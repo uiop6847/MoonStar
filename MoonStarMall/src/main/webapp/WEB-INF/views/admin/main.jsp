@@ -22,14 +22,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	} else if("${msg}"=="LOGOUT_SUCCESS"){
 		alert("로그아웃 되었습니다.");
 		
-	} 
+	}
 </script>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
 
-	<%@include file="/WEB-INF/views/include/main_header.jsp" %>
-	<%@include file="/WEB-INF/views/include/top_admin.jsp" %>
+	<%@include file="/WEB-INF/views/include/main_header_admin.jsp" %>
+	<%--<%@include file="/WEB-INF/views/include/top_admin.jsp" %> --%>
 	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">MoonStarMall</h1>
+						<!-- <h1 class="m-0 text-dark">MoonStarMall</h1> -->
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -54,9 +54,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="content">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-12">
 						<div class="card">
-							<div class="card-body">
+							<div class="card-body login-card-body" style="left: 0; margin-left: auto; margin-right: auto;">
 								<%-- 로그인 안 한 상태 --%>
 								<c:if test="${sessionScope.admin == null}">
 									<form id="loginForm" class="form-signin" action="/admin/loginOK" method="post">
@@ -68,12 +68,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								</c:if>
 								<%-- 로그인 한 상태 --%>
 								<c:if test="${sessionScope.admin != null}">
-									<div style="margin-top:80px;">
-										<h3>welcome!<br/></h3>
-										<h4>This is Admin Main page. <br/> 
-											Please click on the menu you want to work on :)</h4>
-									</div>
-								
+									<h4>welcome!<br/></h4>
+									<h6>This is Admin Main page. <br/> 
+										Please click on the menu you want to work on :)</h6>
 								</c:if>
 							</div>
 						</div>

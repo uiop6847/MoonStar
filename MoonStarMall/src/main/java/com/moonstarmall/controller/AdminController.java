@@ -32,6 +32,7 @@ public class AdminController {
 	}
 	
 	/* 관리자 로그인 */
+	@RequestMapping(value="loginOK", method = RequestMethod.POST)
 	public String loginOK(AdminDTO dto, HttpSession session, RedirectAttributes rttr) throws Exception {
 		logger.info("loginOK() called");
 		

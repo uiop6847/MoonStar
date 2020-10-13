@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+<nav class="main-header navbar navbar-expand-md navbar-light navbar-warning">
 	<div class="container">
-	<%--
 		<a href="/" class="navbar-brand">
 			<span id="nav_brand" class="brand-text font-weight-light" style="color: DarkSlateBlue; font-size: 20pt; font-family: Impact;
 				text-shadow: 0px 1px #ffffff, 4px 4px 0px #FFFAFA;">
 			MoonStarMall</span>
 		</a>
-	 --%>
     
 		<button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -21,12 +19,15 @@
 				<%-- 로그인 안 한 상태 --%>
 				<c:if test="${sessionScope.admin == null}">
 					<li class="nav-item">
-						<p style="color: DarkSlateBlue; font-family: Impact; margin: inherit;">
-						로그인해주세요.</p>
+						<!-- <a href="/admin/main" class="nav-link">LOGIN</a> -->
+						<span>로그인 해주세요.</span>
 					</li>
 				</c:if>
 				<%-- 로그인 한 상태 --%>
 				<c:if test="${sessionScope.admin != null}">
+					<li class="nav-item">
+						<a href="/admin/logout" class="nav-link">LOGOUT</a>
+					</li>
 					<li class="nav-item dropdown">
 						<a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
 						상품 관리</a>
@@ -52,6 +53,37 @@
 				</c:if>
 			</ul>
 		</div>
+
+		<!-- Right navbar links -->
+		<ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+<%--
+			<li class="nav-item">
+				<a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button"><i
+				    class="fas fa-th-large"></i></a>
+			</li>
+--%>
+			<li class="nav-item">
+			  <a href="#" class="nav-link">NOTICE</a>
+			</li>
+			<li class="nav-item">
+			  <a href="#" class="nav-link">Q &amp; A</a>
+			</li>
+			<li class="nav-item">
+			  <a href="#" class="nav-link">REVIEW</a>
+			</li>
+			
+			<!-- SEARCH FORM -->
+			<form class="form-inline ml-0 ml-md-3">
+				<div class="input-group input-group-sm">
+					<input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+					<div class="input-group-append">
+						<button class="btn btn-navbar" type="submit">
+							<i class="fas fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</form>
+		</ul>
 	</div>
 </nav>
 <!-- /.navbar -->

@@ -11,11 +11,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
+<script type="text/javascript" src="/js/admin/login.js"></script>
+<script>
+	if("${msg}"=="LOGIN_SUCCESS"){
+		alert("로그인 되었습니다.\n환영합니다!");
+		
+	} else if("${msg}"=="LOGIN_FAIL"){
+		alert("로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+		
+	} else if("${msg}"=="LOGOUT_SUCCESS"){
+		alert("로그아웃 되었습니다.");
+		
+	} 
+</script>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
 
-	<%@include file="/WEB-INF/views/include/main_header.jsp" %>
+	<%@include file="/WEB-INF/views/include/main_header_admin.jsp" %>
+	<%--<%@include file="/WEB-INF/views/include/top_admin.jsp" %> --%>
 	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
@@ -24,13 +38,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">MoonStarMall - <small>MAIN</small></h1>
+						<!-- <h1 class="m-0 text-dark">MoonStarMall</h1> -->
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a href="#">HOME</a></li>
-							<li class="breadcrumb-item">상품 관리</a></li>
-							<li class="breadcrumb-item active">상품 등록</li>
+							<li class="breadcrumb-item active">HOME</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
@@ -42,36 +54,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="content">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-								
-								<p class="card-text">
-								  Some quick example text to build on the card title and make up the bulk of the card's
-								  content.
-								</p>
-								
-								<a href="#" class="card-link">Card link</a>
-								<a href="#" class="card-link">Another link</a>
+								<%-- 로그인 안 한 상태 --%>
+								<c:if test="${sessionScope.admin == null}">
+								<div class="col-lg-4">
+									<form id="loginForm" class="form-signin" action="/admin/loginOK" method="post">
+										<input type="text" class="form-control" id="admin_id" name="admin_id" placeholder="ID" autofocus required>
+										<input type="password" class="form-control" id="admin_pw" name="admin_pw" placeholder="PW" required>
+										<button class="btn btn-block btn-primary" type="submit" id="btn_login">
+										로그인</button>
+									</form>
+								</div>
+								</c:if>
+								<%-- 로그인 한 상태 --%>
+								<c:if test="${sessionScope.admin != null}">
+									<h4>welcome!<br/></h4>
+									<h6>This is Admin Main page. <br/> 
+										Please click on the menu you want to work on :)</h6>
+								</c:if>
 							</div>
 						</div>
 					</div>
-					<!-- /.col-md-6 -->
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-header">
-								<h5 class="card-title m-0">Featured</h5>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title">Special title treatment</h6>
-								
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-								<a href="#" class="btn btn-primary">Go somewhere</a>
-							</div>
-						</div>
-					</div>
-					<!-- /.col-md-6 -->
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
