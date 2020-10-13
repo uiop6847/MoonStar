@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moonstarmall.mappers.UserInfoMapper">
+
+	<!-- 회원가입 -->
+	<insert id="userInfoAdd" parameterType="UserInfoVO">
+		INSERT INTO USER_INFO(USER_ID, USER_NM, USER_PW, USER_EMAIL, 
+			ZIP_NUM, ADDR, ADDR_DTL, TEL_PHONE, CELL_PHONE, EMAIL_REV_YN)
+		VALUES(#{user_id}, #{user_nm}, #{user_pw}, #{user_email}, 
+			#{zip_num}, #{addr}, #{addr_dtl}, #{tel_phone}, #{cell_phone}, #{email_rev_yn})
+	</insert>
+
+	<!-- 아이디 중복체크 0:사용가능, 1:사용불가능 -->
+	<select id="userIdCheck" parameterType="String" resultType="int">
+		SELECT COUNT(1)
+		FROM USER_INFO
+		WHERE USER_ID = #{user_id}
+	</select>
+	
+	<!-- 이메일 중복체크 0:사용가능, 1:사용불가능 -->
+	<select id="userEmailCheck" parameterType="String" resultType="int">
+		SELECT COUNT(1)
+		FROM USER_INFO
+		WHERE USER_EMAIL = #{user_email}
+	</select>
+	
+	<!-- 로그인(MemberDTO 가져옴) 비번을 파라미터 사용안하고 있음에 주의 -->
+	<select id="loginOK" parameterType="LoginDTO" resultType="LoginDTO">
+		SELECT USER_ID, USER_PW, USER_NM, USER_POINT, LAST_DATE
+		FROM USER_INFO
+		WHERE USER_ID = #{user_id}
+	</select>
+	
+	<!-- 로그인 시간 업데이트 -->
+	<update id="loginUpdate" parameterType="String">
+		UPDATE USER_INFO
+		SET LAST_DATE = SYSDATE
+		WHERE USER_ID = #{user_id}
+	</update>
+	
+	<!-- 로그인 정보 쿠키 저장-->
+	<update id="saveCookie" parameterType="map">
+		UPDATE USER_INFO
+		SET SESSION_KEY = #{session_key},
+			SESSION_LIMIT = #{session_limit}
+		WHERE USER_ID = #{user_id}
+	</update>
+	 
+	<!-- 쿠키에 저장된 세션값으로 로그인 정보 가져옴 -->
+	<select id="checkUserSession" parameterType="String" resultType="UserInfoVO">
+		SELECT USER_ID, USER_NM, USER_PW, USER_EMAIL, ZIP_NUM, ADDR, ADDR_DTL, TEL_PHONE, CELL_PHONE, 
+			EMAIL_REV_YN, USER_POINT, STA_DATE, LAST_DATE, AUTHCODE, SESSION_KEY, SESSION_LIMIT
+		FROM USER_INFO
+		WHERE SESSION_KEY = #{value}
+		AND SESSION_LIMIT > now()
+	</select>
+	
+	<!-- 회원정보 상세조회 -->
+	<select id="userInfoSelect" parameterType="String" resultType="UserInfoVO">
+		SELECT USER_ID, USER_NM, USER_PW, USER_EMAIL, ZIP_NUM, ADDR, ADDR_DTL, TEL_PHONE, CELL_PHONE, 
+			EMAIL_REV_YN, USER_POINT, STA_DATE, LAST_DATE, AUTHCODE, SESSION_KEY, SESSION_LIMIT
+		FROM USER_INFO
+		WHERE USER_ID = #{user_id}
+	</select>
+	
+	<!-- 회원정보 수정 -->
+	<update id="modifyUserInfo" parameterType="UserInfoVO">
+		UPDATE USER_INFO
+		SET USER_NM = #{user_nm}, USER_PW = #{user_pw}, USER_EMAIL = #{user_email}, 
+		    ZIP_NUM = #{zip_num}, ADDR = #{addr}, ADDR_DTL = #{addr_dtl},
+		    TEL_PHONE = #{tel_phone}, CELL_PHONE = #{cell_phone}, EMAIL_REV_YN = #{email_rev_yn}
+		where USER_ID = #{user_id}
+	</update>
+	
+	<delete id="deleteUser" parameterType="String">
+		DELETE FROM USER_INFO
+		WHERE USER_ID = #{user_id}
+	</delete>
+
+</mapper>
