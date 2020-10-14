@@ -12,6 +12,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
+<!-- ckeditor -->
+<script src="/ckeditor/ckeditor.js"></script>
 	<%--
 	<!-- summernote -->
 	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
@@ -88,9 +90,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												type="text" id="pro_discount" name="pro_discount" class="form-control "
 												placeholder="Enter discounted price" />
 										</div>
+										<div class="form-group">
 											<label for="pro_dtl_info">상품상세설명</label>
 							                <textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
 							                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+										</div>
 										<div class="form-group">
 											<label for="file1">대표상품 이미지</label> 
 											<input type="file" id="file1" name="file1" class="form-control" />
@@ -150,8 +154,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Summernote -->
 <script src="/plugins/summernote/summernote-bs4.min.js"></script>
  --%>
- <!-- ckeditor -->
- <script src="/ckeditor/ckeditor.js"></script>
 <!-- Handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 
@@ -191,6 +193,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			$("#subCategory option").remove();
 			target.append(options);
 		}
+		
+		/* 
+			ckEditor 작업
+			config.js를 사용하지 않고 개별 설정하는 부분
+		*/
+		var ckeditor_config = {
+				resize_enabled : false,
+				enterMode : CKEDITOR.ENTER_BR,
+				shiftEnterMode : CKEDITOR.ENTER_P,
+				toolbarCancollapse : true,
+				removePlugins : "elementspath",
+				filebrowserUploadUrl : '/admin/product/imgUpload'
+		};
+		// config.js 설정 사용
+		CKEDITOR.replace("pro_dtl_info", ckeditor_config);
+		
 	});
 </script>
 
