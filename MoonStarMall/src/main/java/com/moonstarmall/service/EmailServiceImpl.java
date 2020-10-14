@@ -14,7 +14,7 @@ import com.moonstarmall.dto.EmailDTO;
 public class EmailServiceImpl implements EmailService {
 	
 	@Autowired
-	JavaMailSender mailSender;
+	private JavaMailSender mailSender;
 
 	/* 이메일 인증코드 전송 */
 	@Override

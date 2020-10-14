@@ -14,7 +14,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
 	<!-- summernote -->
 	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
+<script>
 	
+</script>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -51,31 +53,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<form id='registerForm' role="form" action="/admin/product/insert" method="post" enctype="multipart/form-data">
 									<div class="box-body">
 										<div class="form-group">
-											<label for="exampleInputEmail1" style="width:30%; margin-right:20px;" >1차 카테고리</label>
-											<label for="exampleInputEmail1" style="width:30%;" >2차 카테고리</label> <br />
-											<select class="form-control" id="mainCategory" name="cg_code_prt" style="width:30%; margin-right:10px; display: inline-block;" >
+											<label for="mainCategory" style="width:30%; margin-right:20px;" >1차 카테고리</label>
+											<label for="subCategory" style="width:30%;" >2차 카테고리</label> <br />
+											<select class="form-control" id="mainCategory" name="cat_prtcode" style="width:30%; margin-right:10px; display: inline-block;" >
 											  <option value="default">1차 카테고리 선택</option>
-											  <c:forEach items="${cateList}" var="vo">
-											  	<option value="${vo.cg_code}">${vo.cg_name}</option>
+											  <c:forEach items="${mainCategory}" var="main">
+											  	<option value="${main.cat_code}">${main.cat_name}</option>
 											  </c:forEach>
 											</select>
-											<select class="form-control" id="subCategory" name="cg_code" style="width: 30%; display: inline-block;">
+											<select class="form-control" id="subCategory" name="cat_code" style="width: 30%; display: inline-block;">
 											 	<option value="default">2차 카테고리 선택</option>
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="exampleInputEmail1">상품명</label> <input
+											<label for="pro_name">상품명</label> <input
 												type="text" id="pro_name" name="pro_name" class="form-control"
 												placeholder="Enter Product name">
 										</div>
 										<div class="form-group">
-											<label for="exampleInputEmail1">제조사</label> <input
-												type="text" id="pro_company" name="pro_company" class="form-control"
-												placeholder="Enter company">
+											<label for="pro_publisher">제조사</label> <input
+												type="text" id="pro_publisher" name="pro_publisher" class="form-control"
+												placeholder="Enter pro_publisher">
 										</div>
 										<div class="form-group">
-											<label for="exampleInputEmail1" style="width:40%; margin-right:10px;">가격</label> 
-											<label for="exampleInputEmail1" style="width:40%;">할인율</label> 
+											<label for="pro_price" style="width:40%; margin-right:10px;">가격</label> 
+											<label for="pro_discount" style="width:40%;">할인율</label> 
 											<input style="width:40%; margin-right:10px; display: inline-block;"
 												type="text" id="pro_price" name="pro_price" class="form-control" 
 												placeholder="Enter price" />

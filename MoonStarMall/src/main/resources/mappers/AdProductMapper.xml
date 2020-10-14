@@ -3,13 +3,14 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mappers.AdProductMapper">
 
-	
+	<!-- 1차카테고리 조회 -->
 	<select id="mainCategory" resultType="CategoryVO">
 		SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME
 		FROM CATEGORY_TBL
 		WHERE CAT_PRTCODE IS NULL
 	</select>
 	
+	<!-- 2차카테고리 조회 -->
 	<select id="subCategory" resultType="CategoryVO">
 		SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME
 		FROM CATEGORY_TBL
