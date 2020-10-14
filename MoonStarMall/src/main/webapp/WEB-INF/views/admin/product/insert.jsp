@@ -1,3 +1,4 @@
+<%@page import="com.fasterxml.jackson.annotation.JsonInclude.Include"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!--
@@ -11,25 +12,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
-<script type="text/javascript" src="/js/admin/login.js"></script>
-<script>
-	if("${msg}"=="LOGIN_SUCCESS"){
-		alert("로그인 되었습니다.\n환영합니다!");
-		
-	} else if("${msg}"=="LOGIN_FAIL"){
-		alert("로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
-		
-	} else if("${msg}"=="LOGOUT_SUCCESS"){
-		alert("로그아웃 되었습니다.");
-		
-	} 
-</script>
+	<!-- summernote -->
+	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
+	
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
 
 	<%@include file="/WEB-INF/views/include/main_header_admin.jsp" %>
-	<%--<%@include file="/WEB-INF/views/include/top_admin.jsp" %> --%>
 	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
@@ -38,11 +28,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<!-- <h1 class="m-0 text-dark">MoonStarMall</h1> -->
+						<h1 class="m-0 text-dark">Admin Page <small>Product Insert</small></h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item active">HOME</li>
+							<li class="breadcrumb-item"><a href="#">상품 관리</a></li>
+							<li class="breadcrumb-item active">상품 등록</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
@@ -57,23 +48,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
-								<%-- 로그인 안 한 상태 --%>
-								<c:if test="${sessionScope.admin == null}">
-								<div class="col-lg-4">
-									<form id="loginForm" class="form-signin" action="/admin/loginOK" method="post">
-										<input type="text" class="form-control" id="admin_id" name="admin_id" placeholder="ID" autofocus required>
-										<input type="password" class="form-control" id="admin_pw" name="admin_pw" placeholder="PW" required>
-										<button class="btn btn-block btn-primary" type="submit" id="btn_login">
-										로그인</button>
-									</form>
-								</div>
-								</c:if>
-								<%-- 로그인 한 상태 --%>
-								<c:if test="${sessionScope.admin != null}">
-									<h4>welcome!<br/></h4>
-									<h6>This is Admin Main page. <br/> 
-										Please click on the menu you want to work on :)</h6>
-								</c:if>
+								<form id='registerForm' role="form" action="/admin/product/insert" method="post" enctype="multipart/form-data">
+									<div class="box-body">
+										<div class="form-group">
+											<label for="exampleInputEmail1" style="width:30%; margin-right:20px;" >1차 카테고리</label>
+											<label for="exampleInputEmail1" style="width:30%;" >2차 카테고리</label> <br />
+											<select class="form-control" id="mainCategory" name="cg_code_prt" style="width:30%; margin-right:10px; display: inline-block;" >
+											  <option value="default">1차 카테고리 선택</option>
+											  <c:forEach items="${cateList}" var="vo">
+											  	<option value="${vo.cg_code}">${vo.cg_name}</option>
+											  </c:forEach>
+											</select>
+											<select class="form-control" id="subCategory" name="cg_code" style="width: 30%; display: inline-block;">
+											 	<option value="default">2차 카테고리 선택</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">상품명</label> <input
+												type="text" id="pro_name" name="pro_name" class="form-control"
+												placeholder="Enter Product name">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">제조사</label> <input
+												type="text" id="pro_company" name="pro_company" class="form-control"
+												placeholder="Enter company">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1" style="width:40%; margin-right:10px;">가격</label> 
+											<label for="exampleInputEmail1" style="width:40%;">할인율</label> 
+											<input style="width:40%; margin-right:10px; display: inline-block;"
+												type="text" id="pro_price" name="pro_price" class="form-control" 
+												placeholder="Enter price" />
+											<input style="width:40%; display: inline-block;"
+												type="text" id="pro_discount" name="pro_discount" class="form-control "
+												placeholder="Enter discounted price" />
+										</div>
+										<div class="form-group">
+											<label for="exampleInputPassword1">상품상세설명</label>
+											<textarea class="textarea" placeholder="Place some text here"
+			          							style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">대표상품 이미지</label> <input
+												type="file" id="file1" name="file1" class="form-control" />
+										</div>
+										
+										<div class="form-group">
+											<label for="exampleInputEmail1" style="width:30%; margin-right:10px;">상품개수</label> 
+											<label for="exampleInputEmail1" style="width:15%;">판매가능상태</label><br /> 
+											<input style="width:30%; margin-right:10px; display: inline-block;"
+												type="text" id="pro_amount" name='pro_amount' class="form-control" 
+												placeholder="Enter Amount" />
+											<select class="form-control" id="pro_buy" name="pro_buy" style="width: 15%; display: inline-block;">
+											  <option>Y</option>
+											  <option>N</option>
+											</select>
+										</div>
+									</div>
+	
+									<!-- /.box-body -->
+	
+									<div class="box-footer">
+										<div>
+											<hr>
+										</div>
+	
+										<ul class="mailbox-attachments clearfix uploadedList">
+										</ul>
+	
+										<button id="btn_submit" type="button" class="btn btn-primary">등록</button>
+	
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -96,7 +142,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
+<!-- Summernote -->
+<script src="/plugins/summernote/summernote-bs4.min.js"></script>
+<script>
+  $(function () {
+    // Summernote
+    $('.textarea').summernote()
+  })
+</script>
 </body>
 </html>

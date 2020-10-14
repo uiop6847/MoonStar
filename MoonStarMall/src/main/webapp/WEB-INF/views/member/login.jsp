@@ -47,34 +47,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<!-- /.content-header -->
 	
 		<!-- Main content -->
-		<div class="content">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-4">
-						<div class="card">
-							<div class="card-body">
-								<form id="loginForm" class="form-signin" action="/member/loginOK" method="post">
-									<input type="text" class="form-control" id="user_id" name="user_id" placeholder="ID" autofocus>
-									<input type="password" class="form-control" id="user_pw" name="user_pw" placeholder="PW" required>
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="useCookie"> 자동로그인
-										</label>
-									</div>
-									<button class="btn btn-block btn-primary" type="button" id="btn_login">
-									로그인</button>
-									<button class="btn btn-block btn-outline-primary" type="button" id="btn_join">
-									회원가입</button>
-									<span class='text-center'><a href="#" class="text-sm">아이디 찾기</a></span>
-									<span>&nbsp;/&nbsp;</span>
-									<span class='text-center'><a href="#" class="text-sm">비밀번호 찾기</a></span>
-								</form>
-							</div>
+		<div class="login-page" style="height: 500px; background: none; justify-content: flex-start;">
+			<div class="card login-box">
+				<div class="card-body login-card-body">
+					<form id="loginForm" class="form-signin" action="/member/loginOK" method="post">
+						<input type="text" class="form-control" id="user_id" name="user_id" placeholder="ID" autofocus>
+						<input type="password" class="form-control" id="user_pw" name="user_pw" placeholder="PW" required>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="useCookie"> 자동로그인
+							</label>
 						</div>
-					</div>
+						<button class="btn btn-block btn-primary" type="button" id="btn_login">
+						로그인</button>
+						<button class="btn btn-block btn-outline-primary" type="button" id="btn_join">
+						회원가입</button>
+						<span class='text-center'><a href="#" class="text-sm">아이디 찾기</a></span>
+						<span>&nbsp;/&nbsp;</span>
+						<span class='text-center'><a href="#" class="text-sm">비밀번호 찾기</a></span>
+					</form>
 				</div>
-			<!-- /.row -->
-			</div><!-- /.container-fluid -->
+			</div>
 		</div>
 		<!-- /.content -->
 	</div>
@@ -91,7 +84,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
 </body>
 </html>

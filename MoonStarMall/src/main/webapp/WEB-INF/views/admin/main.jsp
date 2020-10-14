@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<!-- <h1 class="m-0 text-dark">MoonStarMall</h1> -->
+						<h1 class="m-0 text-dark">Admin page</h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -50,33 +50,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		</div>
 		<!-- /.content-header -->
 	
+		<%-- 로그인 안 한 상태 --%>
+		<c:if test="${sessionScope.admin == null}">
+		<!-- Main content -->
+		<div class="login-page" style="height: 500px; background: none; justify-content: flex-start;">
+			<div class="card login-box">
+				<div class="card-body login-card-body">
+					<p class="login-box-msg">Sign in to start your session</p>
+					<form id="loginForm" class="form-signin" action="/admin/loginOK" method="post">
+						<input type="text" class="form-control" id="admin_id" name="admin_id" placeholder="ID" autofocus required>
+						<input type="password" class="form-control" id="admin_pw" name="admin_pw" placeholder="PW" required>
+						<button class="btn btn-block btn-primary" type="submit" id="btn_login">
+						로그인</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- /.content -->
+		</c:if>
 		<!-- Main content -->
 		<div class="content">
 			<div class="container">
-				<div class="row">
+				<%-- 로그인 한 상태 --%>
+				<c:if test="${sessionScope.admin != null}">
 					<div class="col-lg-12">
 						<div class="card">
-							<div class="card-body login-card-body" style="left: 0; margin-left: auto; margin-right: auto;">
-								<%-- 로그인 안 한 상태 --%>
-								<c:if test="${sessionScope.admin == null}">
-									<form id="loginForm" class="form-signin" action="/admin/loginOK" method="post">
-										<input type="text" class="form-control" id="admin_id" name="admin_id" placeholder="ID" autofocus required>
-										<input type="password" class="form-control" id="admin_pw" name="admin_pw" placeholder="PW" required>
-										<button class="btn btn-block btn-primary" type="submit" id="btn_login">
-										로그인</button>
-									</form>
-								</c:if>
-								<%-- 로그인 한 상태 --%>
-								<c:if test="${sessionScope.admin != null}">
-									<h4>welcome!<br/></h4>
-									<h6>This is Admin Main page. <br/> 
-										Please click on the menu you want to work on :)</h6>
-								</c:if>
+							<div class="card-body">
+								<h4>welcome!<br/></h4>
+								<h6>This is Admin Main page. <br/> 
+									Please click on the menu you want to work on :)</h6>
 							</div>
 						</div>
 					</div>
-				</div>
-			<!-- /.row -->
+				</c:if>
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content -->
@@ -94,7 +100,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
 </body>
 </html>

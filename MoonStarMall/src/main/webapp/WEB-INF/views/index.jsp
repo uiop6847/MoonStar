@@ -113,7 +113,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
 </body>
 </html>
