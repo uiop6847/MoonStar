@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand-md navbar-light navbar-warning">
+<nav class="main-header navbar navbar-expand-md navbar-light" style="background-color: #D7DBD1;">
 	<div class="container">
 		<a href="/" class="navbar-brand">
-			<span id="nav_brand" class="brand-text font-weight-light" style="color: DarkSlateBlue; font-size: 20pt; font-family: Impact;
+			<span id="nav_brand" class="brand-text font-weight-light" style="color: #ECA4A6; font-size: 20pt; font-family: Impact;
 				text-shadow: 0px 1px #ffffff, 4px 4px 0px #FFFAFA;">
 			MoonStarMall</span>
 		</a>

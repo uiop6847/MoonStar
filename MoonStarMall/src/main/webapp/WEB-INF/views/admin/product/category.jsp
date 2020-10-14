@@ -38,11 +38,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">Admin page</h1>
+						<h1 class="m-0 text-dark">MoonStarMall - <small>MAIN</small></h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item active">HOME</li>
+							<li class="breadcrumb-item"><a href="#">Home</a></li>
+							<li class="breadcrumb-item"><a href="#">Layout</a></li>
+							<li class="breadcrumb-item active">Top Navigation</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
@@ -50,55 +52,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		</div>
 		<!-- /.content-header -->
 	
-		<%-- 로그인 안 한 상태 --%>
-		<c:if test="${sessionScope.admin == null}">
-		<!-- Main content -->
-		<div class="login-page" style="height: 500px; background: none; justify-content: flex-start;">
-			<div class="card login-box">
-				<div class="card-header" style="background-color: #F9D5D3;">
-				  <h3 class="card-title">Sign in to start your session</h3>
-				</div>
-				<form class="form-horizontal" id="loginForm" action="/admin/loginOK" method="post">
-					<div class="card-body">
-						<div class="form-group row">
-							<label for="admin_id" class="col-sm-2 col-form-label">ID</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="admin_id" name="admin_id" placeholder="ID">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="admin_pw" class="col-sm-2 col-form-label">PW</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control" id="admin_pw" name="admin_pw" placeholder="PW">
-							</div>
-						</div>
-					</div>
-					<!-- /.card-body -->
-				<div class="card-footer">
-				  <button type="submit" class="btn float-right" style="background-color: #F9D5D3;">
-				  Sign in</button>
-				</div>
-				<!-- /.card-footer -->
-				</form>
-			</div>
-		</div>
-		<!-- /.content -->
-		</c:if>		
 		<!-- Main content -->
 		<div class="content">
 			<div class="container">
-				<%-- 로그인 한 상태 --%>
-				<c:if test="${sessionScope.admin != null}">
-					<div class="col-lg-12">
+				<div class="row">
+					<div class="col-lg-6">
 						<div class="card">
 							<div class="card-body">
-								<h4>welcome!<br/></h4>
-								<h6>This is Admin Main page. <br/> 
-									Please click on the menu you want to work on :)</h6>
+								<h5 class="card-title">Card title</h5>
+								
+								<p class="card-text">
+								  Some quick example text to build on the card title and make up the bulk of the card's
+								  content.
+								</p>
+								
+								<a href="#" class="card-link">Card link</a>
+								<a href="#" class="card-link">Another link</a>
 							</div>
 						</div>
 					</div>
-				</c:if>
+					<!-- /.col-md-6 -->
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-title m-0">Featured</h5>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title">Special title treatment</h6>
+								
+								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+								<a href="#" class="btn btn-primary">Go somewhere</a>
+							</div>
+						</div>
+					</div>
+					<!-- /.col-md-6 -->
+				</div>
+			<!-- /.row -->
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content -->
