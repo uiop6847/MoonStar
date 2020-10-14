@@ -17,10 +17,8 @@
 	<!-- 클라이언트에서 사용가능하기위한 경로설정 -->
 	<resources mapping="/bower_components/**" location="/resources/bower_components/" />
 	<resources mapping="/dist/**" location="/resources/dist/" />
-	<resources mapping="/plugins/**" location="/resources/plugins/" />	
-	
-	<resources mapping="/css/**" location="/WEB-INF/views/css/" />
-	<resources mapping="/vendor/**" location="/WEB-INF/views/vendor/" />
+	<resources mapping="/plugins/**" location="/resources/plugins/" />
+	<resources mapping="/ckeditor/**" location="/resources/bower_components/ckeditor/" />
 	
 	<resources mapping="/js/**" location="/WEB-INF/views/js/" />
 

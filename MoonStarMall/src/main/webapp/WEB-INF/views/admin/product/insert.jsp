@@ -12,11 +12,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
+	<%--
 	<!-- summernote -->
 	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
-<script>
-	
-</script>
+	 --%>
+<%-- 상품등록 유효성 검사 --%>
+<script type="text/javascript" src="/js/admin/insert.js"></script>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -34,7 +35,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a href="#">상품 관리</a></li>
+							<li class="breadcrumb-item"><a href="/admin/main">HOME</a></li>
+							<li class="breadcrumb-item active">상품 관리</li>
 							<li class="breadcrumb-item active">상품 등록</li>
 						</ol>
 					</div><!-- /.col -->
@@ -50,7 +52,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
-								<form id='registerForm' role="form" action="/admin/product/insert" method="post" enctype="multipart/form-data">
+								<form id='productInsertForm' action="/admin/product/insert" method="post" enctype="multipart/form-data">
 									<div class="box-body">
 										<div class="form-group">
 											<label for="mainCategory" style="width:30%; margin-right:20px;" >1차 카테고리</label>
@@ -63,6 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											</select>
 											<select class="form-control" id="subCategory" name="cat_code" style="width: 30%; display: inline-block;">
 											 	<option value="default">2차 카테고리 선택</option>
+
 											</select>
 										</div>
 										<div class="form-group">
@@ -85,25 +88,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												type="text" id="pro_discount" name="pro_discount" class="form-control "
 												placeholder="Enter discounted price" />
 										</div>
+											<label for="pro_dtl_info">상품상세설명</label>
+							                <textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
+							                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
 										<div class="form-group">
-											<label for="exampleInputPassword1">상품상세설명</label>
-											<textarea class="textarea" placeholder="Place some text here"
-			          							style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-										</div>
-										<div class="form-group">
-											<label for="exampleInputEmail1">대표상품 이미지</label> <input
-												type="file" id="file1" name="file1" class="form-control" />
+											<label for="file1">대표상품 이미지</label> 
+											<input type="file" id="file1" name="file1" class="form-control" />
 										</div>
 										
 										<div class="form-group">
-											<label for="exampleInputEmail1" style="width:30%; margin-right:10px;">상품개수</label> 
-											<label for="exampleInputEmail1" style="width:15%;">판매가능상태</label><br /> 
+											<label for="pro_amount" style="width:30%; margin-right:10px;">상품개수</label> 
+											<label for="pro_buy_yn" style="width:15%;">판매가능상태</label><br /> 
 											<input style="width:30%; margin-right:10px; display: inline-block;"
 												type="text" id="pro_amount" name='pro_amount' class="form-control" 
 												placeholder="Enter Amount" />
-											<select class="form-control" id="pro_buy" name="pro_buy" style="width: 15%; display: inline-block;">
-											  <option>Y</option>
-											  <option>N</option>
+											<select class="form-control" id="pro_buy_yn" name="pro_buy_yn" style="width: 15%; display: inline-block;">
+											  <option value="Y">Y</option>
+											  <option value="N">N</option>
 											</select>
 										</div>
 									</div>
@@ -145,13 +146,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
+<%--
 <!-- Summernote -->
 <script src="/plugins/summernote/summernote-bs4.min.js"></script>
-<script>
-  $(function () {
-    // Summernote
-    $('.textarea').summernote()
-  })
+ --%>
+ <!-- ckeditor -->
+ <script src="/ckeditor/ckeditor.js"></script>
+<!-- Handlebars -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+
+
+<%-- Handlebar Template --%>
+ <script id="subCategoryTemplate" type="text/x-handlebars-template">
+	<option value="default">2차 카테고리  선택</option>
+	{{#each .}}
+		<option value="{{cat_code}}">{{cat_name}}</option>
+	{{/each}}
 </script>
+
+
+<%-- 2차카테고리 처리 이벤트 --%>
+<script>
+	$(function(){
+		
+		/* 2차 카테고리 처리 */
+		$("#mainCategory").on("change", function(){
+			
+			var mainCatCode = $(this).val(); // 1차카테고리 코드
+			var url = "/admin/product/subCategoryList/" + mainCatCode;
+			
+			// REST 방식으로 전송
+			$.getJSON(url, function(data){
+				subCategory(data, $("#subCategory"), $("#subCategoryTemplate"));
+			});
+		});
+		
+		
+		/* 2차카테고리 템플릿 적용함수 */
+		var subCategory = function(subCGStr, target, templateObject){
+			
+			var template = Handlebars.compile(templateObject.html());
+			var options = template(subCGStr);
+			
+			$("#subCategory option").remove();
+			target.append(options);
+		}
+	});
+</script>
+
 </body>
 </html>
