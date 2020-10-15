@@ -22,6 +22,13 @@
 	
 	<resources mapping="/js/**" location="/WEB-INF/views/js/" />
 	
+	<!-- 클라이언트로 부터 전송되어 온 파일을 스프링에서 처리하는 기능 -->
+	<!-- MultipartFile file 주입됨 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10485760" />
+	</beans:bean>
+	
 	<!-- 파일 업로드 Path -->
 	<beans:bean id="uploadPath" class="java.lang.String">
 		<beans:constructor-arg value="D:\\dev\\upload" />

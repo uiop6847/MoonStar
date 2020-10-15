@@ -2,22 +2,23 @@ package com.moonstarmall.util;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.IOUtils;
 import org.imgscalr.Scalr;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 
 public class FileUtils {
-	
-	private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-	
 	/*
 	 * 파일 업로드
 	 * 
@@ -31,7 +32,7 @@ public class FileUtils {
 	 * 
 	 */	
 	public static String uploadFile(String uploadPath, String originName, byte[] fileData) throws Exception {
-		logger.info("uploadFile() called");
+		System.out.println("uploadFile() called");
 		
 		/* 파일명 설정     ex) uuid_파일명 */
 		UUID uuid = UUID.randomUUID();
@@ -63,22 +64,53 @@ public class FileUtils {
 	private static String calcPath(String uploadPath) {
 		Calendar cal = Calendar.getInstance();
 		
-		/* \\년\\월\\일 형태의 날짜 경로 */
-		String yearPath = File.separator + cal.get(Calendar.YEAR);
-		String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1);
-		String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
+		/* \\년월일 형태의 날짜 경로 */
+		String datePath = File.separator + cal.get(Calendar.YEAR) 
+		+ new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1)
+		+ new DecimalFormat("00").format(cal.get(Calendar.DATE));
 		
-		logger.info("calcPath result: " + datePath);
+		/* \\년\\월\\일 */
+		//String yearPath = File.separator + cal.get(Calendar.YEAR);
+		//String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1);
+		//String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
+		
+		System.out.println("FileUtils.calcPath() result: " + datePath);
 		
 		// 날짜별 폴더 생성
-		makeDir(uploadPath, yearPath, monthPath, datePath);
+		//makeDir(uploadPath, yearPath, monthPath, datePath);
+		makeDir(uploadPath, datePath);
 		
 		return datePath;
 	}
-	
-	/* 폴더 생성 */
+
+	/* 폴더 생성 
 	private static void makeDir(String uploadPath, String... paths) {
+
+//		if(new File(paths[paths.length - 1]).exists() == false) {
+//			// 가장 마지막 매개변수의 폴더가 존재하지 않으면 폴더 생성
+//			for(String path: paths) {
+//				File dirPath = new File(uploadPath + path);
+//				
+//				if(!dirPath.exists()) {
+//					dirPath.mkdir();
+//				}
+//			}
+//		}
+		if(new File(paths[paths.length - 1]).exists()) {
+			return;
+		}
 		
+		for(String path: paths) {
+			File dirPath = new File(uploadPath + path);
+			
+			if(!dirPath.exists()) {
+				dirPath.mkdir();
+			}
+		}
+	}
+*/
+	private static void makeDir(String uploadPath, String datePath) {
+		/*
 		if(new File(paths[paths.length - 1]).exists() == false) {
 			// 가장 마지막 매개변수의 폴더가 존재하지 않으면 폴더 생성
 			for(String path: paths) {
@@ -89,24 +121,34 @@ public class FileUtils {
 				}
 			}
 		}
+		*/
+		if(new File(datePath).exists()) {
+			return;
+		}
+		
+		File dirPath = new File(uploadPath + datePath);
+		
+		if(!dirPath.exists()) {
+			dirPath.mkdir();
+		}
 	}
 	
 	/* 이미지 썸네일 생성 */
-	private static String makeThumbnail(String uploadPath, String path, String fileName) throws IOException {
+	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 		
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
 		// 썸네일 높이를 80px로 하고 너비를 맞춤
 		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 120);
 		
-		// 썸네일 파일명
+		// 썸네일 생성 준비작업
 		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
 		File newFile = new File(thumbnailName);
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 		
 		// 썸네일 생성
-		ImageIO.write(destImg, formatName, newFile);
+		ImageIO.write(destImg, formatName.toUpperCase(), newFile);
 		
-		System.out.println("=====makeThumbNail() thumbNail: " + thumbnailName);
+		System.out.println("FileUtils.makeThumbNail() thumbNail: " + thumbnailName);
 		
 		return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
@@ -119,4 +161,53 @@ public class FileUtils {
 		return iconName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
 
+	/* 파일 가져오기 */
+	public static ResponseEntity<byte[]> getFile(String uploadPath, String fileName) throws Exception {
+		
+		ResponseEntity<byte[]> entity = null;
+		
+		InputStream in = null;
+		
+		try {
+			// 확장자로 파일 종류를 확인
+			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
+			MediaType type = MediaUtils.getMediaType(formatName);
+			
+			// 파일 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(type);
+			
+			// 파일 가져오기
+			in = new FileInputStream(uploadPath + fileName);
+			
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		} finally {
+			in.close();
+		}
+		
+		return entity;
+	}
+	
+	/* 파일 삭제 */
+	public static void deleteFile(String uploadPath, String fileName) {
+		//String front = fileName.substring(0, 12);
+		//String end = fileName.substring(14);
+		//String origin = front + end;
+		String origin = thumbToOriginName(fileName);
+		
+		new File(uploadPath+origin.replace('/', File.separatorChar)).delete();
+		new File(uploadPath+fileName.replace('/', File.separatorChar)).delete();
+	}
+	
+	/* 썸네일 파일명을 원본 파일명으로 변경하는 작업 */
+	public static String thumbToOriginName(String thumbmailName) {
+		String front = thumbmailName.substring(0, 12);
+		String end = thumbmailName.substring(14);
+		
+		return front + end;
+	}
 }

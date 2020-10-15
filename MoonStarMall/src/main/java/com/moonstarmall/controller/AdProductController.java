@@ -1,8 +1,14 @@
 package com.moonstarmall.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonstarmall.domain.CategoryVO;
@@ -66,6 +73,7 @@ public class AdProductController {
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
 	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
+		
 		logger.info("ProductVO: " + vo.toString());
 		
 		vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
@@ -74,6 +82,55 @@ public class AdProductController {
 		rttr.addFlashAttribute("msg", "INSERT_SUCCESS");
 		
 		return "redirect:/admin/product/list";
+	}
+	
+	/* 상품상세내용(ckEditor) 파일업로드 */
+	@RequestMapping(value = "imgUpload", method = RequestMethod.POST)
+	public void imgUpload(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
+		logger.info("imgUpload() called");
+		
+		OutputStream out = null;
+		PrintWriter printWriter = null;
+		
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+		
+		try {
+			// 전송할 파일의 정보
+			String fileName = upload.getOriginalFilename();
+			byte[] bytes = upload.getBytes();
+			
+			// 폴더경로 설정
+			String uploadPath = request.getSession().getServletContext().getRealPath("/");
+			uploadPath = uploadPath + "resources\\upload\\" + fileName;
+			
+			logger.info("uploadPath: " + uploadPath);
+			
+			out = new FileOutputStream(new File(uploadPath));
+			out.write(bytes);
+			
+			printWriter = response.getWriter();
+			String fileUrl = "/upload/" + fileName;
+			
+			printWriter.println("{\"filename\":\"" + fileName + "\", \"uploaded\":1,\"url\":\"" + fileUrl + "\"}");
+			printWriter.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(out != null) {
+				try { out.close(); } catch(Exception e) { e.printStackTrace(); }
+			}
+			
+			if(printWriter != null) {
+				try { printWriter.close(); } catch(Exception e) {e.printStackTrace();}
+			}
+		}
+	}
+	
+	@RequestMapping(value = "list", method = RequestMethod.GET)
+	public void productList() {
+		
 	}
 
 }

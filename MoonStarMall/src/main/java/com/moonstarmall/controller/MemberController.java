@@ -42,7 +42,7 @@ public class MemberController {
 	
 	/* 회원가입 처리 */ 
 	@RequestMapping(value = "joinOK", method = RequestMethod.POST)
-	public String userInfoAdd(UserInfoVO vo, RedirectAttributes redirect) throws Exception {
+	public String userInfoAdd(UserInfoVO vo, RedirectAttributes rttr) throws Exception {
 		
 		logger.info("UserInfoVO: " + vo.toString());
 		
@@ -50,7 +50,7 @@ public class MemberController {
 		// 비밀번호 암호화 처리
 		vo.setUser_pw(passwdEncrypt.encode(vo.getUser_pw()));
 		service.userInfoAdd(vo);
-		redirect.addFlashAttribute("msg", "JOIN_SUCCESS");
+		rttr.addFlashAttribute("msg", "JOIN_SUCCESS");
 		
 		return "redirect:/";
 	}

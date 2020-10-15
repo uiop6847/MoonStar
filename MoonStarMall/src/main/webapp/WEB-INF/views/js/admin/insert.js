@@ -12,13 +12,13 @@ $(function(){
             /* 유효성 검사 */
             var mainCategory    = $("#mainCategory option:selected");
             var subCategory     = $("#subCategory option:selected");
-            var proName         = $("#pro_name");
+            var proNm           = $("#pro_nm");
             var proPublisher    = $("#pro_publisher");
             var proPrice        = $("#pro_price");
             var proDiscount     = $("#pro_discount");
             var ckeditor        = CKEDITOR.instances['pro_dtl_info'];
             var file1           = $("#file1");
-            var proAmount       = $("#pro_amount");
+            var proCount        = $("#pro_count");
 			var fileSize        = file1.size;
 			//var fileFormat      = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
 			var fileFormat      = /(.*?)\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/;
@@ -34,9 +34,9 @@ $(function(){
 				subCategory.focus();
 				return;
 				
-			} else if(proName.val()==null || proName.val()==""){
+			} else if(proNm.val()==null || proNm.val()==""){
 				alert("상품명을 입력해주세요.");
-				proName.focus();
+				proNm.focus();
 				return;
 				
 			} else if(proPublisher.val()==null || proPublisher.val()==""){
@@ -74,9 +74,9 @@ $(function(){
 				file1.focus();
 				return;
 				
-			}else if(proAmount.val()==null || proAmount.val()==""){
+			}else if(proCount.val()==null || proCount.val()==""){
 				alert("상품 수량을 입력해주세요.");
-				proAmount.focus();
+				proCount.focus();
 				return;
 				
 			}else {
