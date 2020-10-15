@@ -41,6 +41,9 @@ public class AdminController {
 		if(vo != null) {
 			
 			session.setAttribute("admin", vo);
+			
+			// 관리자 로그인 시간 업데이트 작업(보완)
+			
 			rttr.addFlashAttribute("msg", "LOGIN_SUCCESS");
 			
 		}else {

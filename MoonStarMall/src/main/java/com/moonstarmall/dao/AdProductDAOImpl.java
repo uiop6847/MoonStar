@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonstarmall.domain.CategoryVO;
+import com.moonstarmall.domain.ProductVO;
 
 @Repository
 public class AdProductDAOImpl implements AdProductDAO {
@@ -26,6 +27,12 @@ public class AdProductDAOImpl implements AdProductDAO {
 	@Override
 	public List<CategoryVO> subCategory(String cat_code) throws Exception {
 		return session.selectList(NS + ".subCategory", cat_code);
+	}
+
+	/* 상품 등록 */
+	@Override
+	public void productInsertOK(ProductVO vo) throws Exception {
+		session.insert(NS + ".productInsertOK", vo);
 	}
 	
 

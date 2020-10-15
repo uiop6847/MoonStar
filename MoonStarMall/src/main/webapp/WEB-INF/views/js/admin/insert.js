@@ -18,7 +18,8 @@ $(function(){
             var file1           = $("#file1");
             var pdtAmount       = $("#pdt_amount");
 			var fileSize        = file1.size;
-			var fileFormat      = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+			//var fileFormat      = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+			var fileFormat      = /(.*?)\.(jpg|jpeg|png|gif)$/;
 			var maxSize         = 5 * 1024 * 1024; // 5MB
 
             if(mainCategory.val()==null || mainCategory.val()=="default"){

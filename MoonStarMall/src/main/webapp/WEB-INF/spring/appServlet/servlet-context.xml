@@ -21,6 +21,11 @@
 	<resources mapping="/ckeditor/**" location="/resources/bower_components/ckeditor/" />
 	
 	<resources mapping="/js/**" location="/WEB-INF/views/js/" />
+	
+	<!-- 파일 업로드 Path -->
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value="/resources/upload" />
+	</beans:bean>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

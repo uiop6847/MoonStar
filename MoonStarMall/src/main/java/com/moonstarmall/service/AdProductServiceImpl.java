@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.moonstarmall.dao.AdProductDAO;
 import com.moonstarmall.domain.CategoryVO;
+import com.moonstarmall.domain.ProductVO;
 
 @Service
 public class AdProductServiceImpl implements AdProductService {
@@ -24,6 +25,12 @@ public class AdProductServiceImpl implements AdProductService {
 	@Override
 	public List<CategoryVO> subCategory(String cat_code) throws Exception {
 		return dao.subCategory(cat_code);
+	}
+
+	/* 상품 등록 */
+	@Override
+	public void productInsertOK(ProductVO vo) throws Exception {
+		dao.productInsertOK(vo);
 	}
 
 }

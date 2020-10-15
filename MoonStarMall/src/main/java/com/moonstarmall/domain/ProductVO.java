@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class AdProductVO {
+public class ProductVO {
 	
 	private int		pro_num;
 	private String	cat_code;
