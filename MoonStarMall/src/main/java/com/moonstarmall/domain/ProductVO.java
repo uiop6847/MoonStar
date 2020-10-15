@@ -17,7 +17,7 @@ public class ProductVO {
 	private	int		pro_count;
 	private	String	pro_buy_yn;
 	private Date	sta_date;
-	private Date	end_date;
+	private Date	udt_date;
 	
 	// 업로드 파일
 	private MultipartFile file1;
@@ -89,11 +89,11 @@ public class ProductVO {
 	public void setSta_date(Date sta_date) {
 		this.sta_date = sta_date;
 	}
-	public Date getEnd_date() {
-		return end_date;
+	public Date getUdt_date() {
+		return udt_date;
 	}
-	public void setEnd_date(Date end_date) {
-		this.end_date = end_date;
+	public void setUdt_date(Date udt_date) {
+		this.udt_date = udt_date;
 	}
 	public MultipartFile getFile1() {
 		return file1;
@@ -104,9 +104,9 @@ public class ProductVO {
 	
 	@Override
 	public String toString() {
-		return "AdProductVO [pro_num=" + pro_num + ", cat_code=" + cat_code + ", pro_nm=" + pro_nm + ", pro_price="
+		return "ProductVO [pro_num=" + pro_num + ", cat_code=" + cat_code + ", pro_nm=" + pro_nm + ", pro_price="
 				+ pro_price + ", pro_discount=" + pro_discount + ", pro_publisher=" + pro_publisher + ", pro_dtl_info="
 				+ pro_dtl_info + ", pro_main_img=" + pro_main_img + ", pro_count=" + pro_count + ", pro_buy_yn="
-				+ pro_buy_yn + ", sta_date=" + sta_date + ", end_date=" + end_date + ", file1=" + file1 + "]";
+				+ pro_buy_yn + ", sta_date=" + sta_date + ", udt_date=" + udt_date + ", file1=" + file1 + "]";
 	}
 }

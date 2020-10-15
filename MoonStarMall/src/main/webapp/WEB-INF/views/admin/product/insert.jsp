@@ -53,21 +53,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="card">
+								<form id='productInsertForm' action="/admin/product/insertOK" method="post" enctype="multipart/form-data">
 							<div class="card-body">
-								<form id='productInsertForm' action="/admin/product/insert" method="post" enctype="multipart/form-data">
 									<div class="box-body">
 										<div class="form-group">
 											<label for="mainCategory" style="width:30%; margin-right:20px;" >1차 카테고리</label>
 											<label for="subCategory" style="width:30%;" >2차 카테고리</label> <br />
 											<select class="form-control" id="mainCategory" name="cat_prtcode" style="width:30%; margin-right:10px; display: inline-block;" >
-											  <option value="default">1차 카테고리 선택</option>
-											  <c:forEach items="${mainCategory}" var="main">
-											  	<option value="${main.cat_code}">${main.cat_name}</option>
-											  </c:forEach>
+												<option value="default">1차 카테고리 선택</option>
+												<c:forEach items="${mainCategory}" var="main">
+													<option value="${main.cat_code}">${main.cat_name}</option>
+												</c:forEach>
 											</select>
 											<select class="form-control" id="subCategory" name="cat_code" style="width: 30%; display: inline-block;">
 											 	<option value="default">2차 카테고리 선택</option>
-
 											</select>
 										</div>
 										<div class="form-group">
@@ -101,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										</div>
 										
 										<div class="form-group">
-											<label for="pro_amount" style="width:30%; margin-right:10px;">상품개수</label> 
+											<label for="pro_amount" style="width:30%; margin-right:10px;">상품수량</label> 
 											<label for="pro_buy_yn" style="width:15%;">판매가능상태</label><br /> 
 											<input style="width:30%; margin-right:10px; display: inline-block;"
 												type="text" id="pro_amount" name='pro_amount' class="form-control" 
@@ -112,22 +111,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											</select>
 										</div>
 									</div>
-	
-									<!-- /.box-body -->
-	
 									<div class="box-footer">
-										<div>
-											<hr>
-										</div>
-	
-										<ul class="mailbox-attachments clearfix uploadedList">
-										</ul>
-	
 										<button id="btn_submit" type="button" class="btn btn-primary">등록</button>
-	
 									</div>
-								</form>
 							</div>
+								</form>
 						</div>
 					</div>
 				</div>

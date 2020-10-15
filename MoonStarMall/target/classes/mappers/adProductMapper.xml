@@ -22,7 +22,7 @@
 	<insert id="productInsertOK" parameterType="ProductVO">
 		INSERT INTO PRODUCT_TBL(PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
 			PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN)
-		VALUES(#{pro_num}, #{cat_code}, #{pro_nm}, #{pro_price}, #{pro_discount}, #{pro_publisher}, 
+		VALUES(seq_pdt_num.NEXTVAL, #{cat_code}, #{pro_nm}, #{pro_price}, #{pro_discount}, #{pro_publisher}, 
 			#{pro_dtl_info}, #{pro_main_img}, #{pro_count}, #{pro_buy_yn})
 	</insert>
 

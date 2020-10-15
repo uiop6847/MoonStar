@@ -46,13 +46,13 @@ public class AdProductController {
 	/* 2차카테고리 조회 */
 	@ResponseBody
 	@RequestMapping(value="subCategoryList/{cat_code}", method = RequestMethod.GET)
-	public ResponseEntity<List<CategoryVO>> subCategoryList(@PathVariable("cat_code") String cat_prtcode) {
+	public ResponseEntity<List<CategoryVO>> subCategoryList(@PathVariable("cat_code") String cat_code) {
 		logger.info("subCategoryList() called");
 		
 		ResponseEntity<List<CategoryVO>> entity = null;
 		
 		try {
-			entity = new ResponseEntity<List<CategoryVO>>(service.subCategory(cat_prtcode), HttpStatus.OK);
+			entity = new ResponseEntity<List<CategoryVO>>(service.subCategory(cat_code), HttpStatus.OK);
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -63,15 +63,14 @@ public class AdProductController {
 	}
 	
 	/* 상품 등록 */
-	@RequestMapping(value="productInsertOK", method=RequestMethod.POST)
+	@RequestMapping(value="insertOK", method=RequestMethod.POST)
 	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
 		logger.info("ProductVO: " + vo.toString());
 		
 		vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
 		
-		// 상품테이블 데이터 insert
-		
+		service.productInsertOK(vo);
 		rttr.addFlashAttribute("msg", "INSERT_SUCCESS");
 		
 		return "redirect:/admin/product/list";

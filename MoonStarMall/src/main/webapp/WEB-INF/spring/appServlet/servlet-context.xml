@@ -24,7 +24,7 @@
 	
 	<!-- 파일 업로드 Path -->
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value="/resources/upload" />
+		<beans:constructor-arg value="D:\\dev\\upload" />
 	</beans:bean>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
