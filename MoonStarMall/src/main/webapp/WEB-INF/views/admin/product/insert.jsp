@@ -152,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</div>
 									<div class="form-group">
 										<label for="pro_count" style="width:30%; margin-right:10px;">상품수량</label> 
-										<label for="pro_buy_yn" style="width:15%;">판매가능상태</label><br /> 
+										<label for="pro_buy_yn" style="width:15%;">판매상태</label><br /> 
 										<input style="width:30%; margin-right:10px; display: inline-block;"
 											type="text" id="pro_count" name='pro_count' class="form-control" placeholder="Enter Amount" />
 										<select class="form-control" id="pro_buy_yn" name="pro_buy_yn" style="width: 15%; display: inline-block;">

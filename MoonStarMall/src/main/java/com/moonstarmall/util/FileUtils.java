@@ -74,7 +74,7 @@ public class FileUtils {
 		//String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1);
 		//String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
 		
-		System.out.println("FileUtils.calcPath() result: " + datePath);
+		System.out.println("=====FileUtils.calcPath() result: " + datePath);
 		
 		// 날짜별 폴더 생성
 		//makeDir(uploadPath, yearPath, monthPath, datePath);
@@ -137,8 +137,7 @@ public class FileUtils {
 	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 		
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
-		// 썸네일 높이를 80px로 하고 너비를 맞춤
-		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 120);
+		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 80);
 		
 		// 썸네일 생성 준비작업
 		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
@@ -148,7 +147,7 @@ public class FileUtils {
 		// 썸네일 생성
 		ImageIO.write(destImg, formatName.toUpperCase(), newFile);
 		
-		System.out.println("FileUtils.makeThumbNail() thumbNail: " + thumbnailName);
+		System.out.println("=====FileUtils.makeThumbNail() thumbNail: " + thumbnailName);
 		
 		return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}

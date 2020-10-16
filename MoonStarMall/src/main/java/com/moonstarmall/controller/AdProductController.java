@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,8 @@ import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
 import com.moonstarmall.service.AdProductService;
 import com.moonstarmall.util.FileUtils;
+import com.moonstarmall.util.PageMaker;
+import com.moonstarmall.util.SearchCriteria;
 
 @Controller
 @RequestMapping("/admin/product/*")
@@ -73,8 +76,7 @@ public class AdProductController {
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
 	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
-		
-		logger.info("ProductVO: " + vo.toString());
+		logger.info("=====ProductVO: " + vo.toString());
 		
 		vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
 		
@@ -104,7 +106,7 @@ public class AdProductController {
 			String uploadPath = request.getSession().getServletContext().getRealPath("/");
 			uploadPath = uploadPath + "resources\\upload\\" + fileName;
 			
-			logger.info("uploadPath: " + uploadPath);
+			logger.info("=====uploadPath: " + uploadPath);
 			
 			out = new FileOutputStream(new File(uploadPath));
 			out.write(bytes);
@@ -128,9 +130,29 @@ public class AdProductController {
 		}
 	}
 	
+	/* 파일 출력 */
+	@RequestMapping(value = "displayFile", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
+		return FileUtils.getFile(uploadPath, fileName);
+	}
+	
+	/* 상품 리스트 */
 	@RequestMapping(value = "list", method = RequestMethod.GET)
-	public void productList() {
+	public void productList(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
+		logger.info("productList() called");
+		logger.info("=====cri : " + cri);
 		
+		model.addAttribute("productList", service.productList(cri));
+		
+		PageMaker pm = new PageMaker();
+		pm.setCri(cri);
+		
+		int count = service.productSearchCount(cri);
+		pm.setTotalCount(count);
+		
+		logger.info("=====PageMaker: " + pm.toString());
+		
+		model.addAttribute("pm", pm);
 	}
 
 }

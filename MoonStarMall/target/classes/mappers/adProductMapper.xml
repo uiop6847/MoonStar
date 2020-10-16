@@ -26,5 +26,59 @@
 			#{pro_dtl_info}, #{pro_main_img}, #{pro_count}, #{pro_buy_yn})
 	</insert>
 
+	<!-- 상품 리스트 -->
+	<select id="productList" parameterType="SearchCriteria" resultType="ProductVO">
+		SELECT PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
+		    PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
+		FROM (SELECT PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
+		    PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE, 
+		    row_number() over (order by PRO_NUM desc) P_SEQ FROM PRODUCT_TBL
+		    <include refid="search" />)
+		WHERE P_SEQ BETWEEN #{rowStart} and #{rowEnd}
+		ORDER BY PRO_NUM DESC
+	</select>
+	
+	<!-- 상품 총 건수 -->
+	<select id="productSearchCount" parameterType="SearchCriteria" resultType="int">
+		<![CDATA[
+			SELECT COUNT(PRO_NUM)
+			FROM PRODUCT_TBL
+		]]>
+		<include refid="search" />
+	</select>
+	
+	<!-- 검색 조건 : 공통으로 사용하는  구문 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<!-- 상품명 -->
+			<if test="searchType == 'name'.toString()"> 
+				where pro_nm like '%' || #{keyword} || '%'
+			</if>
+			<!-- 내용 -->
+			<if test="searchType == 'detail'.toString()"> 
+				where pro_dtl_info like '%' || #{keyword} || '%'
+			</if>
+			<!-- 제조사 -->
+			<if test="searchType == 'company'.toString()"> 
+				where pdt_publisher like '%' || #{keyword} || '%'
+			</if>
+			<!-- 상품명 + 내용 -->
+			<if test="searchType == 'name_detail'.toString()"> 
+				where (pro_nm like '%' || #{keyword} || '%')
+				or (pro_dtl_info like '%' || #{keyword} || '%')
+			</if>
+			<!-- 상품명 + 제조사 -->
+			<if test="searchType == 'name_company'.toString()"> 
+				where (pro_nm like '%' || #{keyword} || '%')
+				or (pdt_publisher like '%' || #{keyword} || '%')
+			</if>
+			<!-- 상품명 + 내용 + 제조사 -->
+			<if test="searchType == 'all'.toString()"> 
+				where (pro_nm like '%' || #{keyword} || '%')
+				or (pro_dtl_info like '%' || #{keyword} || '%')
+				or (pdt_publisher like '%' || #{keyword} || '%')
+			</if>
+		</if>
+	</sql>
 
 </mapper>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
+import com.moonstarmall.util.SearchCriteria;
 
 @Repository
 public class AdProductDAOImpl implements AdProductDAO {
@@ -34,6 +35,21 @@ public class AdProductDAOImpl implements AdProductDAO {
 	public void productInsertOK(ProductVO vo) throws Exception {
 		session.insert(NS + ".productInsertOK", vo);
 	}
+
+	/* 상품 리스트 */
+	@Override
+	public List<ProductVO> productList(SearchCriteria cri) throws Exception {
+		return session.selectList(NS + ".productList", cri);
+	}
+
+	/* 검색조건별 상품 총 건수 */
+	@Override
+	public int productSearchCount(SearchCriteria cri) throws Exception {
+		return session.selectOne(NS + ".productSearchCount", cri);
+	}
+	
+	
+	
 	
 
 }
