@@ -72,25 +72,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<c:out value="${cri.searchType eq 'name_company'?'selected':''}"/>>상품명+제조사</option>
 									<option value="all"
 										<c:out value="${cri.searchType eq 'all'?'selected':''}"/>>상품명+내용+제조사</option>
-								</select> 
-								<%--<input class="form-control" type="text" name='keyword' id="keyword" style="width:250px; display: inline-block;" value='${cri.keyword}' />
-								<button id="btn_search" class="btn btn-default">검색</button> --%>
-								<!-- SEARCH FORM -->
-								<form class="form-inline ml-0 ml-md-3">
-									<div class="input-group">
-										<input class="form-control" type="search" placeholder="Search" aria-label="Search" style="display: inline-block;">
-										<div class="input-group-append">
-											<button class="btn btn-navbar" type="submit">
-												<i class="fas fa-search"></i>
-											</button>
-										</div>
-									</div>
-								</form>
+								</select>
+								<!-- SEARCH -->
+								<input class="form-control" type="text" name='keyword' id="keyword" style="width:250px; display: inline-block;" value='${cri.keyword}' />
+								<%--<button id="btn_search" class="btn btn-default">검색</button>--%>
+								<button class="btn btn-defalt" type="button">
+									<i class="fas fa-search"></i>
+								</button>
 							</div>
 							<div class="card-body table-responsive p-0">
 								<table id="tbl_productList" class="table table-hover table-bordered text-nowrap">
 									<tr class="col-center">
-										<th><input type="checkbox" id="checkAll" /></th>
+										<th><input type="checkbox" id="checkAll"></th>
 										<th>번호</th>
 										<th>이미지</th>
 										<th>상품명</th>
@@ -99,6 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<th>제조사</th>
 										<th>수량</th>
 										<th>판매상태</th>
+										<th>상품등록일자</th>
 									</tr>
 										<%-- 상품리스트 출력 --%>
 										<c:if test="${empty productList}">
@@ -114,14 +108,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												<input type="checkbox" name="check" class="check" value="${productVO.pro_num}">
 											</td>
 											<td class="col-center">${productVO.pro_num}</td>
-											<td class="col-md-1 col-center">
+											<td class="col-center">
 												<img src="/admin/product/displayFile?fileName=${productVO.pro_main_img }" style="width: 80px;">
 												<input type="hidden" name="img_${productVO.pro_num }" value="${productVO.pro_main_img }">
 											</td>
 											<td class="col-md-2">
-												<%-- <a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pdt_num=${productVO.pdt_num}"
-													style="color: black;"> ${productVO.pdt_name} </a> --%>
-												${productVO.pro_nm}
+												<a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pdt_num=${productVO.pro_num}" style="color: #807F89;">
+													${productVO.pro_nm}&nbsp;<ion-icon name="search-outline"></ion-icon>
+												</a>
 											</td>
 											<td class="col-md-1 col-center">${productVO.pro_price}</td>
 											<td class="col-md-1 col-center">${productVO.pro_discount}</td>
@@ -133,6 +127,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												  <option <c:out value="${productVO.pro_buy_yn == 'N'?'selected':''}"/>>N</option>
 												</select>
 											</td>
+											<td class="col-md-1 col-center">${productVO.sta_date }</td>
 										</tr>
 										</c:forEach>
 								</table>

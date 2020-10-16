@@ -122,9 +122,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										</select>
 									</div>
 									<div class="form-group">
-										<label for="pro_nm">상품명</label> <input
-											type="text" id="pro_nm" name="pro_nm" class="form-control"
-											placeholder="Enter Product name">
+										<label for="pro_nm">상품명</label>
+										<input type="text" id="pro_nm" name="pro_nm" class="form-control" placeholder="Enter Product name">
 									</div>
 									<div class="form-group">
 										<label for="pro_publisher">제조사</label> <input
@@ -142,16 +141,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											placeholder="Enter discounted price" />
 									</div>
 									<div class="form-group">
+										<label for="file1">상품 대표 이미지</label> 
+										<input type="file" id="file1" name="file1" class="form-control" />
+									</div>
+									<div class="form-group">
 										<label for="pro_dtl_info">상품상세설명</label>
 						                <textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
 						                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
 									</div>
 									<div class="form-group">
-										<label for="file1">대표상품 이미지</label> 
-										<input type="file" id="file1" name="file1" class="form-control" />
-									</div>
-									<div class="form-group">
-										<label for="pro_count" style="width:30%; margin-right:10px;">상품수량</label> 
+										<label for="pro_count" style="width:30%; margin-right:10px;">판매수량</label> 
 										<label for="pro_buy_yn" style="width:15%;">판매상태</label><br /> 
 										<input style="width:30%; margin-right:10px; display: inline-block;"
 											type="text" id="pro_count" name='pro_count' class="form-control" placeholder="Enter Amount" />
