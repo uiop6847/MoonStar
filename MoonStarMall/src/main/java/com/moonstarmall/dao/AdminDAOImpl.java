@@ -13,7 +13,7 @@ public class AdminDAOImpl implements AdminDAO {
 	@Autowired
 	SqlSession session;
 	
-	public final static String NS="com.moonstarmall.mappers.AdminMapper";
+	public final static String NS = "com.moonstarmall.mappers.AdminMapper";
 	
 	/* 관리자 로그인 */
 	@Override

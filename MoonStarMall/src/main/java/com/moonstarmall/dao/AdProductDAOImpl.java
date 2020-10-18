@@ -16,7 +16,7 @@ public class AdProductDAOImpl implements AdProductDAO {
 	@Autowired
 	SqlSession session;
 	
-	public final static String NS="com.moonstarmall.mappers.AdProductMapper";
+	public final static String NS = "com.moonstarmall.mappers.AdProductMapper";
 
 	/* 1차카테고리 조회 */
 	@Override
