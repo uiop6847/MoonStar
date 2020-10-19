@@ -46,4 +46,10 @@ public class AdProductServiceImpl implements AdProductService {
 		return dao.productSearchCount(cri);
 	}
 
+	/* 상품 상세정보 */
+	@Override
+	public ProductVO readProduct(int pro_num) throws Exception {
+		return dao.readProduct(pro_num);
+	}
+
 }

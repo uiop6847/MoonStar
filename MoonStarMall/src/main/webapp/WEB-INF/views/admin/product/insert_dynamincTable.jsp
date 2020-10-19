@@ -22,6 +22,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
 <script>
+
+	/* 테이블 행클릭 이벤트 */
+	function productDtlInfo(tr){
+		var index = tr.rowIndex - 1;
+	    console.log('클릭한 TR index : ' + index);
+	    
+	    //console.log($(this).attr("data-index"));
+
+	    //var check = $("input[name=check]");
+	    //check.val(index);
+		//console.log('check value : ' + $("input[name=check]").val());
+		
+		//$("#temp_file1").attr("data-index", index);
+		
+		/*
+		$(this).each(function(){
+			$(this).click(function(){
+				$(this).addClass("selected"); //클릭된 부분을 상단에 정의된 CCS인 selected클래스로 적용
+				$(this).siblings().removeClass("selected"); //siblings:형제요소들,    removeClass:선택된 클래스의 특성을 없앰
+			});
+		});
+		*/
+	
+	}
+	
 	/* 이미지 미리보기 */
 	function imgPreview(value) {
 		
@@ -35,22 +60,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			reader.readAsDataURL(value.files[0]);
 		}
 	}
-	
-	/* 테이블 행클릭 이벤트 */
-	function productDtlInfo(tr){
-		
-		var index = tr.rowIndex-1;
-		
-		console.log("index : " + index);
-		//$("div[name=proDtl]").css("display","none");
-		//$("div[name=proDtl]")[0].css("display","");
-		
-		//console.log($("#productRowAddInfo:nth-child("+index+")"));
-		$("#productRowAddInfo div[name='proDtl']").addClass("selected");
-		$("#productRowAddInfo:nth-child(1)").removeClass("selected");
-	}	//.children(index)
-	
-	
 </script>
 <style>
 	.table td {
@@ -60,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	}
 	
 	.selected { 
-		display: none;
+		background-color: #000080;
 	}
 	
 </style>
@@ -145,7 +154,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											</tbody>
 										</table>
 									</div>
-									<div id="productRowAddInfo">
+									<div id="productRowAddInfo" data-index="">
 									<%--
 										<div class="form-group">
 											<div class="row">
@@ -210,7 +219,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- productTable Handlebar Template -->
 <script id="productRowAddTemplate" type="text/x-handlebars-template">
-	<tr onclick="productDtlInfo(this);">
+	<tr onclick="productDtlInfo(this)">
 		<td>
 			<input type="checkbox" name="check" class="check" checked="checked">
 		</td>
@@ -239,24 +248,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </script>
 
 <script id="productRowAddInfoTemplate" type="text/x-handlebars-template">
-<div class="form-group" name="proDtl">
+<div class="form-group">
 	<div class="row">
 		<div class="col-md-2">
 			<img id="LoadImg" style="width: 150px;" height="150px;">
 		</div>
 		<div class="col-md-10">
 			<label for="file1">상품 대표 이미지</label>
-			<input type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
+			<input data-index="" type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
 		</div>
 	</div>
+</div>
+<div class="form-group">
 	<label for="pro_dtl_info">상품상세설명</label>
-	<textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
+	<textarea data-index="" class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
 		style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
 	</textarea>
 </div>
 </script>
 <script>
 $(function(){
+	
+	var rowIndex;
 	
 	/* 2차 카테고리 처리 */
 	$("#mainCategory").on("change", function(){
@@ -299,6 +312,7 @@ $(function(){
 	
 	/* 상품등록 테이블 행추가 */
 	$("#btn_add").click(function(){
+		
 		/* 행추가 */
 		var target = $("#productRowAdd");
 		var templateObject = $("#productRowAddTemplate");
@@ -306,16 +320,17 @@ $(function(){
 		
 		target.append(template);
 		
-		//var rowIndex = $("input[name='check']").length-1;
-		//console.log("table row : " + rowIndex);
-		
-		
 		/* 이미지, 상세설명 추가 */
 		pro_info();
 		
-		//$("#productRowAdd tr:last td input[name=check]").val(rowIndex);
-		//$("#productRowAdd tr:last td input[name=check]").attr("data-index", rowIndex);
-		//console.log("check: " + $("#productRowAdd tr:last td input[name=check]").val());
+		rowIndex = $("#productRowAdd tr:last").index();
+		console.log("$('#productRowAdd tr:last'): " + rowIndex);
+		
+		$("#productRowAdd tr:last td input[name=check]").val(rowIndex);
+		$("#productRowAdd tr:last td input[name=check]").attr("data-index", rowIndex);
+		console.log("check: " + $("#productRowAdd tr:last td input[name=check]").val());
+		
+		$("#file1").attr("data-index", rowIndex);
 		
 	});
 	
@@ -325,32 +340,21 @@ $(function(){
 		var templateObject = $("#productRowAddInfoTemplate");
 		var template = Handlebars.compile(templateObject.html());
 		
-		//target.children().hide();
-		target.children().addClass("selected");
+		target.children().hide();
 		target.append(template);
-		
-		//var rowIndex = $("input[name='file1']").length;
-		//console.log("div row : " + rowIndex);
-		//$(".productRowAddInfo").attr("data-index", rowIndex);
 	}
 	
 	/* 상품등록 테이블 행삭제 */
 	$("#btn_remove").click(function(){
-		
-		for(i=0; i<$("#productRowAdd").lenth-1; i++){
-			if($("input[name=check]").is(":checked") == true) {
-				$("#productRowAddInfo").children(i).remove();
-			}
-		}
-		
-		if($("input[name=check]").is(":checked") == true) { //체크된 요소가 있으면
-			
-			var i = $("input[name='check']:checked").parents("tr");
-		
+
+		if($("input[name=check]").is(":checked") == true){ //체크된 요소가 있으면
+            
+			var i = $("input[name=check]:checked").parents("tr");
+               
 			i.remove();
-		}else {
-			alert("삭제할 항목을 선택해주세요!")
-		}
+        }else {
+            alert("삭제할 항목을 선택해주세요!")
+        }
 	});
 	
 	

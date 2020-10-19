@@ -47,6 +47,12 @@ public class AdProductDAOImpl implements AdProductDAO {
 	public int productSearchCount(SearchCriteria cri) throws Exception {
 		return session.selectOne(NS + ".productSearchCount", cri);
 	}
+
+	/* 상품 상세정보 */
+	@Override
+	public ProductVO readProduct(int pro_num) throws Exception {
+		return session.selectOne(NS + ".readProduct", pro_num);
+	}
 	
 	
 	

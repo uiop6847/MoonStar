@@ -23,6 +23,9 @@ public interface AdProductDAO {
 	/* 검색조건별 상품 총 건수 */
 	public int productSearchCount(SearchCriteria cri) throws Exception;
 	
+	/* 상품 상세정보 */
+	public ProductVO readProduct(int pro_num) throws Exception;
+	
 	
 
 }

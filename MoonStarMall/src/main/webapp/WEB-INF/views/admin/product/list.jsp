@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -113,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												<input type="hidden" name="img_${productVO.pro_num }" value="${productVO.pro_main_img }">
 											</td>
 											<td class="col-md-2">
-												<a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pdt_num=${productVO.pro_num}" style="color: #807F89;">
+												<a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pro_num=${productVO.pro_num}" style="color: #807F89;">
 													${productVO.pro_nm}&nbsp;<ion-icon name="search-outline"></ion-icon>
 												</a>
 											</td>
@@ -127,7 +129,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												  <option <c:out value="${productVO.pro_buy_yn == 'N'?'selected':''}"/>>N</option>
 												</select>
 											</td>
-											<td class="col-md-1 col-center">${productVO.sta_date }</td>
+											<td class="col-md-1 col-center">
+												<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${productVO.sta_date }" />
+											</td>
 										</tr>
 										</c:forEach>
 								</table>

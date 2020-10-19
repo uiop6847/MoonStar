@@ -38,6 +38,16 @@
 		ORDER BY PRO_NUM DESC
 	</select>
 	
+	<select id="readProduct" parameterType="int" resultType="ProductVO">
+		SELECT  PRO_NUM, 
+        (SELECT CAT_NAME FROM CATEGORY_TBL CG WHERE CG.CAT_CODE = C.CAT_PRTCODE) AS CAT_PRTCODE, C.CAT_NAME AS CAT_CODE,
+        PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
+        PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
+		FROM PRODUCT_TBL P INNER JOIN CATEGORY_TBL C
+		ON P.CAT_CODE = C.CAT_CODE
+		WHERE P.PRO_NUM = #{pro_num}
+	</select>
+	
 	<!-- 상품 총 건수 -->
 	<select id="productSearchCount" parameterType="SearchCriteria" resultType="int">
 		<![CDATA[

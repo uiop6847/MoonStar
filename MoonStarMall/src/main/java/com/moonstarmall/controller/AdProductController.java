@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -154,5 +155,29 @@ public class AdProductController {
 		
 		model.addAttribute("pm", pm);
 	}
+	
+	/* 상품 상세정보 */
+	@RequestMapping(value = "read", method = RequestMethod.GET)
+	public void productRead(@ModelAttribute("cri") SearchCriteria cri,
+							@RequestParam("pro_num") int pro_num, Model model) throws Exception {
+		logger.info("productRead() called");
+		
+		ProductVO vo = service.readProduct(pro_num);
+		logger.info("=====readProduct: " + vo);
+		
+		// 썸네일 파일 이름 수정
+		vo.setPro_main_img(vo.getPro_main_img().substring(vo.getPro_main_img().lastIndexOf("_") + 1));
+		logger.info("=====change readProduct: " + vo);
+		
+		model.addAttribute("vo", vo);
+		
+		// 상품 목록으로 돌아가기 위한 목적
+		PageMaker pm = new PageMaker();
+		pm.setCri(cri);
+		
+		model.addAttribute("pm", pm);
+		
+	}
+	
 
 }
