@@ -30,11 +30,10 @@ $(document).ready(function(){
     }).change(function(){
         if( $(this).is(":checked") ){
             // 체크박스의 부모 > 부모 니까 tr 이 되고 tr 에 selected 라는 class 를 추가한다.
-            $(this).parent().parent().addClass("selected");
+            $(this).parent().parent().addClass("checkSelected");
         }
         else{
-            $(this).parent().parent().removeClass("selected");
+            $(this).parent().parent().removeClass("checkSelected");
         }
     });
-    
 });

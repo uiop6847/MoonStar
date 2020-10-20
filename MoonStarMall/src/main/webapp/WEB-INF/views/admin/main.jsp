@@ -52,38 +52,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	
 		<%-- 로그인 안 한 상태 --%>
 		<c:if test="${sessionScope.admin == null}">
-		<!-- Main content -->
-		<div class="login-page" style="height: 500px; background: none; justify-content: flex-start;">
-			<div class="card login-box">
-				<div class="card-header" style="background-color: #F9D5D3;">
-				  <h3 class="card-title">Sign in to start your session</h3>
-				</div>
-				<form class="form-horizontal" id="loginForm" action="/admin/loginOK" method="post">
-					<div class="card-body">
-						<div class="form-group row">
-							<label for="admin_id" class="col-sm-2 col-form-label">ID</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="admin_id" name="admin_id" placeholder="ID">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="admin_pw" class="col-sm-2 col-form-label">PW</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control" id="admin_pw" name="admin_pw" placeholder="PW">
-							</div>
-						</div>
-					</div>
-					<!-- /.card-body -->
-				<div class="card-footer">
-				  <button type="submit" class="btn float-right" style="background-color: #F9D5D3;">
-				  Sign in</button>
-				</div>
-				<!-- /.card-footer -->
-				</form>
-			</div>
-		</div>
-		<!-- /.content -->
-		</c:if>		
+			
+		</c:if>
 		<!-- Main content -->
 		<div class="content">
 			<div class="container">

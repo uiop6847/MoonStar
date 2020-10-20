@@ -19,8 +19,7 @@
 				<%-- 로그인 안 한 상태 --%>
 				<c:if test="${sessionScope.admin == null}">
 					<li class="nav-item">
-						<!-- <a href="/admin/main" class="nav-link">LOGIN</a> -->
-						<span>로그인 해주세요.</span>
+						<a href="/admin/login" class="nav-link">LOGIN</a>
 					</li>
 				</c:if>
 				<%-- 로그인 한 상태 --%>

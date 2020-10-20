@@ -31,6 +31,12 @@ public class AdminController {
 		logger.info("/admin/main");
 	}
 	
+	/* 관리자 로그인 이동 */
+	@RequestMapping(value="login", method = RequestMethod.GET)
+	public void login() {
+		logger.info("/admin/login");
+	}
+	
 	/* 관리자 로그인 */
 	@RequestMapping(value="loginOK", method = RequestMethod.POST)
 	public String loginOK(AdminDTO dto, HttpSession session, RedirectAttributes rttr) throws Exception {

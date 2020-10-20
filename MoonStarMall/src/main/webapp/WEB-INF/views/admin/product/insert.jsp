@@ -22,35 +22,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
 <script>
+
 	/* 이미지 미리보기 */
 	function imgPreview(value) {
+		
+		// 선택된 행의 img태그 찾기
+		var accImg = $("div[name='proDtl']").not(".selected").children().children().children();
 		
 		if(value.files && value.files[0]){
 			var reader = new FileReader();
 			
 			reader.onload = function(e){
-				$("#LoadImg").attr("src", e.target.result)
+				accImg.attr("src", e.target.result);
 			}
 			
 			reader.readAsDataURL(value.files[0]);
 		}
 	}
 	
+	//체크박스 클릭시 상위이벤트 무시
+	$("input[name='check']").on("click",function(event){
+		console.log($(this));
+		//jQuery 이벤트의 경우,
+		//return false는 event.stopPropagation()과 event.preventDefault() 를
+		//모두 수행한 것과 같은 결과를 보인다.
+		return false;
+	});
+	
 	/* 테이블 행클릭 이벤트 */
 	function productDtlInfo(tr){
 		
-		var index = tr.rowIndex-1;
+		var index = tr.rowIndex - 1;
 		
-		console.log("index : " + index);
-		//$("div[name=proDtl]").css("display","none");
-		//$("div[name=proDtl]")[0].css("display","");
+		//console.log("index : " + index);
 		
-		//console.log($("#productRowAddInfo:nth-child("+index+")"));
-		$("#productRowAddInfo div[name='proDtl']").addClass("selected");
-		$("#productRowAddInfo:nth-child(1)").removeClass("selected");
-	}	//.children(index)
+		$("#productRowAddInfo div[name='proDtl']").addClass("selected"); // 모든 div태그 숨기기
+		$("#productRowAddInfo>div").eq(index).removeClass("selected"); // 선택한 행의 div태그 보이기
+	}
 	
-	
+	/* CKEditor 불러오기 */
+	function ckEditorLoad(id){
+		/* 
+			ckEditor 작업
+			config.js를 사용하지 않고 개별 설정하는 부분
+		*/
+		var ckeditor_config = {
+				resize_enabled : true,
+				enterMode : CKEDITOR.ENTER_BR,
+				shiftEnterMode : CKEDITOR.ENTER_P,
+				toolbarCancollapse : true, 
+				removePlugins : "elementspath",
+				filebrowserUploadUrl : '/admin/product/imgUpload'
+		};
+
+		// config.js 설정 사용
+		//CKEDITOR.replace("pro_dtl_info", ckeditor_config);
+		CKEDITOR.replace(id, ckeditor_config);
+	}
 </script>
 <style>
 	.table td {
@@ -62,6 +90,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	.selected { 
 		display: none;
 	}
+	
+	.checkSelected{background-color: navy;color: #fff; font-weight: bold;}
 	
 </style>
 </head>
@@ -146,25 +176,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										</table>
 									</div>
 									<div id="productRowAddInfo">
-									<%--
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-2">
-													<img id="LoadImg" style="width: 150px;" height="150px;">
-												</div>
-												<div class="col-md-10">
-													<label for="file1">상품 대표 이미지</label>
-													<input data-index="" type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="pro_dtl_info">상품상세설명</label>
-							                <textarea data-index="" class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
-							                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
-							                </textarea>
-										</div>
-									 --%>
 									</div>
 									<div class="box-footer">
 										<div>
@@ -270,7 +281,6 @@ $(function(){
 		});
 	});
 	
-	
 	/* 2차카테고리 템플릿 적용함수 */
 	var subCategory = function(subCGStr, target, templateObject){
 		
@@ -280,22 +290,6 @@ $(function(){
 		$("#subCategory option").remove();
 		target.append(options);
 	}
-	
-	/* 
-		ckEditor 작업
-		config.js를 사용하지 않고 개별 설정하는 부분
-	*/
-	var ckeditor_config = {
-			resize_enabled : true,
-			enterMode : CKEDITOR.ENTER_BR,
-			shiftEnterMode : CKEDITOR.ENTER_P,
-			toolbarCancollapse : true, 
-			removePlugins : "elementspath",
-			filebrowserUploadUrl : '/admin/product/imgUpload'
-	};
-	// config.js 설정 사용
-	CKEDITOR.replace("pro_dtl_info", ckeditor_config);
-	
 	
 	/* 상품등록 테이블 행추가 */
 	$("#btn_add").click(function(){
@@ -319,27 +313,37 @@ $(function(){
 		
 	});
 	
+	var cnt = 0; // pro_dtl_info 동적ID값 목적
 	/* 이미지, 상세설명 추가 */
 	function pro_info(){
 		var target = $("#productRowAddInfo");
 		var templateObject = $("#productRowAddInfoTemplate");
 		var template = Handlebars.compile(templateObject.html());
 		
-		//target.children().hide();
 		target.children().addClass("selected");
 		target.append(template);
 		
-		//var rowIndex = $("input[name='file1']").length;
-		//console.log("div row : " + rowIndex);
-		//$(".productRowAddInfo").attr("data-index", rowIndex);
+		//console.log(target.children(":last").children(":last").attr("id"));
+		var ckId = target.children(":last").children(":last").attr("id", "pro_dtl_info_" + cnt);
+		
+		ckEditorLoad(ckId.attr("id"));
+		cnt += 1;
 	}
 	
 	/* 상품등록 테이블 행삭제 */
 	$("#btn_remove").click(function(){
 		
-		for(i=0; i<$("#productRowAdd").lenth-1; i++){
-			if($("input[name=check]").is(":checked") == true) {
-				$("#productRowAddInfo").children(i).remove();
+		var length = $("#productRowAdd tr").length-1;
+
+		//console.log("length : " + length);
+		
+		for(i = length; i >= 0; i--){
+			//console.log("for i : " + i);
+			if($("#productRowAdd tr").eq(i).children().children().is(":checked") == true) {
+				//console.log("if : " + $("#productRowAdd tr").eq(i).children().children().is(":checked"));
+				
+				//console.log($("#productRowAddInfo>div").eq(i).html());
+				$("#productRowAddInfo>div").eq(i).remove();
 			}
 		}
 		
@@ -349,11 +353,9 @@ $(function(){
 		
 			i.remove();
 		}else {
-			alert("삭제할 항목을 선택해주세요!")
+			alert("삭제할 항목을 선택해주세요!");
 		}
 	});
-	
-	
 });
 </script>
 </body>
