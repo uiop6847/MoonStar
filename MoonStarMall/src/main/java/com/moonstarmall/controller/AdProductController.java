@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
@@ -75,7 +76,7 @@ public class AdProductController {
 		return entity;
 	}
 	
-	/* 상품 등록
+	/* 상품 등록 */
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
 	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
@@ -87,29 +88,22 @@ public class AdProductController {
 		rttr.addFlashAttribute("msg", "INSERT_SUCCESS");
 		
 		return "redirect:/admin/product/list";
-	} */
+	}
 	
-	/* 상품 등록 */
+	/* 상품 등록
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
-	public ResponseEntity<String> productInsertOK(@RequestBody List<ProductVO> product) throws Exception {
+	public ResponseEntity<String> productInsertOK(ProductVO vo) throws Exception {
 		logger.info("productInsertOK() called");
-		logger.info("=====list: " + product.toString());
+		logger.info("=====ProductVO: " + vo.toString());
 		
 		ResponseEntity<String> entity = null;
-		ProductVO vo = null;
 		
-		logger.info("=====list.size(): " + product.size());
 		try {
-			for(int i=0; i<product.size(); i++) {
-				vo = product.get(i);
-				logger.info("=====ProductVO: " + vo.toString());
+				//logger.info("=====getFile(): " + vo.getFile1());
 				
-				logger.info("=====getFile(): " + vo.getFile1());
-				
-				vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+				//vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
 				
 				//service.productInsertOK(vo);
-			}
 			
 			entity = new ResponseEntity<String>(HttpStatus.OK);
 			
@@ -119,7 +113,7 @@ public class AdProductController {
 		}
 		
 		return entity;
-	}
+	} */
 	
 	/* 상품상세내용(ckEditor) 파일업로드 */
 	@RequestMapping(value = "imgUpload", method = RequestMethod.POST)

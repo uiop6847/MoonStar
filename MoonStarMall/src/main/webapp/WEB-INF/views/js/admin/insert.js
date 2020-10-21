@@ -20,31 +20,32 @@ $(function(){
 					/* 유효성검사 */
 					if(validationCheck(i)){
 
-						/* JSON 형태로 데이터 변환 */
+						/* JSON 형태로 데이터 변환 
 						console.log("JSON_DataPush");
 						var subCategory     = $("#subCategory option:selected");
-						var proNm           = $("input[name=pro_nm]");
-						var proPublisher    = $("input[name=pro_publisher]");
-						var proPrice        = $("input[name=pro_price]");
-						var proDiscount     = $("input[name=pro_discount]");
-						var proCount        = $("input[name=pro_count]");
+						var proNm           = $("input[name=pro_nm]:eq("+i+")");
+						var proPublisher    = $("input[name=pro_publisher]:eq("+i+")");
+						var proPrice        = $("input[name=pro_price]:eq("+i+")");
+						var proDiscount     = $("input[name=pro_discount]:eq("+i+")");
+						var proCount        = $("input[name=pro_count]:eq("+i+")");
 						var proBuyYN		= $("select[name=pro_buy_yn] option:selected");
-						var file1           = $("input[name=file1]");
-						var pro_dtl_info    = $("textarea[name=pro_dtl_info]");
-						var ckeditor 		= CKEDITOR.instances[pro_dtl_info.eq(i).attr("id")];
-
+						var file1           = $("input[name=file1]:eq("+i+")");
+						var pro_dtl_info    = $("textarea[name=pro_dtl_info]:eq("+i+")");
+						var ckeditor 		= CKEDITOR.instances[pro_dtl_info.attr("id")];
+						
 						data.cat_code 		= subCategory.val();
-						data.pro_nm 		= proNm.eq(i).val();
-						data.pro_publisher	= proPublisher.eq(i).val();
-						data.pro_price		= proPrice.eq(i).val();
-						data.pro_discount	= proDiscount.eq(i).val();
-						data.pro_count		= proCount.eq(i).val();
-						data.proBuyYN		= proBuyYN.eq(i).val();
-						data.file1			= file1.eq(i).val();
+						data.pro_nm 		= proNm.val();
+						data.pro_publisher	= proPublisher.val();
+						data.pro_price		= proPrice.val();
+						data.pro_discount	= proDiscount.val();
+						data.pro_count		= proCount.val();
+						data.proBuyYN		= proBuyYN.val();
+						data.file1			= file1.val();
 						data.pro_dtl_info	= ckeditor.getData();
 
+						
 						// 리스트에 생성된 객체 삽입
-						list.push(data);
+						list.push(data);*/
 					}else {
 						return false;
 					}
@@ -56,6 +57,9 @@ $(function(){
 		/* submit */
 		if(checked == "Y"){
 			console.log("checked : " + checked);
+
+			form.submit();
+			/*
 			// String 형태로 변환
 			var jsonData = JSON.stringify(list);
 
@@ -65,9 +69,11 @@ $(function(){
 				url: '/admin/product/insertOK',
 				type: 'post',
 				contentType: 'application/json; charset=utf-8',
-				data: jsonData,
+				//processData: false,
+				//contentType: false,
 				//enctype: 'multipart/form-data',
-				//dataType: 'json',
+				data: jsonData,
+				dataType: 'json',
 				success: function(data){
 					console.log("success");
 					location.href="/admin/product/list";
@@ -75,9 +81,7 @@ $(function(){
 				}, error: function(xhr, status, error){
 					console.log("error: " + status);
 				}
-			});
-
-			
+			});*/
 
 		} else if(checked == "N"){
 			alert("등록할 상품을 체크해주세요.");
