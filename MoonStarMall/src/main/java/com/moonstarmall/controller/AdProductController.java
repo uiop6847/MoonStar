@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.multi.MultiFileChooserUI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
@@ -73,7 +75,7 @@ public class AdProductController {
 		return entity;
 	}
 	
-	/* 상품 등록 */
+	/* 상품 등록
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
 	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
@@ -85,6 +87,38 @@ public class AdProductController {
 		rttr.addFlashAttribute("msg", "INSERT_SUCCESS");
 		
 		return "redirect:/admin/product/list";
+	} */
+	
+	/* 상품 등록 */
+	@RequestMapping(value="insertOK", method=RequestMethod.POST)
+	public ResponseEntity<String> productInsertOK(@RequestBody List<ProductVO> product) throws Exception {
+		logger.info("productInsertOK() called");
+		logger.info("=====list: " + product.toString());
+		
+		ResponseEntity<String> entity = null;
+		ProductVO vo = null;
+		
+		logger.info("=====list.size(): " + product.size());
+		try {
+			for(int i=0; i<product.size(); i++) {
+				vo = product.get(i);
+				logger.info("=====ProductVO: " + vo.toString());
+				
+				logger.info("=====getFile(): " + vo.getFile1());
+				
+				vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+				
+				//service.productInsertOK(vo);
+			}
+			
+			entity = new ResponseEntity<String>(HttpStatus.OK);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return entity;
 	}
 	
 	/* 상품상세내용(ckEditor) 파일업로드 */

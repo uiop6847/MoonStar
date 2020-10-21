@@ -5,10 +5,10 @@ $(document).ready(function(){
     $(":checkbox:first", tbl).click(function(){
         // 클릭한 체크박스가 체크상태인지 체크해제상태인지 판단
         if( $(this).is(":checked") ){
-            $(":checkbox", tbl).attr("checked", "checked");
+            $(":checkbox", tbl).prop("checked", true);
         }
         else{
-            $(":checkbox", tbl).removeAttr("checked");
+            $(":checkbox", tbl).prop("checked", false);
         }
 
         // 모든 체크박스에 change 이벤트 발생시키기               
@@ -22,10 +22,10 @@ $(document).ready(function(){
          
         // 전체 체크박스 갯수와 현재 체크된 체크박스 갯수를 비교해서 헤더에 있는 체크박스 체크할지 말지 판단
         if( allCnt==checkedCnt ){
-            $(":checkbox:first", tbl).attr("checked", "checked");
+            $(":checkbox:first", tbl).prop("checked", true);
         }
         else{
-            $(":checkbox:first", tbl).removeAttr("checked");
+            $(":checkbox:first", tbl).prop("checked", false);
         }
     }).change(function(){
         if( $(this).is(":checked") ){

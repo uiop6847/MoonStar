@@ -1,6 +1,7 @@
 package com.moonstarmall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,11 @@ public class ProductVO {
 	
 	// 업로드 파일
 	private MultipartFile file1;
+	
+	private List<ProductVO> list;
 
+	
+	
 	public int getPro_num() {
 		return pro_num;
 	}
@@ -135,12 +140,20 @@ public class ProductVO {
 		this.file1 = file1;
 	}
 
+	public List<ProductVO> getList() {
+		return list;
+	}
+
+	public void setList(List<ProductVO> list) {
+		this.list = list;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductVO [pro_num=" + pro_num + ", cat_code=" + cat_code + ", cat_prtcode=" + cat_prtcode + ", pro_nm="
 				+ pro_nm + ", pro_price=" + pro_price + ", pro_discount=" + pro_discount + ", pro_publisher="
 				+ pro_publisher + ", pro_dtl_info=" + pro_dtl_info + ", pro_main_img=" + pro_main_img + ", pro_count="
 				+ pro_count + ", pro_buy_yn=" + pro_buy_yn + ", sta_date=" + sta_date + ", udt_date=" + udt_date
-				+ ", file1=" + file1 + "]";
+				+ ", file1=" + file1 + ", list=" + list + "]";
 	}
 }

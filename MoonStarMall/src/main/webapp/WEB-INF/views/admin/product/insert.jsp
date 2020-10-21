@@ -40,20 +40,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		}
 	}
 	
-	//체크박스 클릭시 상위이벤트 무시
-	$("input[name='check']").on("click",function(event){
-		console.log($(this));
-		//jQuery 이벤트의 경우,
-		//return false는 event.stopPropagation()과 event.preventDefault() 를
-		//모두 수행한 것과 같은 결과를 보인다.
-		return false;
-	});
-	
 	/* 테이블 행클릭 이벤트 */
 	function productDtlInfo(tr){
 		
 		var index = tr.rowIndex - 1;
-		
 		//console.log("index : " + index);
 		
 		$("#productRowAddInfo div[name='proDtl']").addClass("selected"); // 모든 div태그 숨기기
@@ -162,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<table class="table table-head-fixed table-hover text-nowrap" id="tbl_product">
 											<thead>
 												<tr style="text-align: center;">
-													<th><input type="checkbox" id="checkAll"></th>
+													<th><input type="checkbox" id="checkAll" name="checkAll"></th>
 													<th>상품명</th>
 													<th>제조사</th>
 													<th>판매가</th>
@@ -181,8 +171,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<div>
 											<hr>
 										</div>
-										<ul class="mailbox-attachments clearfix uploadedList">
-										</ul>
 										<button id="btn_submit" type="button" class="btn btn-primary">상품등록</button>
 	
 									</div>
@@ -238,7 +226,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<input type="number" id="pro_discount" name="pro_discount" class="form-control">
 		</td>
 		<td>
-			<input type="number" id="pro_count" name='pro_count' class="form-control">
+			<input type="number" id="pro_count" name="pro_count" class="form-control">
 		</td>
 		<td>
 			<select id="pro_buy_yn" name="pro_buy_yn" class="form-control">
@@ -260,7 +248,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<input type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
 		</div>
 	</div>
-	<label for="pro_dtl_info">상품상세설명</label>
+	<label>상품상세설명</label>
 	<textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
 		style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
 	</textarea>
@@ -268,6 +256,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </script>
 <script>
 $(function(){
+	
+	var cnt = 0; // 동적ID값 목적 : pro_dtl_info_(cnt) 
 	
 	/* 2차 카테고리 처리 */
 	$("#mainCategory").on("change", function(){
@@ -293,27 +283,20 @@ $(function(){
 	
 	/* 상품등록 테이블 행추가 */
 	$("#btn_add").click(function(){
-		/* 행추가 */
+		
 		var target = $("#productRowAdd");
 		var templateObject = $("#productRowAddTemplate");
 		var template = Handlebars.compile(templateObject.html());
 		
 		target.append(template);
 		
-		//var rowIndex = $("input[name='check']").length-1;
-		//console.log("table row : " + rowIndex);
-		
-		
+		//target.children(":last").children(":first").children().prop("checked", true);
+
 		/* 이미지, 상세설명 추가 */
 		pro_info();
 		
-		//$("#productRowAdd tr:last td input[name=check]").val(rowIndex);
-		//$("#productRowAdd tr:last td input[name=check]").attr("data-index", rowIndex);
-		//console.log("check: " + $("#productRowAdd tr:last td input[name=check]").val());
-		
 	});
 	
-	var cnt = 0; // pro_dtl_info 동적ID값 목적
 	/* 이미지, 상세설명 추가 */
 	function pro_info(){
 		var target = $("#productRowAddInfo");
@@ -323,7 +306,6 @@ $(function(){
 		target.children().addClass("selected");
 		target.append(template);
 		
-		//console.log(target.children(":last").children(":last").attr("id"));
 		var ckId = target.children(":last").children(":last").attr("id", "pro_dtl_info_" + cnt);
 		
 		ckEditorLoad(ckId.attr("id"));
@@ -335,14 +317,10 @@ $(function(){
 		
 		var length = $("#productRowAdd tr").length-1;
 
-		//console.log("length : " + length);
-		
 		for(i = length; i >= 0; i--){
-			//console.log("for i : " + i);
+			
 			if($("#productRowAdd tr").eq(i).children().children().is(":checked") == true) {
-				//console.log("if : " + $("#productRowAdd tr").eq(i).children().children().is(":checked"));
 				
-				//console.log($("#productRowAddInfo>div").eq(i).html());
 				$("#productRowAddInfo>div").eq(i).remove();
 			}
 		}
@@ -356,6 +334,18 @@ $(function(){
 			alert("삭제할 항목을 선택해주세요!");
 		}
 	});
+	/*
+	$(document).on("click","input[name=check]",function(){
+		var adultYn = $("input[name=check]").is(":checked")?"Y":"N"; //3항연산자, checkbox 체크 여부
+
+		if(adultYn == "Y"){
+			$("input[name=check]").attr("checked", "checked");
+		}else{
+			$("input[name=check]").removeAttr("checked");
+		}
+		console.log(adultYn);
+	});
+	*/
 });
 </script>
 </body>

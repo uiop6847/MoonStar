@@ -206,6 +206,18 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.9.9</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>2.9.9</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>2.9.9</version>
+		</dependency>
 
 		<!-- 파일 업로드 기능 -->
 		<dependency>
