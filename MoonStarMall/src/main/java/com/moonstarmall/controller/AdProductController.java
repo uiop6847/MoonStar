@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.multi.MultiFileChooserUI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
@@ -76,7 +75,7 @@ public class AdProductController {
 		return entity;
 	}
 	
-	/* 상품 등록 */
+	/* 상품 등록 
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
 	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
@@ -88,32 +87,74 @@ public class AdProductController {
 		rttr.addFlashAttribute("msg", "INSERT_SUCCESS");
 		
 		return "redirect:/admin/product/list";
-	}
+	}*/
 	
-	/* 상품 등록
+	/* 상품 등록 */
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
-	public ResponseEntity<String> productInsertOK(ProductVO vo) throws Exception {
+	public ResponseEntity<String> productInsertOK(@RequestBody List<Map<String, Object>> list) throws Exception {
 		logger.info("productInsertOK() called");
-		logger.info("=====ProductVO: " + vo.toString());
+		logger.info("=====List: " + list.toString());
 		
 		ResponseEntity<String> entity = null;
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
 		try {
-				//logger.info("=====getFile(): " + vo.getFile1());
+			
+			for(int i=0; i<list.size(); i++) {
+				map = list.get(i);
+				logger.info("=====Map: " + map);
 				
-				//vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
-				
-				//service.productInsertOK(vo);
+				//MAP의 KEY값을 이용하여 VALUE값 가져오기
+				System.out.println("=================================");
+			    for (String mapkey : map.keySet()){
+			        System.out.println("key:"+mapkey+",value:"+map.get(mapkey));
+			    }
+			    System.out.println("=================================");
+			    
+			    //vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+			    //System.out.println("file1 : " + map.get("file1"));
+			    //MultipartFile fileName = (MultipartFile) map.get("file1");
+			    //map.put("pro_main_img", FileUtils.uploadFile(uploadPath, ((MultipartFile) map.get("file1")).getOriginalFilename(), ((MultipartFile) map.get("file1")).getBytes()));
+			    
+			    //service.productInsertOK(map);
+			}
 			
 			entity = new ResponseEntity<String>(HttpStatus.OK);
-			
+		
 		}catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 		
 		return entity;
-	} */
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="CheckFileUpload", method=RequestMethod.POST)
+	public ResponseEntity<String> productCheckFileUpload(@RequestBody MultipartFile file1,
+			HttpServletRequest req, HttpServletResponse res) {
+		logger.info("=====file1: " + file1);
+		
+		ResponseEntity<String> entity = null;
+		
+		res.setHeader("Content-Type", "application/xml");
+		res.setContentType("text/xml;charset=UTF-8");
+		res.setCharacterEncoding("utf-8");
+		
+		try {
+			
+			String fileName = FileUtils.uploadFile(uploadPath, file1.getOriginalFilename(), file1.getBytes());
+			logger.info("=====fileName: " + fileName);
+			
+			entity = new ResponseEntity<String>(fileName, HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return entity;
+	}
 	
 	/* 상품상세내용(ckEditor) 파일업로드 */
 	@RequestMapping(value = "imgUpload", method = RequestMethod.POST)

@@ -1,6 +1,7 @@
 package com.moonstarmall.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,14 @@ public class AdProductDAOImpl implements AdProductDAO {
 	/* 상품 등록 */
 	@Override
 	public void productInsertOK(ProductVO vo) throws Exception {
-		session.insert(NS + ".productInsertOK", vo);
+		//session.insert(NS + ".productInsertOK", vo);
+	}
+	
+	/* 상품 등록 */
+	@Override
+	public void productInsertOK(Map<String, Object> map) throws Exception {
+		System.out.println("DAO");
+		session.insert(NS + ".productInsertOK", map);
 	}
 
 	/* 상품 리스트 */

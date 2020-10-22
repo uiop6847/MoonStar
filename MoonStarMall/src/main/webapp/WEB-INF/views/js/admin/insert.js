@@ -1,6 +1,7 @@
 $(function(){
 
 	var form = $("#productInsertForm");
+	var fileName = "";
 
     /* 상품 등록 버튼 클릭 시 */
 	$("#btn_submit").on("click", function(){
@@ -8,62 +9,108 @@ $(function(){
 		var checked = "N"; // checked 여부
 		var result = confirm("상품을 등록하시겠습니까?");
 
-		var list = new Array(); // 리스트 생성
-		var data = new Object() ; // 객체 생성
-
+		var list = []; // 리스트 생성
+		var data = {}; // 객체 생성
+		const sendingData = new FormData();
+		
 		for(i = 0; i < $(":checkbox:not(:first)").length; i++){
 			
 			if($(":checkbox").is(":checked")){
 				checked = "Y";
-
+				
 				if(result){
 					/* 유효성검사 */
-					if(validationCheck(i)){
+					if(!validationCheck(i)){ return false; }
 
-						/* JSON 형태로 데이터 변환 
-						console.log("JSON_DataPush");
-						var subCategory     = $("#subCategory option:selected");
-						var proNm           = $("input[name=pro_nm]:eq("+i+")");
-						var proPublisher    = $("input[name=pro_publisher]:eq("+i+")");
-						var proPrice        = $("input[name=pro_price]:eq("+i+")");
-						var proDiscount     = $("input[name=pro_discount]:eq("+i+")");
-						var proCount        = $("input[name=pro_count]:eq("+i+")");
-						var proBuyYN		= $("select[name=pro_buy_yn] option:selected");
-						var file1           = $("input[name=file1]:eq("+i+")");
-						var pro_dtl_info    = $("textarea[name=pro_dtl_info]:eq("+i+")");
-						var ckeditor 		= CKEDITOR.instances[pro_dtl_info.attr("id")];
-						
-						data.cat_code 		= subCategory.val();
-						data.pro_nm 		= proNm.val();
-						data.pro_publisher	= proPublisher.val();
-						data.pro_price		= proPrice.val();
-						data.pro_discount	= proDiscount.val();
-						data.pro_count		= proCount.val();
-						data.proBuyYN		= proBuyYN.val();
-						data.file1			= file1.val();
-						data.pro_dtl_info	= ckeditor.getData();
+					/* JSON 형태로 데이터 변환 */
+					var subCategory     = $("#subCategory option:selected");
+					var proNm           = $("input[name=pro_nm]:eq("+i+")");
+					var proPublisher    = $("input[name=pro_publisher]:eq("+i+")");
+					var proPrice        = $("input[name=pro_price]:eq("+i+")");
+					var proDiscount     = $("input[name=pro_discount]:eq("+i+")");
+					var proCount        = $("input[name=pro_count]:eq("+i+")");
+					var proBuyYN		= $("select[name=pro_buy_yn] option:selected");
+					var pro_dtl_info    = $("textarea[name=pro_dtl_info]:eq("+i+")");
+					var ckeditor 		= CKEDITOR.instances[pro_dtl_info.attr("id")];
+					var file1           = $("input[name=file1]:eq("+i+")");
+					var fileName		= "";
+					
+					data = {};
 
-						
-						// 리스트에 생성된 객체 삽입
-						list.push(data);*/
-					}else {
-						return false;
-					}
+					sendingData.append('file1', file1[0].files[0]);
+					console.log(sendingData.get("file1"));
+					
+					syncGetData(sendingData);
+					/*$.ajax({
+						url: '/admin/product/CheckFileUpload',
+						type: 'post',
+						processData: false,
+						contentType: false,
+						dataType : 'json',
+						data: sendingData,
+						sync : false,
+						success: function(result){
+							if(result != null) {
+								console.log(result);
+								fileName = result;
+							}
+						}
+					});*/
+					
+					console.log("fileName : " + fileName);
+					data.cat_code 		= subCategory.val();
+					data.pro_nm 		= proNm.val();
+					data.pro_publisher	= proPublisher.val();
+					data.pro_price		= proPrice.val();
+					data.pro_discount	= proDiscount.val();
+					data.pro_count		= proCount.val();
+					data.pro_buy_yn		= proBuyYN.val();
+					data.pro_main_img	= fileName;
+					//data.file1			= file1[0].files[0];
+					data.pro_dtl_info	= ckeditor.getData();
+
+					// 리스트에 생성된 객체 삽입
+					list.push(data);
+
+					/*
+					formData = new FormData();
+    				formData.append('file1', file1[0].files[0]);
+					console.log(formData);
+					$.ajax({
+						url: '/admin/product/CheckFileUpload',
+						type: 'post',
+						processData: false,
+						contentType: false,
+						dataType : 'json',
+						//enctype: 'multipart/form-data',
+						data: formData,
+						success: function(result){
+							alert("업로드 성공!!"+result);
+						}
+					});*/
+					
+					/*
+					sendingData.append('cat_code', subCategory.val());
+					sendingData.append('pro_nm', proNm.val());
+					sendingData.append('pro_publisher', proPublisher.val());
+					sendingData.append('pro_price', proPrice.val());
+					sendingData.append('pro_discount', proDiscount.val());
+					sendingData.append('pro_count', proCount.val());
+					sendingData.append('pro_buy_yn', proBuyYN.val());
+					sendingData.append('data.pro_dtl_info', ckeditor.getData());
+					sendingData.append('file1',file1[0].files[0]);
+
+					list.push(sendingData);
+					*/
 				}
 			}
-
+			
 		}
-
+		
 		/* submit */
 		if(checked == "Y"){
-			console.log("checked : " + checked);
-
-			form.submit();
-			/*
 			// String 형태로 변환
 			var jsonData = JSON.stringify(list);
-
-			console.log(jsonData);
 
 			$.ajax({
 				url: '/admin/product/insertOK',
@@ -73,15 +120,11 @@ $(function(){
 				//contentType: false,
 				//enctype: 'multipart/form-data',
 				data: jsonData,
-				dataType: 'json',
 				success: function(data){
 					console.log("success");
-					location.href="/admin/product/list";
-					
-				}, error: function(xhr, status, error){
-					console.log("error: " + status);
+					//location.href="/admin/product/list";
 				}
-			});*/
+			});
 
 		} else if(checked == "N"){
 			alert("등록할 상품을 체크해주세요.");
@@ -89,9 +132,32 @@ $(function(){
 		}
 	});
 
+	async function syncGetData(data){
+		let myData = "";
+		console.log('START');
+		myData = await ajaxGetData(data);
+		console.log('myData', myData);
+		console.log('END');
+
+		fileName = myData;
+	}
+
+	function ajaxGetData(data){
+		console.log("ajaxGetData");
+		return $.ajax({
+			url: '/admin/product/CheckFileUpload',
+			type: 'post',
+			processData: false,
+			contentType: false,
+			dataType : 'text',
+			data: data
+		});
+	}
+
+
 	/* 유효성검사 */
 	function validationCheck(i){
-		console.log("validationCheck");
+		
 		var mainCategory    = $("#mainCategory option:selected");
 		var subCategory     = $("#subCategory option:selected");
 		var proNm           = $("input[name=pro_nm]");

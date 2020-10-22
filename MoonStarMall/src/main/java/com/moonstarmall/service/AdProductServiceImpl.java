@@ -1,6 +1,7 @@
 package com.moonstarmall.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,12 @@ public class AdProductServiceImpl implements AdProductService {
 	@Override
 	public void productInsertOK(ProductVO vo) throws Exception {
 		dao.productInsertOK(vo);
+	}
+	
+	/* 상품 등록 */
+	@Override
+	public void productInsertOK(Map<String, Object> map) throws Exception {
+		dao.productInsertOK(map);
 	}
 
 	/* 상품 리스트 */

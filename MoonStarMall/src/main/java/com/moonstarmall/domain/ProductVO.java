@@ -25,8 +25,6 @@ public class ProductVO {
 	private MultipartFile file1;
 	
 	private List<ProductVO> list;
-
-	
 	
 	public int getPro_num() {
 		return pro_num;
