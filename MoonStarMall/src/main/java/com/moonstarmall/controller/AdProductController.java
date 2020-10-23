@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +19,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
@@ -75,85 +73,24 @@ public class AdProductController {
 		return entity;
 	}
 	
-	/* 상품 등록 
+	/* 상품 등록 */
 	@RequestMapping(value="insertOK", method=RequestMethod.POST)
-	public String productInsertOK(ProductVO vo, RedirectAttributes rttr) throws Exception {
+	public String productInsertOK(ProductVO list, RedirectAttributes rttr) throws Exception {
 		logger.info("productInsertOK() called");
-		logger.info("=====ProductVO: " + vo.toString());
+		logger.info("=====list: " + list.toString());
 		
-		vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+		for(ProductVO vo : list.getList()) {
+			logger.info("=====vo: " + vo);
+			
+			vo.setCat_code(list.getCat_code());
+			vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+			
+			service.productInsertOK(vo);
+		}
 		
-		service.productInsertOK(vo);
 		rttr.addFlashAttribute("msg", "INSERT_SUCCESS");
 		
 		return "redirect:/admin/product/list";
-	}*/
-	
-	/* 상품 등록 */
-	@RequestMapping(value="insertOK", method=RequestMethod.POST)
-	public ResponseEntity<String> productInsertOK(@RequestBody List<Map<String, Object>> list) throws Exception {
-		logger.info("productInsertOK() called");
-		logger.info("=====List: " + list.toString());
-		
-		ResponseEntity<String> entity = null;
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		try {
-			
-			for(int i=0; i<list.size(); i++) {
-				map = list.get(i);
-				logger.info("=====Map: " + map);
-				
-				//MAP의 KEY값을 이용하여 VALUE값 가져오기
-				System.out.println("=================================");
-			    for (String mapkey : map.keySet()){
-			        System.out.println("key:"+mapkey+",value:"+map.get(mapkey));
-			    }
-			    System.out.println("=================================");
-			    
-			    //vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
-			    //System.out.println("file1 : " + map.get("file1"));
-			    //MultipartFile fileName = (MultipartFile) map.get("file1");
-			    //map.put("pro_main_img", FileUtils.uploadFile(uploadPath, ((MultipartFile) map.get("file1")).getOriginalFilename(), ((MultipartFile) map.get("file1")).getBytes()));
-			    
-			    //service.productInsertOK(map);
-			}
-			
-			entity = new ResponseEntity<String>(HttpStatus.OK);
-		
-		}catch (Exception e) {
-			e.printStackTrace();
-			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
-		
-		return entity;
-	}
-	
-	@ResponseBody
-	@RequestMapping(value="CheckFileUpload", method=RequestMethod.POST)
-	public ResponseEntity<String> productCheckFileUpload(@RequestBody MultipartFile file1,
-			HttpServletRequest req, HttpServletResponse res) {
-		logger.info("=====file1: " + file1);
-		
-		ResponseEntity<String> entity = null;
-		
-		res.setHeader("Content-Type", "application/xml");
-		res.setContentType("text/xml;charset=UTF-8");
-		res.setCharacterEncoding("utf-8");
-		
-		try {
-			
-			String fileName = FileUtils.uploadFile(uploadPath, file1.getOriginalFilename(), file1.getBytes());
-			logger.info("=====fileName: " + fileName);
-			
-			entity = new ResponseEntity<String>(fileName, HttpStatus.OK);
-		}catch (Exception e) {
-			e.printStackTrace();
-			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
-		
-		return entity;
 	}
 	
 	/* 상품상세내용(ckEditor) 파일업로드 */
@@ -210,7 +147,7 @@ public class AdProductController {
 	@RequestMapping(value = "list", method = RequestMethod.GET)
 	public void productList(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 		logger.info("productList() called");
-		logger.info("=====cri : " + cri);
+		logger.info("=====cri : " + cri.toString());
 		
 		model.addAttribute("productList", service.productList(cri));
 		
@@ -220,6 +157,7 @@ public class AdProductController {
 		int count = service.productSearchCount(cri);
 		pm.setTotalCount(count);
 		
+		logger.info("=====일치하는 상품개수 :" + count);
 		logger.info("=====PageMaker: " + pm.toString());
 		
 		model.addAttribute("pm", pm);
@@ -233,10 +171,6 @@ public class AdProductController {
 		
 		ProductVO vo = service.readProduct(pro_num);
 		logger.info("=====readProduct: " + vo);
-		
-		// 썸네일 파일 이름 수정
-		vo.setPro_main_img(vo.getPro_main_img().substring(vo.getPro_main_img().lastIndexOf("_") + 1));
-		logger.info("=====change readProduct: " + vo);
 		
 		model.addAttribute("vo", vo);
 		

@@ -13,6 +13,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
+<%--table all ckeckbox기능 --%>
+<script type="text/javascript" src="/js/check.js"></script>
 <style>
 	.col-center	{
 		text-align: center;
@@ -64,21 +66,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<c:out value="${cri.searchType == null?'selected':''}"/>>검색조건 선택</option>
 									<option value="name"
 										<c:out value="${cri.searchType eq 'name'?'selected':''}"/>>상품명</option>
-									<option value="detail"
-										<c:out value="${cri.searchType eq 'detail'?'selected':''}"/>>내용</option>
-									<option value="company"
-										<c:out value="${cri.searchType eq 'company'?'selected':''}"/>>제조사</option>
-									<option value="name_detail"
-										<c:out value="${cri.searchType eq 'name_detail'?'selected':''}"/>>상품명+내용</option>
-									<option value="name_company"
-										<c:out value="${cri.searchType eq 'name_company'?'selected':''}"/>>상품명+제조사</option>
+									<option value="dtl_info"
+										<c:out value="${cri.searchType eq 'dtl_info'?'selected':''}"/>>내용</option>
+									<option value="publisher"
+										<c:out value="${cri.searchType eq 'publisher'?'selected':''}"/>>제조사</option>
+									<option value="name_dtl_info"
+										<c:out value="${cri.searchType eq 'name_dtl_info'?'selected':''}"/>>상품명+내용</option>
+									<option value="name_publisher"
+										<c:out value="${cri.searchType eq 'name_publisher'?'selected':''}"/>>상품명+제조사</option>
 									<option value="all"
 										<c:out value="${cri.searchType eq 'all'?'selected':''}"/>>상품명+내용+제조사</option>
 								</select>
 								<!-- SEARCH -->
 								<input class="form-control" type="text" name='keyword' id="keyword" style="width:250px; display: inline-block;" value='${cri.keyword}' />
 								<%--<button id="btn_search" class="btn btn-default">검색</button>--%>
-								<button class="btn btn-defalt" type="button">
+								<button class="btn btn-defalt" type="button" id="btn_search">
 									<i class="fas fa-search"></i>
 								</button>
 							</div>
@@ -94,7 +96,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<th>제조사</th>
 										<th>수량</th>
 										<th>판매상태</th>
-										<th>상품등록일자</th>
+										<th>상품등록일</th>
 									</tr>
 										<%-- 상품리스트 출력 --%>
 										<c:if test="${empty productList}">
@@ -130,7 +132,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												</select>
 											</td>
 											<td class="col-md-1 col-center">
-												<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${productVO.sta_date }" />
+												<fmt:formatDate pattern="yyyy-MM-dd" value="${productVO.sta_date }" />
 											</td>
 										</tr>
 										</c:forEach>
@@ -175,5 +177,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
+
+<%-- 버튼 클릭 이벤트 --%>
+<script>
+$(function(){
+	/* 검색버튼 클릭시 */
+	$("#btn_search").on("click", function(){
+		self.location = "list"
+			+ '${pm.makeQuery(1)}'
+			+ "&searchType="
+			+ $("select option:selected").val()
+			+ "&keyword=" + $('#keyword').val();
+	});
+	
+});
+</script>
 </body>
 </html>

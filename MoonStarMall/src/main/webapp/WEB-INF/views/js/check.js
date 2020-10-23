@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var tbl = $("#tbl_product");
+    var tbl = $("table");
      
     // 테이블 헤더에 있는 checkbox 클릭시
     $(":checkbox:first", tbl).click(function(){
@@ -16,7 +16,7 @@ $(document).ready(function(){
     });
      
     // 헤더에 있는 체크박스외 다른 체크박스 클릭시
-    $(":checkbox:not(:first)", tbl).click(function(){
+    $(":checkbox:not(:first)", tbl).on("click", function(){
         var allCnt = $(":checkbox:not(:first)", tbl).length;
         var checkedCnt = $(":checkbox:not(:first)", tbl).filter(":checked").length;
          
@@ -26,14 +26,6 @@ $(document).ready(function(){
         }
         else{
             $(":checkbox:first", tbl).prop("checked", false);
-        }
-    }).change(function(){
-        if( $(this).is(":checked") ){
-            // 체크박스의 부모 > 부모 니까 tr 이 되고 tr 에 selected 라는 class 를 추가한다.
-            $(this).parent().parent().addClass("checkSelected");
-        }
-        else{
-            $(this).parent().parent().removeClass("checkSelected");
         }
     });
 });

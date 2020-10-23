@@ -18,8 +18,8 @@ public interface AdProductService {
 	/* 상품 등록 */
 	public void productInsertOK(ProductVO vo) throws Exception;
 	
-	/* 상품 등록 */
-	public void productInsertOK(Map<String, Object> map) throws Exception;
+	/* 상품 등록
+	public void productInsertOK(Map<String, Object> map) throws Exception; */
 	
 	/* 상품 리스트 */
 	public List<ProductVO> productList(SearchCriteria cri) throws Exception;

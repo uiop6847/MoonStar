@@ -37,21 +37,7 @@
 	  </props>
 	  </property>
 	</bean>
-	<!-- 
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-	   <property name="messageConverters">
-	        <list>
-	            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-	                <property name="supportedMediaTypes">
-	                    <list>
-	                        <value>text/html;charset=UTF-8</value>
-	                    </list>
-	                </property>
-	            </bean>
-	        </list>
-	    </property>
-	</bean>
-	 -->
+	
 	<!-- package의 클래스 bean객체 설정구문 -->
 	<context:component-scan	base-package="com.moonstarmall.dao" />
 	<context:component-scan	base-package="com.moonstarmall.dto" />

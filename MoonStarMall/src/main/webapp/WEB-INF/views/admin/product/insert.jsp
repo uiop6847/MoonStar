@@ -13,21 +13,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
-<!-- ckeditor -->
+<%-- ckeditor --%>
 <script src="/ckeditor/ckeditor.js"></script>
-<!-- Handlebars -->
+<%-- Handlebars --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 <%-- 상품등록 유효성 검사 --%>
 <script type="text/javascript" src="/js/admin/insert.js"></script>
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
 <script>
-
 	/* 이미지 미리보기 */
 	function imgPreview(value) {
 		
 		// 선택된 행의 img태그 찾기
-		var accImg = $("div[name='proDtl']").not(".selected").children().children().children();
+		var accImg = $("div[name='proDtl']:not(.selected)").find("img");
 		
 		if(value.files && value.files[0]){
 			var reader = new FileReader();
@@ -44,10 +43,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	function productDtlInfo(tr){
 		
 		var index = tr.rowIndex - 1;
-		//console.log("index : " + index);
+		
+		$("#productRowAdd tr").removeClass("lastFocus");
+		$("#productRowAdd tr").eq(index).addClass("lastFocus");
 		
 		$("#productRowAddInfo div[name='proDtl']").addClass("selected"); // 모든 div태그 숨기기
 		$("#productRowAddInfo>div").eq(index).removeClass("selected"); // 선택한 행의 div태그 보이기
+		
 	}
 	
 	/* CKEditor 불러오기 */
@@ -81,8 +83,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		display: none;
 	}
 	
-	.checkSelected{background-color: navy;color: #fff; font-weight: bold;}
-	
+	.lastFocus {
+		background-color: #D7DBD1;
+	}
 </style>
 </head>
 <body class="hold-transition layout-top-nav">
@@ -254,10 +257,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	</textarea>
 </div>
 </script>
+
+<%-- 버튼 클릭 이벤트 --%>
 <script>
 $(function(){
-	
-	var cnt = 0; // 동적ID값 목적 : pro_dtl_info_(cnt) 
 	
 	/* 2차 카테고리 처리 */
 	$("#mainCategory").on("change", function(){
@@ -281,8 +284,9 @@ $(function(){
 		target.append(options);
 	}
 	
+	var cnt = 0; // 동적ID값 번호
 	/* 상품등록 테이블 행추가 */
-	$("#btn_add").click(function(){
+	$("#btn_add").on("click", function(){
 		
 		var target = $("#productRowAdd");
 		var templateObject = $("#productRowAddTemplate");
@@ -290,8 +294,22 @@ $(function(){
 		
 		target.append(template);
 		
-		//target.children(":last").children(":first").children().prop("checked", true);
-
+		var tr = target.children(":last");
+		
+		// 추가된 행 색변경
+		target.find("tr").removeClass("lastFocus");
+		tr.addClass("lastFocus");
+		
+		// 태그 id 중복방지
+		var td = tr.find("td");
+		td.each(function(i){
+			
+			if(i != 0){
+				var name = $(this).children().attr("id");
+				$(this).children().attr("id", name + "_" + cnt);
+			}
+		});
+		
 		/* 이미지, 상세설명 추가 */
 		pro_info();
 		
@@ -306,6 +324,13 @@ $(function(){
 		target.children().addClass("selected");
 		target.append(template);
 		
+		//var fileTag = target.find("input[id=file1]").attr("id");
+		//var edtorTag = target.find("textarea[id=pro_dtl_info]").attr("id");
+
+		//target.find("input[name=file1]").attr("name", "list[" + i + "]." + fileTag);
+		//target.find("textarea[name=pro_dtl_info]").attr("name", "list[" + i + "]." + edtorTag);
+		
+		// 태그 id 중복방지
 		var ckId = target.children(":last").children(":last").attr("id", "pro_dtl_info_" + cnt);
 		
 		ckEditorLoad(ckId.attr("id"));
@@ -313,7 +338,7 @@ $(function(){
 	}
 	
 	/* 상품등록 테이블 행삭제 */
-	$("#btn_remove").click(function(){
+	$("#btn_remove").on("click", function(){
 		
 		var length = $("#productRowAdd tr").length-1;
 
@@ -334,18 +359,6 @@ $(function(){
 			alert("삭제할 항목을 선택해주세요!");
 		}
 	});
-	/*
-	$(document).on("click","input[name=check]",function(){
-		var adultYn = $("input[name=check]").is(":checked")?"Y":"N"; //3항연산자, checkbox 체크 여부
-
-		if(adultYn == "Y"){
-			$("input[name=check]").attr("checked", "checked");
-		}else{
-			$("input[name=check]").removeAttr("checked");
-		}
-		console.log(adultYn);
-	});
-	*/
 });
 </script>
 </body>

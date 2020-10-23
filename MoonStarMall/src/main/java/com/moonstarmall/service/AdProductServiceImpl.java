@@ -35,11 +35,11 @@ public class AdProductServiceImpl implements AdProductService {
 		dao.productInsertOK(vo);
 	}
 	
-	/* 상품 등록 */
+	/* 상품 등록 
 	@Override
 	public void productInsertOK(Map<String, Object> map) throws Exception {
 		dao.productInsertOK(map);
-	}
+	}*/
 
 	/* 상품 리스트 */
 	@Override

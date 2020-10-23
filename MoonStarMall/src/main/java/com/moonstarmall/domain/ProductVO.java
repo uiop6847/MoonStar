@@ -20,7 +20,6 @@ public class ProductVO {
 	private	String	pro_buy_yn;
 	private Date	sta_date;
 	private Date	udt_date;
-	
 	// 업로드 파일
 	private MultipartFile file1;
 	
@@ -154,4 +153,5 @@ public class ProductVO {
 				+ pro_count + ", pro_buy_yn=" + pro_buy_yn + ", sta_date=" + sta_date + ", udt_date=" + udt_date
 				+ ", file1=" + file1 + ", list=" + list + "]";
 	}
+
 }

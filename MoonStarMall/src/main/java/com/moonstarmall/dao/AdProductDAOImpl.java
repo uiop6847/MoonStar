@@ -34,15 +34,15 @@ public class AdProductDAOImpl implements AdProductDAO {
 	/* 상품 등록 */
 	@Override
 	public void productInsertOK(ProductVO vo) throws Exception {
-		//session.insert(NS + ".productInsertOK", vo);
+		session.insert(NS + ".productInsertOK", vo);
 	}
 	
-	/* 상품 등록 */
+	/* 상품 등록 
 	@Override
 	public void productInsertOK(Map<String, Object> map) throws Exception {
 		System.out.println("DAO");
 		session.insert(NS + ".productInsertOK", map);
-	}
+	}*/
 
 	/* 상품 리스트 */
 	@Override
