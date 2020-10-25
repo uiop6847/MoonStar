@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -162,6 +163,15 @@ public class AdProductController {
 		
 		model.addAttribute("pm", pm);
 	}
+	
+	/* 체크된 상품 수정 */
+	@RequestMapping(value = "edit", method = RequestMethod.POST)
+	public void productEdit(@RequestParam("proNum[]") int[] pro_num) throws Exception {
+		
+		
+	}
+	
+	/* 체크된 상품 삭제 */
 	
 	/* 상품 상세정보 */
 	@RequestMapping(value = "read", method = RequestMethod.GET)

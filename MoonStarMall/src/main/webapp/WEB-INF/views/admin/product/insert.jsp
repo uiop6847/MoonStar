@@ -17,10 +17,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/ckeditor/ckeditor.js"></script>
 <%-- Handlebars --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
-<%-- 상품등록 유효성 검사 --%>
-<script type="text/javascript" src="/js/admin/insert.js"></script>
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
+<script type="text/javascript" src="/js/admin/insert.js"></script>
 <script>
 	/* 이미지 미리보기 */
 	function imgPreview(value) {
@@ -73,16 +72,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	}
 </script>
 <style>
+	.table th {
+		text-align: center;
+	}
 	.table td {
 		padding: 0;
 		text-align: center;
 		vertical-align: middle;
 	}
-	
 	.selected { 
 		display: none;
 	}
-	
 	.lastFocus {
 		background-color: #D7DBD1;
 	}
@@ -154,7 +154,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										</div>
 										<table class="table table-head-fixed table-hover text-nowrap" id="tbl_product">
 											<thead>
-												<tr style="text-align: center;">
+												<tr>
 													<th><input type="checkbox" id="checkAll" name="checkAll"></th>
 													<th>상품명</th>
 													<th>제조사</th>
@@ -168,14 +168,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											</tbody>
 										</table>
 									</div>
+									<div>
+										<hr>
+									</div>
 									<div id="productRowAddInfo">
 									</div>
 									<div class="box-footer">
 										<div>
 											<hr>
 										</div>
-										<button id="btn_submit" type="button" class="btn btn-primary">상품등록</button>
-	
+										<div class="row">
+											<div class="col-12 col-right">
+												<button id="btn_submit" type="button" class="btn" style="background-color: #F9D5D3;">
+												상품등록</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</form>
@@ -243,11 +250,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script id="productRowAddInfoTemplate" type="text/x-handlebars-template">
 <div class="form-group" name="proDtl">
 	<div class="row">
-		<div class="col-md-2">
-			<img id="LoadImg" style="width: 150px;" height="150px;">
-		</div>
-		<div class="col-md-10">
+		<div class="col-md-3">
 			<label for="file1">상품 대표 이미지</label>
+			<img id="LoadImg" style="width: 270px;" height="270px;">
+		</div>
+		<div class="col-md-9">
 			<input type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
 		</div>
 	</div>
