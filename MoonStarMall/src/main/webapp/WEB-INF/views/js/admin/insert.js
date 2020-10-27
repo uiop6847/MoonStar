@@ -15,7 +15,7 @@ $(function(){
 		if(result){
 
 			/* 유효성검사 */
-			if(!validationCheck()){ return false; };
+			if(!validationCheck()) return false;
 
 			// 체크되지 않은 row는 삭제처리
 			$("#productRowAdd tr").each(function(i){
@@ -55,7 +55,7 @@ $(function(){
 	});
 
 	/* 유효성검사 */
-	function validationCheck(i){
+	function validationCheck(){
 		
 		var mainCategory    = $("#mainCategory option:selected");
 		var subCategory     = $("#subCategory option:selected");

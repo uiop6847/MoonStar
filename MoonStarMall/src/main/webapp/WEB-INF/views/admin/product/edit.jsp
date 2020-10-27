@@ -78,12 +78,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	
 	/* 선택한 행의 카테고리로 변경 */
 	function selectCategory(i){
-		console.log("before : " + $("#mainCategory option:selected").text());
+		
 		var main = $("input[id='list["+i+"].cat_prtcode']").val();
-		console.log("selectCategory : " + main);
-		$("#mainCategory > option").removeAttr("selected");
-		$("#mainCategory > option[value="+main+"]").attr("selected", "true");
-		console.log("after : " + $("#mainCategory option:selected").text());
+		
+		//$("#mainCategory > option").removeAttr("selected");
+		$("#mainCategory > option[value="+main+"]").prop("selected", true);
+		
 		
 		// REST 방식으로 전송
 		var url = "/admin/product/subCategoryList/" + main;
@@ -103,8 +103,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			var sub = $("input[id='list["+i+"].cat_code']").val();
 
-			$("#subCategory > option").removeAttr("selected");
-			$("#subCategory > option[value="+sub+"]").attr("selected", "true");
+			//$("#subCategory > option").removeAttr("selected");
+			$("#subCategory > option[value="+sub+"]").prop("selected", true);
 		}
 	}
 </script>
@@ -157,7 +157,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="card">
-							<form id="productInsertForm" action="/admin/product/insertOK" method="post" enctype="multipart/form-data">
+							<form id="productEditForm" action="/admin/product/editOK" method="post" enctype="multipart/form-data">
 								<div class="card-body">
 									<div class="form-group">
 										<div class="row">
@@ -265,10 +265,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<div>
 											<hr>
 										</div>
-										<div class="row">
-											<div class="col-12 col-right">
+										<div class="row float-right">
+											<div class="col-md-12">
 												<button id="btn_submit" type="button" class="btn" style="background-color: #F9D5D3;">
-												상품등록</button>
+												상품수정</button>
 											</div>
 										</div>
 									</div>
@@ -338,8 +338,9 @@ $(function(){
 	
 	$("#subCategory").on("change", function(){
 		
+		var subCatCode = $(this).val(); // 1차카테고리 코드
 		var sub = $("#productRowAdd").find(".lastFocus").find("td").eq(0).find("input[id$=cat_code]");
-		sub.val(mainCatCode);
+		sub.val(subCatCode);
 	});
 	
 });

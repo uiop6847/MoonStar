@@ -177,8 +177,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<div>
 											<hr>
 										</div>
-										<div class="row">
-											<div class="col-12 col-right">
+										<div class="row float-right">
+											<div class="col-md-12">
 												<button id="btn_submit" type="button" class="btn" style="background-color: #F9D5D3;">
 												상품등록</button>
 											</div>

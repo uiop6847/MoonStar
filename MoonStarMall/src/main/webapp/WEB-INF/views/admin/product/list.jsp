@@ -15,7 +15,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
-<script type="text/javascript" src="/js/admin/list.js"></script>
+<%-- 메시지 처리 --%>
+<script>
+	if ("${msg}" == "INSERT_SUCCESS") {
+		alert("상품등록이 완료되었습니다.");
+		
+	} else if ("${msg}" == "EDIT_SUCCESS") {
+		alert("상품 수정이 완료되었습니다.");
+		
+	} else if ("${msg}" == "DELETE_SUCCESS") {
+		alert("상품 삭제가 완료되었습니다.");
+	}
+</script>
 <style>
 	.col-center	{
 		text-align: center;

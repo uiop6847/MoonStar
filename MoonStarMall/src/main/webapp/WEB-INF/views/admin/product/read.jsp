@@ -124,7 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<hr>
 									</div>
 									<div class="row">
-										<div class="col-6 col-left">
+										<div class="col-12">
 											<button id="btn_list" type="button" class="btn" style="background-color: #F9D5D3;">
 											상품 목록</button>
 										</div>

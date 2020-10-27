@@ -2,6 +2,7 @@ package com.moonstarmall.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -202,7 +203,25 @@ public class AdProductController {
 		model.addAttribute("mainCategory", service.mainCategory()); // 1차카테고리 전송
 	}
 	
-	/* 체크된 상품 수정 */
+	/* 상품 수정 */
+	@RequestMapping(value = "editOK", method = RequestMethod.POST)
+	public String productEditOK(ProductVO list, RedirectAttributes rttr) throws IOException, Exception {
+		logger.info("productEditOK() called");
+		logger.info("=====list: " + list.toString());
+		
+		for(ProductVO vo : list.getList()) {
+			logger.info("=====vo: " + vo);
+			
+			vo.setCat_code(list.getCat_code());
+			vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+			
+			//service.productInsertOK(vo);
+		}
+		
+		rttr.addFlashAttribute("msg", "EDIT_SUCCESS");
+		
+		return "redirect:/admin/product/list";
+	}
 	
 	/* 체크된 상품 삭제 */
 	
