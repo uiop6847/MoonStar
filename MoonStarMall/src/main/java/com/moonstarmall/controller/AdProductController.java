@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,6 +157,7 @@ public class AdProductController {
 		
 		PageMaker pm = new PageMaker();
 		pm.setCri(cri);
+		pm.setTotalCount(service.productSearchCount(cri));
 		
 		model.addAttribute("pm", pm);
 	}
@@ -178,71 +180,27 @@ public class AdProductController {
 		model.addAttribute("pm", pm);
 	}
 	
-	/* 체크된 상품리스트 조회 
-	@RequestMapping(value = "editList", method = RequestMethod.POST)
-	public ResponseEntity<String> productEditList(@RequestParam("proNum[]") List<Integer> proNumArr, Model model) throws Exception {
-		logger.info("productEditList() called");
-		
-		ResponseEntity<String> entity = null;
-		
-		try {
-			Map<String, Object> map = new HashMap<String, Object>();
-			String pro_num = null;
-
-			for(int i=0; i<proNumArr.size(); i++) {
-				pro_num += "," + proNumArr.get(i);
-			}
-			
-			pro_num = pro_num.substring(5); // null,을 제외한 값 가져오기
-			
-			map.put("pro_num", pro_num);
-			logger.info("=====pro_num : " + map.get("pro_num"));
-			
-			List<ProductVO> editList =  service.productEditList(map);
-			logger.info("=====editList : " + editList);
-			model.addAttribute("editList", editList);
-			
-			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
-		
-		return entity;
-	}*/
-	
-	/* 체크된 상품리스트 조회 */
+	/* 상품수정 이동 */
 	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public void productEditList(@ModelAttribute("cri") SearchCriteria cri, 
-								@RequestParam("proNum[]") List<Integer> proNumArr,
-								Model model) throws Exception {
-		logger.info("productEditList() called");
+	public void productEdit(@ModelAttribute("cri") SearchCriteria cri,
+							@RequestParam("proNumArr") int[] proNumArr, Model model) throws Exception {
+		logger.info("productEdit() called");
+		
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		String pro_num = null;
 
-		for(int i=0; i<proNumArr.size(); i++) {
-			pro_num += "," + proNumArr.get(i);
+		for(int i=0; i<proNumArr.length; i++) {
+			pro_num += "," + proNumArr[i];
 		}
 		
 		pro_num = pro_num.substring(5); // null,을 제외한 값 가져오기
-		
 		map.put("pro_num", pro_num);
-		logger.info("=====pro_num : " + map.get("pro_num"));
 		
-		List<ProductVO> editList =  service.productEditList(map);
-		logger.info("=====editList : " + editList);
-		model.addAttribute("editList", editList);
+		model.addAttribute("editList", service.productEditList(map)); // 체크된 상품리스트
+		//model.addAttribute("originFile", originFile); // 원본파일명
+		model.addAttribute("mainCategory", service.mainCategory()); // 1차카테고리 전송
 	}
-	
-	/* 상품 수정 이동
-	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public String productEdit(@ModelAttribute("editList") List<ProductVO> editList) {
-		logger.info("productEdit() called");
-		logger.info("=====editList : " + editList);
-		
-		return "/admin/product/edit";
-	} */
 	
 	/* 체크된 상품 수정 */
 	

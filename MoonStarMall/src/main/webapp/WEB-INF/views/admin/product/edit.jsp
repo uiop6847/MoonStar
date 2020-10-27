@@ -49,6 +49,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		$("#productRowAddInfo div[name='proDtl']").addClass("selected"); // 모든 div태그 숨기기
 		$("#productRowAddInfo>div").eq(index).removeClass("selected"); // 선택한 행의 div태그 보이기
 		
+		var id = $("textarea[id='list["+index+"].pro_dtl_info']").attr("id");
+		ckEditorLoad(id); // CKEditor 불러오기
+		
+		// 선택한 행의 카테고리로 변경
+		selectCategory(index);
 	}
 	
 	/* CKEditor 불러오기 */
@@ -67,8 +72,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		};
 
 		// config.js 설정 사용
-		//CKEDITOR.replace("pro_dtl_info", ckeditor_config);
+		//CKEDITOR.replace("list["+index+"].pro_dtl_info", ckeditor_config);
 		CKEDITOR.replace(id, ckeditor_config);
+	}
+	
+	/* 선택한 행의 카테고리로 변경 */
+	function selectCategory(i){
+		console.log("before : " + $("#mainCategory option:selected").text());
+		var main = $("input[id='list["+i+"].cat_prtcode']").val();
+		console.log("selectCategory : " + main);
+		$("#mainCategory > option").removeAttr("selected");
+		$("#mainCategory > option[value="+main+"]").attr("selected", "true");
+		console.log("after : " + $("#mainCategory option:selected").text());
+		
+		// REST 방식으로 전송
+		var url = "/admin/product/subCategoryList/" + main;
+		
+		$.getJSON(url, function(data){
+			subCategory(data, $("#subCategory"), $("#subCategoryTemplate"));
+		});
+		
+		/* 2차카테고리 템플릿 적용함수 */
+		var subCategory = function(subCGStr, target, templateObject){
+			
+			var template = Handlebars.compile(templateObject.html());
+			var options = template(subCGStr);
+			
+			$("#subCategory option").remove();
+			target.append(options);
+
+			var sub = $("input[id='list["+i+"].cat_code']").val();
+
+			$("#subCategory > option").removeAttr("selected");
+			$("#subCategory > option[value="+sub+"]").attr("selected", "true");
+		}
 	}
 </script>
 <style>
@@ -156,6 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<thead>
 												<tr>
 													<th><input type="checkbox" id="checkAll" name="checkAll"></th>
+													<th>번호</th>
 													<th>상품명</th>
 													<th>제조사</th>
 													<th>판매가</th>
@@ -165,14 +203,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												</tr>
 											</thead>
 											<tbody id="productRowAdd">
+											<c:forEach var="vo" items="${editList}" begin="0" step="1" varStatus="i">
+												<tr onclick="productDtlInfo(this);">
+													<td>
+														<input type="checkbox" name="check" class="check" checked="checked">
+														<input type="hidden" id="list[${i.index }].cat_code" name="list[${i.index }].cat_code" value="${vo.cat_code}">
+														<input type="hidden" id="list[${i.index }].cat_prtcode" name="list[${i.index }].cat_prtcode" value="${vo.cat_prtcode}">
+													</td>
+													<td>
+														<input type="text" id="list[${i.index }].pro_num" name="list[${i.index }].pro_num" value="${vo.pro_num}" class="form-control">
+													</td>
+													<td>
+														<input type="text" id="list[${i.index }].pro_nm" name="list[${i.index }].pro_nm" value="${vo.pro_nm}" class="form-control">
+													</td>
+													<td>
+														<input type="text" id="list[${i.index }].pro_publisher" name="list[${i.index }].pro_publisher" value="${vo.pro_publisher}" class="form-control"> 
+													</td>
+													<td>
+														<input type="number" id="list[${i.index }].pro_price" name="list[${i.index }].pro_price" value="${vo.pro_price}" class="form-control">
+													</td>
+													<td>
+														<input type="number" id="list[${i.index }].pro_discount" name="list[${i.index }].pro_discount" value="${vo.pro_discount}" class="form-control">
+													</td>
+													<td>
+														<input type="number" id="list[${i.index }].pro_count" name="list[${i.index }].pro_count" value="${vo.pro_count}" class="form-control">
+													</td>
+													<td>
+														<select id="list[${status.index }].pro_buy_yn" name="list[${status.index }].pro_buy_yn" class="form-control">
+															<option <c:out value="${productVO.pro_buy_yn == 'Y'?'selected':''}"/>>Y</option>
+													  		<option <c:out value="${productVO.pro_buy_yn == 'N'?'selected':''}"/>>N</option>
+														</select>
+													</td>
+												</tr>
+											</c:forEach>
 											</tbody>
 										</table>
 									</div>
 									<div>
 										<hr>
 									</div>
+									<c:forEach var="vo" items="${editList}" begin="0" step="1" varStatus="i">
 									<div id="productRowAddInfo">
+										<div class="form-group selected" name="proDtl">
+											<div class="row">
+												<div class="col-md-2">
+													<label for="file1">상품 대표 이미지</label>
+													<img id="LoadImg" style="width: 100px;" height="100px;" src="/admin/product/displayFile?fileName=${vo.pro_main_img }">
+												</div>
+												<div class="col-md-10">
+													<input type="file" id="list[${i.index }].file1" name="list[${i.index }].file1" value="${vo.pro_main_img }" class="form-control" onchange="imgPreview(this);" />
+												</div>
+											</div>
+											<label>상품상세설명</label>
+											<textarea class="textarea" placeholder="Place some text here" id="list[${i.index }].pro_dtl_info" name="list[${i.index }].pro_dtl_info" 
+											style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+											${vo.pro_dtl_info }</textarea>
+										</div>
 									</div>
+									</c:forEach>
 									<div class="box-footer">
 										<div>
 											<hr>
@@ -217,54 +305,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	{{/each}}
 </script>
 
-<!-- productTable Handlebar Template -->
-<script id="productRowAddTemplate" type="text/x-handlebars-template">
-	<tr onclick="productDtlInfo(this);">
-		<td>
-			<input type="checkbox" name="check" class="check" checked="checked">
-		</td>
-		<td>
-			<input type="text" id="pro_nm" name="pro_nm" class="form-control">
-		</td>
-		<td>
-			<input type="text" id="pro_publisher" name="pro_publisher" class="form-control"> 
-		</td>
-		<td>
-			<input type="number" id="pro_price" name="pro_price" class="form-control">
-		</td>
-		<td>
-			<input type="number" id="pro_discount" name="pro_discount" class="form-control">
-		</td>
-		<td>
-			<input type="number" id="pro_count" name="pro_count" class="form-control">
-		</td>
-		<td>
-			<select id="pro_buy_yn" name="pro_buy_yn" class="form-control">
-				<option value="Y">Y</option>
-				<option value="N">N</option>
-			</select>
-		</td>
-	</tr>
-</script>
-
-<script id="productRowAddInfoTemplate" type="text/x-handlebars-template">
-<div class="form-group" name="proDtl">
-	<div class="row">
-		<div class="col-md-3">
-			<label for="file1">상품 대표 이미지</label>
-			<img id="LoadImg" style="width: 270px;" height="270px;">
-		</div>
-		<div class="col-md-9">
-			<input type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
-		</div>
-	</div>
-	<label>상품상세설명</label>
-	<textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
-		style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
-	</textarea>
-</div>
-</script>
-
 <%-- 버튼 클릭 이벤트 --%>
 <script>
 $(function(){
@@ -279,6 +319,11 @@ $(function(){
 		$.getJSON(url, function(data){
 			subCategory(data, $("#subCategory"), $("#subCategoryTemplate"));
 		});
+		
+		// 변경한 1차카테고리를 해당 row에 적용
+		var main = $("#productRowAdd").find(".lastFocus").find("td").eq(0).find("input[id$=cat_prtcode]");
+		main.val(mainCatCode);
+		console.log("change : " + main.val());
 	});
 	
 	/* 2차카테고리 템플릿 적용함수 */
@@ -291,81 +336,12 @@ $(function(){
 		target.append(options);
 	}
 	
-	var cnt = 0; // 동적ID값 번호
-	/* 상품등록 테이블 행추가 */
-	$("#btn_add").on("click", function(){
+	$("#subCategory").on("change", function(){
 		
-		var target = $("#productRowAdd");
-		var templateObject = $("#productRowAddTemplate");
-		var template = Handlebars.compile(templateObject.html());
-		
-		target.append(template);
-		
-		var tr = target.children(":last");
-		
-		// 추가된 행 색변경
-		target.find("tr").removeClass("lastFocus");
-		tr.addClass("lastFocus");
-		
-		// 태그 id 중복방지
-		var td = tr.find("td");
-		td.each(function(i){
-			
-			if(i != 0){
-				var name = $(this).children().attr("id");
-				$(this).children().attr("id", name + "_" + cnt);
-			}
-		});
-		
-		/* 이미지, 상세설명 추가 */
-		pro_info();
-		
+		var sub = $("#productRowAdd").find(".lastFocus").find("td").eq(0).find("input[id$=cat_code]");
+		sub.val(mainCatCode);
 	});
 	
-	/* 이미지, 상세설명 추가 */
-	function pro_info(){
-		var target = $("#productRowAddInfo");
-		var templateObject = $("#productRowAddInfoTemplate");
-		var template = Handlebars.compile(templateObject.html());
-		
-		target.children().addClass("selected");
-		target.append(template);
-		
-		//var fileTag = target.find("input[id=file1]").attr("id");
-		//var edtorTag = target.find("textarea[id=pro_dtl_info]").attr("id");
-
-		//target.find("input[name=file1]").attr("name", "list[" + i + "]." + fileTag);
-		//target.find("textarea[name=pro_dtl_info]").attr("name", "list[" + i + "]." + edtorTag);
-		
-		// 태그 id 중복방지
-		var ckId = target.children(":last").children(":last").attr("id", "pro_dtl_info_" + cnt);
-		
-		ckEditorLoad(ckId.attr("id"));
-		cnt += 1;
-	}
-	
-	/* 상품등록 테이블 행삭제 */
-	$("#btn_remove").on("click", function(){
-		
-		var length = $("#productRowAdd tr").length-1;
-
-		for(i = length; i >= 0; i--){
-			
-			if($("#productRowAdd tr").eq(i).children().children().is(":checked") == true) {
-				
-				$("#productRowAddInfo>div").eq(i).remove();
-			}
-		}
-		
-		if($("input[name=check]").is(":checked") == true) { //체크된 요소가 있으면
-			
-			var i = $("input[name='check']:checked").parents("tr");
-		
-			i.remove();
-		}else {
-			alert("삭제할 항목을 선택해주세요!");
-		}
-	});
 });
 </script>
 </body>

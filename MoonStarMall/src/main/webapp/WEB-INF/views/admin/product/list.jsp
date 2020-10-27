@@ -96,65 +96,67 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										삭제</button>
 								</div>
 							</div>
-							<div class="card-body table-responsive p-0">
-								<table id="tbl_productList" class="table table-hover table-bordered text-nowrap">
-									<thead>
-									<tr class="col-center">
-										<th><input type="checkbox" id="checkAll"></th>
-										<th>번호</th>
-										<th>이미지</th>
-										<th>상품명</th>
-										<th>판매가</th>
-										<th>할인가</th>
-										<th>제조사</th>
-										<th>수량</th>
-										<th>판매상태</th>
-										<th>상품등록일</th>
-										<!-- <th>상품수정일</th> -->
-									</tr>
-									</thead>
-									<tbody id="tbl_productListRow">
-										<%-- 상품리스트 출력 --%>
-										<c:if test="${empty productList}">
-										<tr>
-											<td colspan="10">
-												<p style="padding:50px 0px; text-align: center;">등록된 상품이 존재하지 않습니다. </p>
-											</td>
+							<form id="productListForm" method="post">
+								<div class="card-body table-responsive p-0">
+									<table id="tbl_productList" class="table table-hover table-bordered text-nowrap">
+										<thead>
+										<tr class="col-center">
+											<th><input type="checkbox" id="checkAll"></th>
+											<th>번호</th>
+											<th>이미지</th>
+											<th>상품명</th>
+											<th>판매가</th>
+											<th>할인가</th>
+											<th>제조사</th>
+											<th>수량</th>
+											<th>판매상태</th>
+											<th>상품등록일</th>
+											<!-- <th>상품수정일</th> -->
 										</tr>
-										</c:if>
-										<c:forEach items="${productList }" var="productVO">
-										<tr>
-											<td>
-												<input type="checkbox" name="check" class="check">
-											</td>
-											<td class="col-center">${productVO.pro_num}</td>
-											<td class="col-center">
-												<img src="/admin/product/displayFile?fileName=${productVO.pro_main_img }" style="width: 80px;">
-												<input type="hidden" name="img_${productVO.pro_num }" value="${productVO.pro_main_img }">
-											</td>
-											<td class="col-md-2">
-												<a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pro_num=${productVO.pro_num}" style="color: #807F89;">
-													${productVO.pro_nm}&nbsp;<ion-icon name="search-outline"></ion-icon>
-												</a>
-											</td>
-											<td class="col-md-1 col-center">${productVO.pro_price}</td>
-											<td class="col-md-1 col-center">${productVO.pro_discount}</td>
-											<td class="col-md-2 col-center">${productVO.pro_publisher}</td>
-											<td class="col-md-1 col-center">${productVO.pro_count }</td>
-											<td class="col-center">${productVO.pro_buy_yn}</td>
-											<td class="col-md-1 col-center">
-												<fmt:formatDate value="${productVO.sta_date }" pattern="yyyy-MM-dd"/>
-											</td>
-											<!-- 
-											<td class="col-md-1 col-center">
-												<fmt:formatDate value="${productVO.udt_date}" pattern="yyyy-MM-dd"/>
-											</td>
-											 -->
-										</tr>
-										</c:forEach>
-									</tbody>
-								</table>
-							</div><!-- /.card-body -->
+										</thead>
+										<tbody id="tbl_productListRow">
+											<%-- 상품리스트 출력 --%>
+											<c:if test="${empty productList}">
+											<tr>
+												<td colspan="10">
+													<p style="padding:50px 0px; text-align: center;">등록된 상품이 존재하지 않습니다. </p>
+												</td>
+											</tr>
+											</c:if>
+											<c:forEach items="${productList }" var="productVO">
+											<tr>
+												<td>
+													<input type="checkbox" name="check" class="check">
+												</td>
+												<td class="col-center">${productVO.pro_num}</td>
+												<td class="col-center">
+													<img src="/admin/product/displayFile?fileName=${productVO.pro_main_img }" style="width: 80px;">
+													<input type="hidden" name="img_${productVO.pro_num }" value="${productVO.pro_main_img }">
+												</td>
+												<td class="col-md-2">
+													<a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pro_num=${productVO.pro_num}" style="color: #807F89;">
+														${productVO.pro_nm}&nbsp;<ion-icon name="search-outline"></ion-icon>
+													</a>
+												</td>
+												<td class="col-md-1 col-center">${productVO.pro_price}</td>
+												<td class="col-md-1 col-center">${productVO.pro_discount}</td>
+												<td class="col-md-2 col-center">${productVO.pro_publisher}</td>
+												<td class="col-md-1 col-center">${productVO.pro_count }</td>
+												<td class="col-center">${productVO.pro_buy_yn}</td>
+												<td class="col-md-1 col-center">
+													<fmt:formatDate value="${productVO.sta_date }" pattern="yyyy-MM-dd"/>
+												</td>
+												<!-- 
+												<td class="col-md-1 col-center">
+													<fmt:formatDate value="${productVO.udt_date}" pattern="yyyy-MM-dd"/>
+												</td>
+												 -->
+											</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div><!-- /.card-body -->
+							</form>
 							<div class="card-footer">
 								<ul class="pagination pagination-sm m-0 text-center">
 									<!-- 이전표시 여부  [이전] -->
@@ -196,10 +198,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
 <script>
 $(function(){
+	/* 검색버튼 클릭 시 */
+	$("#btn_search").on("click", function(){
+		self.location = "list"
+			+ '${pm.makeQuery(1)}'
+			+ "&searchType="
+			+ $("select option:selected").val()
+			+ "&keyword=" + $('#keyword').val();
+    });
+	
     /* 수정버튼 클릭 시 */
     $("#btn_edit").on("click", function(){
         
-        var proNum = [];
+        var proNumArr = [];
         
         if($(":checkbox:checked").length == 0){
             alert("수정할 상품이 없습니다.\n수정할 상품을 체크해주세요.");
@@ -210,30 +221,12 @@ $(function(){
 
             if($(this).find(":checkbox").is(":checked")){
                 
-                proNum.push($(this).children().eq(1).text());
+            	proNumArr.push($(this).children().eq(1).text());
             }
         });
         
-        //location.href= '/admin/product/edit${pm.makeSearch(pm.cri.page)}&proNum=' + proNum;
-        /*$.ajax({
-            url: '/admin/product/editList',
-            type: 'post',
-            dataType: 'text',
-            data: { proNum : proNum },
-            success : function(data) {
-            	
-            	if(data == "SUCCESS"){            		
-                	location.href="/admin/product/edit";
-            	}
-            }
-
-        });*/
-        $.ajax({
-            url: '/admin/product/edit${pm.makeSearch(pm.cri.page)}',
-            type: 'get',
-            dataType: 'text',
-            data: { proNum : proNum }
-        });
+        // 상품수정 화면 이동
+        location.href= '/admin/product/edit?proNumArr=' + proNumArr;
     });
 	
 });
