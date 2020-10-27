@@ -18,18 +18,20 @@ public interface AdProductDAO {
 	/* 상품 등록 */
 	public void productInsertOK(ProductVO vo) throws Exception;
 	
-	/* 상품 등록 
-	public void productInsertOK(Map<String, Object> map) throws Exception;*/
-	
 	/* 상품 리스트 */
 	public List<ProductVO> productList(SearchCriteria cri) throws Exception;
 	
 	/* 검색조건별 상품 총 건수 */
 	public int productSearchCount(SearchCriteria cri) throws Exception;
 	
-	/* 상품 상세정보 */
+	/* 상품 상세정보 조회 */
 	public ProductVO readProduct(int pro_num) throws Exception;
 	
+	/* 체크된 상품리스트 조회 */
+	public List<ProductVO> productEditList(Map<String, Object> map) throws Exception;
 	
+	/* 체크된 상품 수정 */
+	
+	/* 체크된 상품 삭제 */
 
 }

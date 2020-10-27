@@ -13,65 +13,79 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
-<!-- ckeditor -->
+<%-- ckeditor --%>
 <script src="/ckeditor/ckeditor.js"></script>
-<!-- Handlebars -->
+<%-- Handlebars --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
-<%-- 상품등록 유효성 검사 --%>
-<script type="text/javascript" src="/js/admin/insert.js"></script>
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
+<script type="text/javascript" src="/js/admin/edit.js"></script>
 <script>
-
-	/* 테이블 행클릭 이벤트 */
-	function productDtlInfo(tr){
-		var index = tr.rowIndex - 1;
-	    console.log('클릭한 TR index : ' + index);
-	    
-	    //console.log($(this).attr("data-index"));
-
-	    //var check = $("input[name=check]");
-	    //check.val(index);
-		//console.log('check value : ' + $("input[name=check]").val());
-		
-		//$("#temp_file1").attr("data-index", index);
-		
-		/*
-		$(this).each(function(){
-			$(this).click(function(){
-				$(this).addClass("selected"); //클릭된 부분을 상단에 정의된 CCS인 selected클래스로 적용
-				$(this).siblings().removeClass("selected"); //siblings:형제요소들,    removeClass:선택된 클래스의 특성을 없앰
-			});
-		});
-		*/
-	
-	}
-	
 	/* 이미지 미리보기 */
 	function imgPreview(value) {
+		
+		// 선택된 행의 img태그 찾기
+		var accImg = $("div[name='proDtl']:not(.selected)").find("img");
 		
 		if(value.files && value.files[0]){
 			var reader = new FileReader();
 			
 			reader.onload = function(e){
-				$("#LoadImg").attr("src", e.target.result)
+				accImg.attr("src", e.target.result);
 			}
 			
 			reader.readAsDataURL(value.files[0]);
 		}
 	}
+	
+	/* 테이블 행클릭 이벤트 */
+	function productDtlInfo(tr){
+		
+		var index = tr.rowIndex - 1;
+		
+		$("#productRowAdd tr").removeClass("lastFocus");
+		$("#productRowAdd tr").eq(index).addClass("lastFocus");
+		
+		$("#productRowAddInfo div[name='proDtl']").addClass("selected"); // 모든 div태그 숨기기
+		$("#productRowAddInfo>div").eq(index).removeClass("selected"); // 선택한 행의 div태그 보이기
+		
+	}
+	
+	/* CKEditor 불러오기 */
+	function ckEditorLoad(id){
+		/* 
+			ckEditor 작업
+			config.js를 사용하지 않고 개별 설정하는 부분
+		*/
+		var ckeditor_config = {
+				resize_enabled : true,
+				enterMode : CKEDITOR.ENTER_BR,
+				shiftEnterMode : CKEDITOR.ENTER_P,
+				toolbarCancollapse : true, 
+				removePlugins : "elementspath",
+				filebrowserUploadUrl : '/admin/product/imgUpload'
+		};
+
+		// config.js 설정 사용
+		//CKEDITOR.replace("pro_dtl_info", ckeditor_config);
+		CKEDITOR.replace(id, ckeditor_config);
+	}
 </script>
 <style>
+	.table th {
+		text-align: center;
+	}
 	.table td {
 		padding: 0;
 		text-align: center;
 		vertical-align: middle;
 	}
-	
 	.selected { 
-		background-color: #000080;
+		display: none;
 	}
-	
+	.lastFocus {
+		background-color: #D7DBD1;
+	}
 </style>
 </head>
 <body class="hold-transition layout-top-nav">
@@ -91,8 +105,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><a href="/admin/main">HOME</a></li>
-							<li class="breadcrumb-item active">상품 관리</li>
-							<li class="breadcrumb-item active">상품 등록</li>
+							<li class="breadcrumb-item"><a href="/admin/product/list${pm.makeSearch(pm.cri.page)}">상품 목록</a></li>
+							<li class="breadcrumb-item active">상품 수정</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
@@ -140,8 +154,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										</div>
 										<table class="table table-head-fixed table-hover text-nowrap" id="tbl_product">
 											<thead>
-												<tr style="text-align: center;">
-													<th><input type="checkbox" id="checkAll"></th>
+												<tr>
+													<th><input type="checkbox" id="checkAll" name="checkAll"></th>
 													<th>상품명</th>
 													<th>제조사</th>
 													<th>판매가</th>
@@ -154,35 +168,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											</tbody>
 										</table>
 									</div>
-									<div id="productRowAddInfo" data-index="">
-									<%--
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-2">
-													<img id="LoadImg" style="width: 150px;" height="150px;">
-												</div>
-												<div class="col-md-10">
-													<label for="file1">상품 대표 이미지</label>
-													<input data-index="" type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="pro_dtl_info">상품상세설명</label>
-							                <textarea data-index="" class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
-							                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
-							                </textarea>
-										</div>
-									 --%>
+									<div>
+										<hr>
+									</div>
+									<div id="productRowAddInfo">
 									</div>
 									<div class="box-footer">
 										<div>
 											<hr>
 										</div>
-										<ul class="mailbox-attachments clearfix uploadedList">
-										</ul>
-										<button id="btn_submit" type="button" class="btn btn-primary">상품등록</button>
-	
+										<div class="row">
+											<div class="col-12 col-right">
+												<button id="btn_submit" type="button" class="btn" style="background-color: #F9D5D3;">
+												상품등록</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</form>
@@ -219,7 +219,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- productTable Handlebar Template -->
 <script id="productRowAddTemplate" type="text/x-handlebars-template">
-	<tr onclick="productDtlInfo(this)">
+	<tr onclick="productDtlInfo(this);">
 		<td>
 			<input type="checkbox" name="check" class="check" checked="checked">
 		</td>
@@ -236,7 +236,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<input type="number" id="pro_discount" name="pro_discount" class="form-control">
 		</td>
 		<td>
-			<input type="number" id="pro_count" name='pro_count' class="form-control">
+			<input type="number" id="pro_count" name="pro_count" class="form-control">
 		</td>
 		<td>
 			<select id="pro_buy_yn" name="pro_buy_yn" class="form-control">
@@ -248,28 +248,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </script>
 
 <script id="productRowAddInfoTemplate" type="text/x-handlebars-template">
-<div class="form-group">
+<div class="form-group" name="proDtl">
 	<div class="row">
-		<div class="col-md-2">
-			<img id="LoadImg" style="width: 150px;" height="150px;">
-		</div>
-		<div class="col-md-10">
+		<div class="col-md-3">
 			<label for="file1">상품 대표 이미지</label>
-			<input data-index="" type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
+			<img id="LoadImg" style="width: 270px;" height="270px;">
+		</div>
+		<div class="col-md-9">
+			<input type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
 		</div>
 	</div>
-</div>
-<div class="form-group">
-	<label for="pro_dtl_info">상품상세설명</label>
-	<textarea data-index="" class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
+	<label>상품상세설명</label>
+	<textarea class="textarea" placeholder="Place some text here" id="pro_dtl_info" name="pro_dtl_info"
 		style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
 	</textarea>
 </div>
 </script>
+
+<%-- 버튼 클릭 이벤트 --%>
 <script>
 $(function(){
-	
-	var rowIndex;
 	
 	/* 2차 카테고리 처리 */
 	$("#mainCategory").on("change", function(){
@@ -283,7 +281,6 @@ $(function(){
 		});
 	});
 	
-	
 	/* 2차카테고리 템플릿 적용함수 */
 	var subCategory = function(subCGStr, target, templateObject){
 		
@@ -294,43 +291,34 @@ $(function(){
 		target.append(options);
 	}
 	
-	/* 
-		ckEditor 작업
-		config.js를 사용하지 않고 개별 설정하는 부분
-	*/
-	var ckeditor_config = {
-			resize_enabled : true,
-			enterMode : CKEDITOR.ENTER_BR,
-			shiftEnterMode : CKEDITOR.ENTER_P,
-			toolbarCancollapse : true, 
-			removePlugins : "elementspath",
-			filebrowserUploadUrl : '/admin/product/imgUpload'
-	};
-	// config.js 설정 사용
-	CKEDITOR.replace("pro_dtl_info", ckeditor_config);
-	
-	
+	var cnt = 0; // 동적ID값 번호
 	/* 상품등록 테이블 행추가 */
-	$("#btn_add").click(function(){
+	$("#btn_add").on("click", function(){
 		
-		/* 행추가 */
 		var target = $("#productRowAdd");
 		var templateObject = $("#productRowAddTemplate");
 		var template = Handlebars.compile(templateObject.html());
 		
 		target.append(template);
 		
+		var tr = target.children(":last");
+		
+		// 추가된 행 색변경
+		target.find("tr").removeClass("lastFocus");
+		tr.addClass("lastFocus");
+		
+		// 태그 id 중복방지
+		var td = tr.find("td");
+		td.each(function(i){
+			
+			if(i != 0){
+				var name = $(this).children().attr("id");
+				$(this).children().attr("id", name + "_" + cnt);
+			}
+		});
+		
 		/* 이미지, 상세설명 추가 */
 		pro_info();
-		
-		rowIndex = $("#productRowAdd tr:last").index();
-		console.log("$('#productRowAdd tr:last'): " + rowIndex);
-		
-		$("#productRowAdd tr:last td input[name=check]").val(rowIndex);
-		$("#productRowAdd tr:last td input[name=check]").attr("data-index", rowIndex);
-		console.log("check: " + $("#productRowAdd tr:last td input[name=check]").val());
-		
-		$("#file1").attr("data-index", rowIndex);
 		
 	});
 	
@@ -340,24 +328,44 @@ $(function(){
 		var templateObject = $("#productRowAddInfoTemplate");
 		var template = Handlebars.compile(templateObject.html());
 		
-		target.children().hide();
+		target.children().addClass("selected");
 		target.append(template);
+		
+		//var fileTag = target.find("input[id=file1]").attr("id");
+		//var edtorTag = target.find("textarea[id=pro_dtl_info]").attr("id");
+
+		//target.find("input[name=file1]").attr("name", "list[" + i + "]." + fileTag);
+		//target.find("textarea[name=pro_dtl_info]").attr("name", "list[" + i + "]." + edtorTag);
+		
+		// 태그 id 중복방지
+		var ckId = target.children(":last").children(":last").attr("id", "pro_dtl_info_" + cnt);
+		
+		ckEditorLoad(ckId.attr("id"));
+		cnt += 1;
 	}
 	
 	/* 상품등록 테이블 행삭제 */
-	$("#btn_remove").click(function(){
+	$("#btn_remove").on("click", function(){
+		
+		var length = $("#productRowAdd tr").length-1;
 
-		if($("input[name=check]").is(":checked") == true){ //체크된 요소가 있으면
-            
-			var i = $("input[name=check]:checked").parents("tr");
-               
+		for(i = length; i >= 0; i--){
+			
+			if($("#productRowAdd tr").eq(i).children().children().is(":checked") == true) {
+				
+				$("#productRowAddInfo>div").eq(i).remove();
+			}
+		}
+		
+		if($("input[name=check]").is(":checked") == true) { //체크된 요소가 있으면
+			
+			var i = $("input[name='check']:checked").parents("tr");
+		
 			i.remove();
-        }else {
-            alert("삭제할 항목을 선택해주세요!")
-        }
+		}else {
+			alert("삭제할 항목을 선택해주세요!");
+		}
 	});
-	
-	
 });
 </script>
 </body>

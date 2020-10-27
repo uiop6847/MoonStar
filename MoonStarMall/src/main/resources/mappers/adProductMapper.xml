@@ -19,7 +19,7 @@
 	</select>
 	
 	<!-- 상품 등록 -->
-	<insert id="productInsertOK" parameterType="ProductVO">
+	<insert id="insertOK" parameterType="ProductVO">
 		INSERT INTO PRODUCT_TBL(PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
 			PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN)
 		VALUES(seq_pro_num.NEXTVAL, #{cat_code}, #{pro_nm}, #{pro_price}, #{pro_discount}, #{pro_publisher}, 
@@ -27,7 +27,7 @@
 	</insert>
 
 	<!-- 상품 리스트 -->
-	<select id="productList" parameterType="SearchCriteria" resultType="ProductVO">
+	<select id="list" parameterType="SearchCriteria" resultType="ProductVO">
 		SELECT PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
 		    PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
 		FROM (SELECT PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
@@ -38,18 +38,8 @@
 		ORDER BY PRO_NUM DESC
 	</select>
 	
-	<select id="readProduct" parameterType="int" resultType="ProductVO">
-		SELECT  PRO_NUM, 
-        (SELECT CAT_NAME FROM CATEGORY_TBL CG WHERE CG.CAT_CODE = C.CAT_PRTCODE) AS CAT_PRTCODE, C.CAT_NAME AS CAT_CODE,
-        PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
-        PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
-		FROM PRODUCT_TBL P INNER JOIN CATEGORY_TBL C
-		ON P.CAT_CODE = C.CAT_CODE
-		WHERE P.PRO_NUM = #{pro_num}
-	</select>
-	
 	<!-- 상품 총 건수 -->
-	<select id="productSearchCount" parameterType="SearchCriteria" resultType="int">
+	<select id="searchCount" parameterType="SearchCriteria" resultType="int">
 		<![CDATA[
 			SELECT COUNT(PRO_NUM)
 			FROM PRODUCT_TBL
@@ -90,5 +80,27 @@
 			</if>
 		</if>
 	</sql>
+	
+	<!-- 상품 상세정보 조회 -->
+	<select id="readProduct" parameterType="int" resultType="ProductVO">
+		SELECT  PRO_NUM, 
+        (SELECT CAT_NAME FROM CATEGORY_TBL CG WHERE CG.CAT_CODE = C.CAT_PRTCODE) AS CAT_PRTCODE, C.CAT_NAME AS CAT_CODE,
+        PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
+        PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
+		FROM PRODUCT_TBL P INNER JOIN CATEGORY_TBL C
+		ON P.CAT_CODE = C.CAT_CODE
+		WHERE P.PRO_NUM = #{pro_num}
+	</select>
+	
+	<!-- 체크된 상품리스트 조회 -->
+	<select id="editList" parameterType="Map" resultType="ProductVO">
+		SELECT  PRO_NUM, 
+        (SELECT CAT_NAME FROM CATEGORY_TBL CG WHERE CG.CAT_CODE = C.CAT_PRTCODE) AS CAT_PRTCODE, C.CAT_NAME AS CAT_CODE,
+        PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER, 
+        PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
+		FROM PRODUCT_TBL P INNER JOIN CATEGORY_TBL C
+		ON P.CAT_CODE = C.CAT_CODE
+		WHERE P.PRO_NUM IN (${pro_num})
+	</select>
 
 </mapper>

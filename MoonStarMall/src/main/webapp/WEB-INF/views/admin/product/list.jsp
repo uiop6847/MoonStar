@@ -15,12 +15,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
+<script type="text/javascript" src="/js/admin/list.js"></script>
 <style>
 	.col-center	{
 		text-align: center;
 	}
 	table, th, td {
 		vertical-align: middle !important; 
+	}
+	.col-right	{
+		text-align: right;
 	}
 </style>
 </head>
@@ -37,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">Admin page</h1>
+						<h1 class="m-0 text-dark">Admin Page <small>Product List</small></h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -84,8 +88,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<i class="fas fa-search"></i>
 								</button>
 							</div>
+							<div class="row">
+								<div class="col-12" style="text-align: right; padding: 10px;">
+									<button class="btn btn-info" type="button" id="btn_edit">
+										수정</button>
+									<button class="btn btn-danger" type="button" id="btn_delete">
+										삭제</button>
+								</div>
+							</div>
 							<div class="card-body table-responsive p-0">
 								<table id="tbl_productList" class="table table-hover table-bordered text-nowrap">
+									<thead>
 									<tr class="col-center">
 										<th><input type="checkbox" id="checkAll"></th>
 										<th>번호</th>
@@ -97,7 +110,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<th>수량</th>
 										<th>판매상태</th>
 										<th>상품등록일</th>
+										<!-- <th>상품수정일</th> -->
 									</tr>
+									</thead>
+									<tbody id="tbl_productListRow">
 										<%-- 상품리스트 출력 --%>
 										<c:if test="${empty productList}">
 										<tr>
@@ -109,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<c:forEach items="${productList }" var="productVO">
 										<tr>
 											<td>
-												<input type="checkbox" name="check" class="check" value="${productVO.pro_num}">
+												<input type="checkbox" name="check" class="check">
 											</td>
 											<td class="col-center">${productVO.pro_num}</td>
 											<td class="col-center">
@@ -125,17 +141,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<td class="col-md-1 col-center">${productVO.pro_discount}</td>
 											<td class="col-md-2 col-center">${productVO.pro_publisher}</td>
 											<td class="col-md-1 col-center">${productVO.pro_count }</td>
-											<td class="col-center">
-												<select class="form-control" name="buy${productVO.pro_num}" style="width: 60px; display: inline-block;">
-												  <option <c:out value="${productVO.pro_buy_yn == 'Y'?'selected':''}"/>>Y</option>
-												  <option <c:out value="${productVO.pro_buy_yn == 'N'?'selected':''}"/>>N</option>
-												</select>
-											</td>
+											<td class="col-center">${productVO.pro_buy_yn}</td>
 											<td class="col-md-1 col-center">
-												<fmt:formatDate pattern="yyyy-MM-dd" value="${productVO.sta_date }" />
+												<fmt:formatDate value="${productVO.sta_date }" pattern="yyyy-MM-dd"/>
 											</td>
+											<!-- 
+											<td class="col-md-1 col-center">
+												<fmt:formatDate value="${productVO.udt_date}" pattern="yyyy-MM-dd"/>
+											</td>
+											 -->
 										</tr>
 										</c:forEach>
+									</tbody>
 								</table>
 							</div><!-- /.card-body -->
 							<div class="card-footer">
@@ -177,18 +194,47 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
-
-<%-- 버튼 클릭 이벤트 --%>
 <script>
 $(function(){
-	/* 검색버튼 클릭시 */
-	$("#btn_search").on("click", function(){
-		self.location = "list"
-			+ '${pm.makeQuery(1)}'
-			+ "&searchType="
-			+ $("select option:selected").val()
-			+ "&keyword=" + $('#keyword').val();
-	});
+    /* 수정버튼 클릭 시 */
+    $("#btn_edit").on("click", function(){
+        
+        var proNum = [];
+        
+        if($(":checkbox:checked").length == 0){
+            alert("수정할 상품이 없습니다.\n수정할 상품을 체크해주세요.");
+			return false;
+        }
+        
+        $("#tbl_productListRow tr").each(function(i){
+
+            if($(this).find(":checkbox").is(":checked")){
+                
+                proNum.push($(this).children().eq(1).text());
+            }
+        });
+        
+        //location.href= '/admin/product/edit${pm.makeSearch(pm.cri.page)}&proNum=' + proNum;
+        /*$.ajax({
+            url: '/admin/product/editList',
+            type: 'post',
+            dataType: 'text',
+            data: { proNum : proNum },
+            success : function(data) {
+            	
+            	if(data == "SUCCESS"){            		
+                	location.href="/admin/product/edit";
+            	}
+            }
+
+        });*/
+        $.ajax({
+            url: '/admin/product/edit${pm.makeSearch(pm.cri.page)}',
+            type: 'get',
+            dataType: 'text',
+            data: { proNum : proNum }
+        });
+    });
 	
 });
 </script>

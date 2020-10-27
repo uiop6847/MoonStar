@@ -34,12 +34,6 @@ public class AdProductServiceImpl implements AdProductService {
 	public void productInsertOK(ProductVO vo) throws Exception {
 		dao.productInsertOK(vo);
 	}
-	
-	/* 상품 등록 
-	@Override
-	public void productInsertOK(Map<String, Object> map) throws Exception {
-		dao.productInsertOK(map);
-	}*/
 
 	/* 상품 리스트 */
 	@Override
@@ -53,10 +47,16 @@ public class AdProductServiceImpl implements AdProductService {
 		return dao.productSearchCount(cri);
 	}
 
-	/* 상품 상세정보 */
+	/* 상품 상세정보 조회 */
 	@Override
 	public ProductVO readProduct(int pro_num) throws Exception {
 		return dao.readProduct(pro_num);
+	}
+
+	/* 체크된 상품리스트 조회 */
+	@Override
+	public List<ProductVO> productEditList(Map<String, Object> map) throws Exception {
+		return dao.productEditList(map);
 	}
 
 }

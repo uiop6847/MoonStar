@@ -23,8 +23,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	});
 </script>
 <style>
+	table th {
+		width: 10%;
+		text-align: right;
+	}
 	.col-right	{
 		text-align: right;
+	}
+	.col-left	{
+		text-align: left;
 	}
 </style>
 </head>
@@ -40,7 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">Product Detail Info</h1>
+						<h1 class="m-0 text-dark">Admin Page <small>Product Detail Info</small></h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -61,55 +68,67 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
-								<div class="row form-group">
-									<div class="col-md-2 col-right"><label>1차 카테고리</label></div>
-									<div class="col-md-3"><span class="form-control">${vo.cat_prtcode}</span></div>
-									<div class="col-md-2 col-right"><label>2차 카테고리</label></div>
-									<div class="col-md-3"><span class="form-control">${vo.cat_code}</span></div>
-								</div>
-								<div class="row form-group">
-									<div class="col-md-2 col-right"><label>상품명</label></div>
-									<div class="col-md-10"><span class="form-control">${vo.pro_nm}</span></div>
-								</div>
-								<div class="row form-group">
-									<div class="col-md-2 col-right"><label>제조사</label></div>
-									<div class="col-md-10"><span class="form-control">${vo.pro_publisher}</span></div>
-								</div>
-								<div class="row form-group">
-									<div class="col-md-2 col-right"><label>가격</label></div>
-									<div class="col-md-4"><span class="form-control">${vo.pro_price}</span></div>
-									<div class="col-md-2 col-right"><label>할인율</label></div>
-									<div class="col-md-4"><span class="form-control">${vo.pro_discount}</span></div>
-								</div>
-								<div class="row form-group">
-									<div class="col-md-2 col-right"><label>판매수량</label></div>
-									<div class="col-md-4"><span class="form-control">${vo.pro_count}</span></div>
-									<div class="col-md-2 col-right"><label>판매상태</label></div>
-									<div class="col-md-4"><span class="form-control">${vo.pro_buy_yn}</span></div>
-								</div>
-								<div class="row form-group">
-									<div class="col-md-2 col-right"><label>등록일자</label></div>
-									<div class="col-md-4"><span class="form-control">
-										<fmt:formatDate value="${vo.sta_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span></div>
-									<div class="col-md-2 col-right"><label>수정일자</label></div>
-									<div class="col-md-4"><span class="form-control">
-										<fmt:formatDate value="${vo.udt_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span></div>
-								</div>
 								<div class="form-group">
-									<label>대표 이미지</label><br>
-									<img src="/admin/product/displayFile?fileName=${vo.pro_main_img }" style="width: 100px;">
-								</div>
-								<div class="form-group">
-									<label for="pro_dtl_info">상세설명</label>
-									<div contenteditable="false" style="border: 1px solid #d2d2d2; padding: 20px;">
-										${vo.pro_dtl_info}
+									<div class="row">
+										<div class="col-md-4"><label for="mainCategory">1차 카테고리</label></div>
+										<div class="col-md-4"><label for="subCategory">2차 카테고리</label></div>
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<span class="form-control">${vo.cat_prtcode}</span>
+										</div>
+										<div class="col-md-4">
+											<span class="form-control">${vo.cat_code}</span>
+										</div>
 									</div>
 								</div>
+								<table class="table table-head-fixed table-hover text-nowrap" id="tbl_product">
+										<tr>
+											<th>번호</th><td>${vo.pro_num}</td>
+										</tr>
+										<tr>
+											<th>상품명</th><td>${vo.pro_nm}</td>
+										</tr>
+										<tr>
+											<th>제조사</th><td>${vo.pro_publisher}</td>
+										</tr>
+										<tr>
+											<th>가격</th><td>${vo.pro_price}</td>
+										</tr>
+										<tr>
+											<th>할인율</th><td>${vo.pro_discount}</td>
+										</tr>
+										<tr>
+											<th>판매수량</th><td>${vo.pro_count}</td>
+										</tr>
+										<tr>
+											<th>판매상태</th><td>${vo.pro_buy_yn}</td>
+										</tr>
+										<tr>
+											<th>상품등록일</th><td><fmt:formatDate value="${vo.sta_date}" pattern="yyyy-MM-dd"/></td>
+										</tr>
+										<tr>
+											<th>상품수정일</th><td><fmt:formatDate value="${vo.udt_date}" pattern="yyyy-MM-dd"/></td>
+										</tr>
+										<tr>
+											<th>대표 이미지</th><td><img src="/admin/product/displayFile?fileName=${vo.pro_main_img }" style="width: 80px;"></td>
+										</tr>
+										<tr>
+											<th>상세설명</th><td><div contenteditable="false" style="border: 1px solid #d2d2d2; padding: 20px;">
+										${vo.pro_dtl_info}
+									</div></td>
+										</tr>
+								</table>
 								<div class="box-footer">
 									<div>
 										<hr>
 									</div>
-									<button id="btn_list" type="button" class="btn btn-primary" >상품 목록</button>
+									<div class="row">
+										<div class="col-6 col-left">
+											<button id="btn_list" type="button" class="btn" style="background-color: #F9D5D3;">
+											상품 목록</button>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -134,6 +153,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
-
 </body>
 </html>
