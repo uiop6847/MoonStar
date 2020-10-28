@@ -224,7 +224,7 @@ $(function(){
         var proNumArr = [];
         
         if($(":checkbox:checked").length == 0){
-            alert("수정할 상품이 없습니다.\n수정할 상품을 체크해주세요.");
+            alert("선택된 상품이 없습니다.\n수정할 상품을 선택해주세요.");
 			return false;
         }
         
@@ -238,6 +238,28 @@ $(function(){
         
         // 상품수정 화면 이동
         location.href= '/admin/product/edit?proNumArr=' + proNumArr;
+    });
+    
+    /* 삭제버튼 클릭 시 */
+    $("#btn_delete").on("click", function(){
+		
+    	var proNumArr = [];
+        
+        if($(":checkbox:checked").length == 0){
+        	alert("선택된 상품이 없습니다.\n삭제할 상품을 선택해주세요.");
+			return false;
+        }
+        
+        $("#tbl_productListRow tr").each(function(i){
+
+            if($(this).find(":checkbox").is(":checked")){
+                
+            	proNumArr.push($(this).children().eq(1).text());
+            }
+        });
+        
+        // 상품수정 화면 이동
+        location.href= '/admin/product/delete?proNumArr=' + proNumArr;
     });
 	
 });

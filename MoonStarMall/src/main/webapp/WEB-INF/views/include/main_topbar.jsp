@@ -1,37 +1,73 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="/">PROJECT</a>
-            <div class="nav-collapse">
-                <ul id="menu" class="nav">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contanct</a></li>
-                </ul>
-            </div><!-- /.nav-collapse -->
-            <ul class="nav pull-right"> <!-- user-menu dropdown --> 
-                <li class="dropdown" id="user-menu">
-                    <a href="#user-menu" class="dropdown-toggle" data-toggle="dropdown">
-                        <i style="opacity: 0.40;" class="icon-user icon-white">&nbsp;</i>&nbsp;Anonymous
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-name="user-activity"><a href="#">Preferences</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Logout</a></li>
-                    </ul>
-                </li>
-            </ul> <!-- /user-menu dropdown --> 
-        </div>
-    </div><!-- /navbar-inner -->
-</div>
-<div class="span10">
-    <div class="well"><h1>Sample content</h1></div>
-</div>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%-- Handlebar Template --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+<!-- Navbar -->
+<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+	<div class="container">
+		<div style="margin: 0 auto;">
+			<!-- top navbar links -->
+			<ul class="navbar-nav">
+				<!-- 카테고리 -->
+				<c:forEach items="${categoryList}" var="list">
+					<li class="nav-item mainCategory">
+						<a href="/product/list?cat_code=${list.cat_code}" class="nav-link">${list.cat_name}</a>
+						<!--  2차카테고리 자식수준으로 추가작업 -->
+						<%--<ul class="treeview-menu" id="mainCategory_${list.cat_code}"></ul> --%>
+					</li>
+				</c:forEach>
+			</ul>
+		</div>
+		<ul class="navbar-nav">
+			<li class="nav-item" >
+				<a class="nav-link">
+					<ion-icon src="/ionicons/bag-outline.svg" style="font-size:20px;"></ion-icon></a>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+<!-- /.navbar -->
+<script id="subCategoryTemplate" type="text/x-handlebars-template">
+	{{#each .}}
+		<li><a href="/product/list?cat_code={{cat_code}}">{{cat_name}}</a></li>
+	{{/each}}
+</script>
+<%-- 2차 카테고리 템플릿 적용함수 --%>
+<script>
+$(function(){
+	/* 1차 카테고리에 따른 2차 카테고리 작업.   on()메서드: 매번진행 one()메서드: 단1회만 진행 */
+	$(".mainCategory").one("click", function(){
+		var mainCatCode= $(this).val();
+		var url = "/product/subCategoryList/" + mainCatCode;
+		
+					
+		// REST 방식으로 전송
+		$.getJSON(url, function(data){
+			// 받은 데이터로 subCategory에 템플릿 적용
+			subCategory(data, $("#mainCategory_"+mainCatCode), $("#subCategoryTemplate"));
+			
+		});
+
+	});
+	
+	var subCategory = function(subCGStr, target, templateObject) {
+
+		var template = Handlebars.compile(templateObject.html());
+		var options = template(subCGStr);
+
+		// 기존 option 제거(누적방지)
+		//$("#subCategory option").remove();
+		target.append(options);
+	}
+	
+	$("li").on("mouseover", function(e){
+		
+		var tip = $(this).attr("title");
+		
+		$(this).attr("title", "");
+		
+		$(this).append('<div id="tooltip"><div class="tipBody">' + tip + '</div></div>');
+	});
+});
+</script>

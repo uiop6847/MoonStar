@@ -71,7 +71,7 @@ $(function(){
 			return false;
 		}
 		
-		var isOk = false;
+		var isOk;
 		$("#productRowAdd tr").each(function(i){
 			
 			var proNm           = $("input[name=pro_nm]");
@@ -85,6 +85,8 @@ $(function(){
 			var fileFormat      = /(.*?)\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/;
 			var maxSize         = 5 * 1024 * 1024; // 5MB
 			
+			isOk = false;
+
 			/* 유효성 검사 */
 			if(proNm.eq(i).val() == null || proNm.eq(i).val() == "") {
 				alert("상품명을 입력해주세요.");

@@ -30,8 +30,10 @@ public interface AdProductService {
 	/* 체크된 상품리스트 조회 */
 	public List<ProductVO> productEditList(Map<String, Object> map) throws Exception;
 	
-	/* 체크된 상품 수정 */
+	/* 상품 수정 */
+	public void productEditOK(ProductVO vo) throws Exception;
 	
-	/* 체크된 상품 삭제 */
+	/* 상품 삭제 */
+	public void productDelete(Map<String, Object> map) throws Exception;
 
 }

@@ -21,6 +21,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="/js/check.js"></script>
 <script type="text/javascript" src="/js/admin/edit.js"></script>
 <script>
+
+	//페이지 로드시 자바스크립트 실행
+	window.onload = pageLoad;
+	function pageLoad(){
+		ckEditorLoad();// CKEditor 불러오기
+	};
+	
 	/* 이미지 미리보기 */
 	function imgPreview(value) {
 		
@@ -49,15 +56,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		$("#productRowAddInfo div[name='proDtl']").addClass("selected"); // 모든 div태그 숨기기
 		$("#productRowAddInfo>div").eq(index).removeClass("selected"); // 선택한 행의 div태그 보이기
 		
-		var id = $("textarea[id='list["+index+"].pro_dtl_info']").attr("id");
-		ckEditorLoad(id); // CKEditor 불러오기
-		
 		// 선택한 행의 카테고리로 변경
 		selectCategory(index);
 	}
-	
+
+
 	/* CKEditor 불러오기 */
-	function ckEditorLoad(id){
+	function ckEditorLoad(){
 		/* 
 			ckEditor 작업
 			config.js를 사용하지 않고 개별 설정하는 부분
@@ -71,9 +76,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				filebrowserUploadUrl : '/admin/product/imgUpload'
 		};
 
-		// config.js 설정 사용
-		//CKEDITOR.replace("list["+index+"].pro_dtl_info", ckeditor_config);
-		CKEDITOR.replace(id, ckeditor_config);
+		$("div[name=proDtl]").each(function(i){
+			CKEDITOR.replace("list["+i+"].pro_dtl_info", ckeditor_config);
+		});
 	}
 	
 	/* 선택한 행의 카테고리로 변경 */
@@ -83,7 +88,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		
 		//$("#mainCategory > option").removeAttr("selected");
 		$("#mainCategory > option[value="+main+"]").prop("selected", true);
-		
 		
 		// REST 방식으로 전송
 		var url = "/admin/product/subCategoryList/" + main;
@@ -203,35 +207,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
 												</tr>
 											</thead>
 											<tbody id="productRowAdd">
-											<c:forEach var="vo" items="${editList}" begin="0" step="1" varStatus="i">
+											<c:forEach var="vo" items="${editList}" varStatus="i">
 												<tr onclick="productDtlInfo(this);">
 													<td>
 														<input type="checkbox" name="check" class="check" checked="checked">
-														<input type="hidden" id="list[${i.index }].cat_code" name="list[${i.index }].cat_code" value="${vo.cat_code}">
-														<input type="hidden" id="list[${i.index }].cat_prtcode" name="list[${i.index }].cat_prtcode" value="${vo.cat_prtcode}">
+														<input type="hidden" id="list[${i.index }].cat_code" name="cat_code" value="${vo.cat_code}">
+														<input type="hidden" id="list[${i.index }].cat_prtcode" name="cat_prtcode" value="${vo.cat_prtcode}">
+													</td>
+													<td style="min-width: 10px;">
+														<input type="hidden" id="list[${i.index }].pro_num" name="pro_num" value="${vo.pro_num}">
+														<span>${vo.pro_num}</span>
 													</td>
 													<td>
-														<input type="text" id="list[${i.index }].pro_num" name="list[${i.index }].pro_num" value="${vo.pro_num}" class="form-control">
+														<input type="text" id="list[${i.index }].pro_nm" name="pro_nm" value="${vo.pro_nm}" class="form-control">
 													</td>
 													<td>
-														<input type="text" id="list[${i.index }].pro_nm" name="list[${i.index }].pro_nm" value="${vo.pro_nm}" class="form-control">
+														<input type="text" id="list[${i.index }].pro_publisher" name="pro_publisher" value="${vo.pro_publisher}" class="form-control"> 
 													</td>
 													<td>
-														<input type="text" id="list[${i.index }].pro_publisher" name="list[${i.index }].pro_publisher" value="${vo.pro_publisher}" class="form-control"> 
+														<input type="number" id="list[${i.index }].pro_price" name="pro_price" value="${vo.pro_price}" class="form-control">
 													</td>
 													<td>
-														<input type="number" id="list[${i.index }].pro_price" name="list[${i.index }].pro_price" value="${vo.pro_price}" class="form-control">
+														<input type="number" id="list[${i.index }].pro_discount" name="pro_discount" value="${vo.pro_discount}" class="form-control">
 													</td>
 													<td>
-														<input type="number" id="list[${i.index }].pro_discount" name="list[${i.index }].pro_discount" value="${vo.pro_discount}" class="form-control">
+														<input type="number" id="list[${i.index }].pro_count" name="pro_count" value="${vo.pro_count}" class="form-control">
 													</td>
 													<td>
-														<input type="number" id="list[${i.index }].pro_count" name="list[${i.index }].pro_count" value="${vo.pro_count}" class="form-control">
-													</td>
-													<td>
-														<select id="list[${status.index }].pro_buy_yn" name="list[${status.index }].pro_buy_yn" class="form-control">
-															<option <c:out value="${productVO.pro_buy_yn == 'Y'?'selected':''}"/>>Y</option>
-													  		<option <c:out value="${productVO.pro_buy_yn == 'N'?'selected':''}"/>>N</option>
+														<select id="list[${status.index }].pro_buy_yn" name="pro_buy_yn" class="form-control">
+															<option <c:out value="${vo.pro_buy_yn == 'Y'?'selected':''}"/>>Y</option>
+													  		<option <c:out value="${vo.pro_buy_yn == 'N'?'selected':''}"/>>N</option>
 														</select>
 													</td>
 												</tr>
@@ -242,7 +247,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<div>
 										<hr>
 									</div>
-									<c:forEach var="vo" items="${editList}" begin="0" step="1" varStatus="i">
+								<c:set var="originFile" value="${originFile}" />
+								<c:forEach var="vo" items="${editList}" varStatus="i">
 									<div id="productRowAddInfo">
 										<div class="form-group selected" name="proDtl">
 											<div class="row">
@@ -251,16 +257,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 													<img id="LoadImg" style="width: 100px;" height="100px;" src="/admin/product/displayFile?fileName=${vo.pro_main_img }">
 												</div>
 												<div class="col-md-10">
-													<input type="file" id="list[${i.index }].file1" name="list[${i.index }].file1" value="${vo.pro_main_img }" class="form-control" onchange="imgPreview(this);" />
+													<input type="hidden" name="pro_main_img" value="${vo.pro_main_img}" />
+													<span id="fileName" style="margin-left:5px; font-size:14px;">현재 등록된 파일: <c:out value="${originFile[i.index]}"/></span>
+													<input type="file" id="list[${i.index }].file1" name="file1" class="form-control" onchange="imgPreview(this);" />
 												</div>
 											</div>
 											<label>상품상세설명</label>
-											<textarea class="textarea" placeholder="Place some text here" id="list[${i.index }].pro_dtl_info" name="list[${i.index }].pro_dtl_info" 
+											<textarea class="textarea" placeholder="Place some text here" id="list[${i.index }].pro_dtl_info" name="pro_dtl_info" 
 											style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
 											${vo.pro_dtl_info }</textarea>
 										</div>
 									</div>
-									</c:forEach>
+						        </c:forEach>
 									<div class="box-footer">
 										<div>
 											<hr>

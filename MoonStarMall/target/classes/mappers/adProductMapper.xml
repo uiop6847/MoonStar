@@ -15,7 +15,7 @@
 	<select id="subCategory" resultType="CategoryVO">
 		SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME
 		FROM CATEGORY_TBL
-		WHERE CAT_PRTCODE = #{subCategory}
+		WHERE CAT_PRTCODE = #{cat_code}
 	</select>
 	
 	<!-- 상품 등록 -->
@@ -99,6 +99,22 @@
 		FROM PRODUCT_TBL P INNER JOIN CATEGORY_TBL C
 		ON P.CAT_CODE = C.CAT_CODE
 		WHERE P.PRO_NUM IN (${pro_num})
+		ORDER BY PRO_NUM DESC
 	</select>
+	
+	<!-- 상품 수정 -->
+	<update id="editOK" parameterType="ProductVO">
+	UPDATE PRODUCT_TBL
+	SET CAT_CODE = #{cat_code}, PRO_NM = #{pro_nm}, PRO_PRICE = #{pro_price}, PRO_DISCOUNT = #{pro_discount}, PRO_PUBLISHER = #{pro_publisher},
+	    PRO_DTL_INFO = #{pro_dtl_info}, PRO_MAIN_IMG = #{pro_main_img}, PRO_COUNT = #{pro_count}, PRO_BUY_YN = #{pro_buy_yn}, UDT_DATE = SYSDATE
+	WHERE PRO_NUM = #{pro_num}
+	</update>
+	
+	<!-- 상품 삭제 -->
+	<delete id="delete" parameterType="Map">
+		DELETE
+		FROM PRODUCT_TBL
+		WHERE PRO_NUM IN (${pro_num})
+	</delete>
 
 </mapper>

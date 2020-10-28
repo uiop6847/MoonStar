@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moonstarmall.mappers.ProductMapper">
+
+	<!-- 1차카테고리 조회 -->
+	<select id="mainCategory" resultType="CategoryVO">
+		SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME
+		FROM CATEGORY_TBL
+		WHERE CAT_PRTCODE IS NULL
+	</select>
+	
+	<!-- 2차카테고리 조회 -->
+	<select id="subCategory" resultType="CategoryVO">
+		SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME
+		FROM CATEGORY_TBL
+		WHERE CAT_PRTCODE = #{cat_code}
+	</select>
+
+</mapper>

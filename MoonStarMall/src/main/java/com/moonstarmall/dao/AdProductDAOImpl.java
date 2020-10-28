@@ -60,6 +60,18 @@ public class AdProductDAOImpl implements AdProductDAO {
 	public List<ProductVO> productEditList(Map<String, Object> map) throws Exception {
 		return session.selectList(NS + ".editList", map);
 	}
+
+	/* 상품 수정 */
+	@Override
+	public void productEditOK(ProductVO vo) throws Exception {
+		session.update(NS + ".editOK" , vo);
+	}
+
+	/* 상품 삭제 */
+	@Override
+	public void productDelete(Map<String, Object> map) throws Exception {
+		session.delete(NS + ".delete", map);
+	}
 	
 	
 	

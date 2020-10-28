@@ -59,4 +59,17 @@ public class AdProductServiceImpl implements AdProductService {
 		return dao.productEditList(map);
 	}
 
+	/* 상품 수정 */
+	@Override
+	public void productEditOK(ProductVO vo) throws Exception {
+		dao.productEditOK(vo);		
+	}
+
+	/* 상품 삭제 */
+	@Override
+	public void productDelete(Map<String, Object> map) throws Exception {
+		dao.productDelete(map);
+		
+	}
+
 }

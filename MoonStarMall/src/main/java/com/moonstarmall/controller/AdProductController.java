@@ -187,6 +187,63 @@ public class AdProductController {
 							@RequestParam("proNumArr") int[] proNumArr, Model model) throws Exception {
 		logger.info("productEdit() called");
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		String pro_num = null;
+
+		for(int i=0; i<proNumArr.length; i++) {
+			pro_num += "," + proNumArr[i];
+		}
+		
+		pro_num = pro_num.substring(5); // null,을 제외한 값 가져오기
+		map.put("pro_num", pro_num);
+		
+		List<ProductVO> list = service.productEditList(map);
+		
+		ArrayList<String> originFile = new ArrayList<String>();
+		for(int i=0; i<list.size(); i++) {
+			originFile.add(list.get(i).getPro_main_img().substring(list.get(i).getPro_main_img().lastIndexOf("_")+1));
+			logger.info("=====originFile: " + originFile.get(i));
+		}
+		
+		logger.info("=====list: " + list.toString());
+		
+		model.addAttribute("editList", list); // 체크된 상품리스트
+		model.addAttribute("originFile", originFile); // 원본파일명
+		model.addAttribute("mainCategory", service.mainCategory()); // 1차카테고리 전송
+		
+		PageMaker pm = new PageMaker();
+		pm.setCri(cri);
+		
+		model.addAttribute("pm", pm);
+	}
+	
+	/* 상품 수정 */
+	@RequestMapping(value = "editOK", method = RequestMethod.POST)
+	public String productEditOK(ProductVO list, SearchCriteria cri, RedirectAttributes rttr) throws IOException, Exception {
+		logger.info("productEditOK() called");
+		logger.info("=====list: " + list.toString());
+		
+		for(ProductVO vo : list.getList()) {
+			
+			if(vo.getFile1().getSize() > 0) {
+				logger.info("=====file not zero size");
+				vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
+			}
+			logger.info("=====vo: " + vo);
+			
+			service.productEditOK(vo);
+		}
+		rttr.addFlashAttribute("msg", "EDIT_SUCCESS");
+		
+		return "redirect:/admin/product/list";
+	}
+	
+	/* 상품 삭제 */
+	@RequestMapping(value = "delete", method = RequestMethod.GET)
+	public String productDelete(@RequestParam("proNumArr") int[] proNumArr, 
+								@ModelAttribute("cri") SearchCriteria cri,
+								RedirectAttributes rttr) throws Exception {
+		logger.info("productDelete() called");
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		String pro_num = null;
@@ -198,32 +255,11 @@ public class AdProductController {
 		pro_num = pro_num.substring(5); // null,을 제외한 값 가져오기
 		map.put("pro_num", pro_num);
 		
-		model.addAttribute("editList", service.productEditList(map)); // 체크된 상품리스트
-		//model.addAttribute("originFile", originFile); // 원본파일명
-		model.addAttribute("mainCategory", service.mainCategory()); // 1차카테고리 전송
-	}
-	
-	/* 상품 수정 */
-	@RequestMapping(value = "editOK", method = RequestMethod.POST)
-	public String productEditOK(ProductVO list, RedirectAttributes rttr) throws IOException, Exception {
-		logger.info("productEditOK() called");
-		logger.info("=====list: " + list.toString());
+		service.productDelete(map);
 		
-		for(ProductVO vo : list.getList()) {
-			logger.info("=====vo: " + vo);
-			
-			vo.setCat_code(list.getCat_code());
-			vo.setPro_main_img(FileUtils.uploadFile(uploadPath, vo.getFile1().getOriginalFilename(), vo.getFile1().getBytes()));
-			
-			//service.productInsertOK(vo);
-		}
-		
-		rttr.addFlashAttribute("msg", "EDIT_SUCCESS");
+		rttr.addFlashAttribute("msg", "DELETE_SUCCESS");
 		
 		return "redirect:/admin/product/list";
 	}
 	
-	/* 체크된 상품 삭제 */
-	
-
 }

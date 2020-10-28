@@ -39,6 +39,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 	<%@include file="/WEB-INF/views/include/main_header.jsp" %>
 	
+	<%@include file="/WEB-INF/views/include/main_topbar.jsp" %>
+	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
