@@ -1,8 +1,7 @@
 package com.moonstarmall.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
+import java.util.Map;
 
 import com.moonstarmall.domain.CategoryVO;
 
@@ -13,4 +12,7 @@ public interface ProductService {
 	
 	/* 2차 카테고리 */
 	public List<CategoryVO> subCategoryList(String cat_code) throws Exception;
+	
+	/* new상품 리스트(main진열) */
+	public List<Map<String, Object>> newProductList() throws Exception;
 }

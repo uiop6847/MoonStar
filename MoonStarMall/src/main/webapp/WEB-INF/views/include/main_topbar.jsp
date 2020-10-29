@@ -10,10 +10,16 @@
 			<ul class="navbar-nav">
 				<!-- 카테고리 -->
 				<c:forEach items="${categoryList}" var="list">
-					<li class="nav-item mainCategory">
+					<%--<li class="nav-item mainCategory">
 						<a href="/product/list?cat_code=${list.cat_code}" class="nav-link">${list.cat_name}</a>
 						<!--  2차카테고리 자식수준으로 추가작업 -->
-						<%--<ul class="treeview-menu" id="mainCategory_${list.cat_code}"></ul> --%>
+						<ul class="treeview-menu" id="mainCategory_${list.cat_code}"></ul>
+					</li> --%>
+					<li class="nav-item dropdown mainCategory" value="${list.cat_code}">
+						<a href="/product/list?cat_code=${list.cat_code}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+						${list.cat_name}</a>
+						<ul class="dropdown-menu border-0 shadow" id="mainCategory_${list.cat_code}">
+						</ul>
 					</li>
 				</c:forEach>
 			</ul>
@@ -26,11 +32,10 @@
 		</ul>
 	</div>
 </nav>
-
 <!-- /.navbar -->
 <script id="subCategoryTemplate" type="text/x-handlebars-template">
 	{{#each .}}
-		<li><a href="/product/list?cat_code={{cat_code}}">{{cat_name}}</a></li>
+		<li><a href="/product/list?cat_code={{cat_code}}" class="dropdown-item">{{cat_name}}</a></li>
 	{{/each}}
 </script>
 <%-- 2차 카테고리 템플릿 적용함수 --%>
@@ -40,7 +45,6 @@ $(function(){
 	$(".mainCategory").one("click", function(){
 		var mainCatCode= $(this).val();
 		var url = "/product/subCategoryList/" + mainCatCode;
-		
 					
 		// REST 방식으로 전송
 		$.getJSON(url, function(data){
@@ -60,14 +64,5 @@ $(function(){
 		//$("#subCategory option").remove();
 		target.append(options);
 	}
-	
-	$("li").on("mouseover", function(e){
-		
-		var tip = $(this).attr("title");
-		
-		$(this).attr("title", "");
-		
-		$(this).append('<div id="tooltip"><div class="tipBody">' + tip + '</div></div>');
-	});
 });
 </script>

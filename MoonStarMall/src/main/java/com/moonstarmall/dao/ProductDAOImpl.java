@@ -1,6 +1,7 @@
 package com.moonstarmall.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<CategoryVO> subCategoryList(String cat_code) throws Exception {
 		return session.selectList(NS + ".subCategory", cat_code);
+	}
+
+	/* new상품 리스트(main진열) */
+	@Override
+	public List<Map<String, Object>> newProductList() throws Exception {
+		return session.selectList(NS + ".newProductList");
 	}
 
 }

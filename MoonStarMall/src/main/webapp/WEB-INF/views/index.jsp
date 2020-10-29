@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -43,62 +44,73 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
-		<!-- Content Header (Page header) -->
-		<div class="content-header">
+		<div class="content">
 			<div class="container">
-				<div class="row mb-2">
-					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">MoonStarMall - <small>MAIN</small></h1>
-					</div><!-- /.col -->
-					<div class="col-sm-6">
-						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a href="#">Home</a></li>
-							<li class="breadcrumb-item"><a href="#">Layout</a></li>
-							<li class="breadcrumb-item active">Top Navigation</li>
-						</ol>
-					</div><!-- /.col -->
-				</div><!-- /.row -->
-			</div><!-- /.container-fluid -->
+				<!-- START ACCORDION & CAROUSEL-->
+				<%@include file="/WEB-INF/views/include/carousel.jsp" %>
+				<!-- END ACCORDION & CAROUSEL-->
+			</div>
 		</div>
-		<!-- /.content-header -->
-	
+		
 		<!-- Main content -->
 		<div class="content">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-								
-								<p class="card-text">
-								  Some quick example text to build on the card title and make up the bulk of the card's
-								  content.
-								</p>
-								
-								<a href="#" class="card-link">Card link</a>
-								<a href="#" class="card-link">Another link</a>
+					<c:forEach items="${newProductList}" var="newList" >
+						<div class="col-lg-3 col-md-6 mb-3">
+							<div class="card h-100">
+								<a href="/product/detail?pro_num=${newList.pro_num}">
+									<img class="card-img-top" src="/admin/product/displayFile?fileName=${newList.pro_main_img}">
+								</a>
+								<div class="card-body">
+									<a href="/product/detail?pro_num=${newList.pro_num}" style="color: black; font-size: 16px;">
+									${newList.pro_nm}</a>
+									<c:if test="${newList.pro_discount == 0}">
+										<br><p>${newList.pro_price}</p>
+									</c:if>
+									<c:if test="${newList.pro_discount != 0}">
+										<br><span style="text-decoration:line-through;">${newList.pro_price}</span>
+										<br>
+										<span style="color: #ECA4A6;">할인판매가 : 
+											<fmt:formatNumber value="${newList.pro_price - newList.pro_price div newList.pro_discount}" />
+										</span>
+									</c:if>
+								</div>
+								<div class="card-footer" style="height: 72px;">
+									<c:if test="${newList.avg_score == 0}">
+										<div style="width:95px; overflow:hidden; color:#cdcdcd;">
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+										</div>
+									</c:if>
+									<c:if test="${newList.avg_score != 0}">
+										<div style="position:absolute; width:95px; overflow:hidden; color:#cdcdcd;">
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+										</div>
+										<c:set var="width" value="${(newList.avg_score/5)*95}"></c:set>
+										<div style="position:absolute; width:${width}px; overflow:hidden; white-space:nowrap; color:#312E41;">
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+											<ion-icon src="/ionicons/star.svg"></ion-icon>
+										</div>
+										<br><span style="color: #807F89; position:relative;">[${newList.avg_score}]</span>
+									</c:if>
+								</div>
 							</div>
 						</div>
-					</div>
-					<!-- /.col-md-6 -->
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-header">
-								<h5 class="card-title m-0">Featured</h5>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title">Special title treatment</h6>
-								
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-								<a href="#" class="btn btn-primary">Go somewhere</a>
-							</div>
-						</div>
-					</div>
-					<!-- /.col-md-6 -->
+					</c:forEach>
 				</div>
-			<!-- /.row -->
-			</div><!-- /.container-fluid -->
+				<!-- /.row -->
+			</div>
 		</div>
 		<!-- /.content -->
 	</div>

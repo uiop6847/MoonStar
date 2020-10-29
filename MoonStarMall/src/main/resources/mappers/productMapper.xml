@@ -17,5 +17,16 @@
 		FROM CATEGORY_TBL
 		WHERE CAT_PRTCODE = #{cat_code}
 	</select>
+	
+	<!-- new상품 리스트(main진열) -->
+	<select id="newProductList" resultType="HashMap">
+		SELECT 	P.PRO_NUM, P.PRO_NM, P.PRO_PRICE, P.PRO_DISCOUNT, P.PRO_MAIN_IMG, P.PRO_COUNT, 
+				NVL(R.REW_CNT, '0') AS REW_CNT, NVL(R.AVG_SCORE,'0') AS AVG_SCORE
+		FROM PRODUCT_TBL P LEFT JOIN (	SELECT PRO_NUM, COUNT(REW_NUM) AS REW_CNT, AVG(REW_SCORE) AS AVG_SCORE
+									  	FROM REVIEW_TBL GROUP BY PRO_NUM
+									 ) R
+		ON P.PRO_NUM = R.PRO_NUM
+		ORDER BY P.PRO_NUM DESC
+	</select>
 
 </mapper>

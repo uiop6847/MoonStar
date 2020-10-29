@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.service.ProductService;
+import com.moonstarmall.util.Criteria;
 
 @Controller
 @RequestMapping("/product/*")
@@ -33,8 +36,9 @@ public class PoductController {
 		ResponseEntity<List<CategoryVO>> entity = null;
 		
 		try {
-			
-			entity = new ResponseEntity<List<CategoryVO>>(service.subCategoryList(cat_code), HttpStatus.OK); 
+			List<CategoryVO> list = service.subCategoryList(cat_code);
+			//logger.info("=====list : " + list);
+			entity = new ResponseEntity<List<CategoryVO>>(list, HttpStatus.OK); 
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -43,6 +47,15 @@ public class PoductController {
 	
 		return entity;
 	}
-	
+
+	/* 카테고리별 상품 리스트 */
+	@RequestMapping(value = "category", method = RequestMethod.GET)
+	public void productList(@ModelAttribute("cri") Criteria cri, 
+							@ModelAttribute("cat_code") String cat_code,
+							Model model) {
+		logger.info("productList() called");
+		
+		
+	}
 	
 }

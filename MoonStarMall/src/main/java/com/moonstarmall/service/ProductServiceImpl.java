@@ -1,6 +1,7 @@
 package com.moonstarmall.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<CategoryVO> subCategoryList(String cat_code) throws Exception {
 		return dao.subCategoryList(cat_code);
+	}
+
+	/* new상품 리스트(main진열) */
+	@Override
+	public List<Map<String, Object>> newProductList() throws Exception {
+		return dao.newProductList();
 	}
 
 }

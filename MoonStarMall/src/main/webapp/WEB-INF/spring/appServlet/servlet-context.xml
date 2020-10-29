@@ -18,11 +18,11 @@
 	<resources mapping="/bower_components/**" location="/resources/bower_components/" />
 	<resources mapping="/dist/**" location="/resources/dist/" />
 	<resources mapping="/plugins/**" location="/resources/plugins/" />
-	<!-- <resources mapping="/ckeditor/**" location="/resources/bower_components/ckeditor/" /> -->
 	<resources mapping="/ckeditor/**" location="/resources/ckeditor/" />
 	<resources mapping="/ionicons/**" location="/resources/ionicons/" />
 	<resources mapping="/upload/**" location="/resources/upload/" />
 	<resources mapping="/js/**" location="/WEB-INF/views/js/" />
+	<resources mapping="/carouselImg/**" location="/resources/carouselImg/" />
 	
 	<!-- 클라이언트로 부터 전송되어 온 파일을 스프링에서 처리하는 기능 -->
 	<!-- MultipartFile file 주입됨 -->
