@@ -15,3 +15,9 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!-- Ionicons -->
 <script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+<style>
+	.dropdown:hover .dropdown-menu {
+	    display: block;
+	    margin-top: 0;
+	}
+</style>

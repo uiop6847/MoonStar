@@ -26,7 +26,65 @@
 									  	FROM REVIEW_TBL GROUP BY PRO_NUM
 									 ) R
 		ON P.PRO_NUM = R.PRO_NUM
-		ORDER BY P.PRO_NUM DESC
+		<![CDATA[
+		WHERE ROWNUM <= 20
+		]]>
+		AND PRO_BUY_YN = 'Y'
+		ORDER BY P.STA_DATE DESC
 	</select>
+	
+	<!-- 카테고리별 상품 리스트 -->
+	<select id="productList" resultType="HashMap">
+		SELECT  PRO_NUM, CAT_CODE, CAT_PRTCODE, CAT_NAME, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_MAIN_IMG, PRO_COUNT, 
+		        NVL(REW_CNT, '0') AS REW_CNT, NVL(AVG_SCORE,'0') AS AVG_SCORE
+		FROM (  SELECT P.PRO_NUM, P.CAT_CODE, C.CAT_PRTCODE, C.CAT_NAME, P.PRO_NM, P.PRO_PRICE, P.PRO_DISCOUNT, P.PRO_MAIN_IMG, P.PRO_COUNT,
+		               R.REW_CNT, R.AVG_SCORE, row_number() over (<include refid="sort" />) P_SEQ
+		        FROM PRODUCT_TBL P LEFT JOIN ( SELECT PRO_NUM, COUNT(REW_NUM) AS REW_CNT, AVG(REW_SCORE) AS AVG_SCORE
+		                                       FROM REVIEW_TBL GROUP BY PRO_NUM
+		                                     ) R
+		        ON P.PRO_NUM = R.PRO_NUM
+		        INNER JOIN (SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME FROM CATEGORY_TBL WHERE CAT_CODE = #{cat_code} OR CAT_PRTCODE = #{cat_code}) C
+		        ON P.CAT_CODE = C.CAT_CODE
+		        WHERE P.PRO_BUY_YN = 'Y'
+		     )
+		WHERE P_SEQ BETWEEN #{cri.rowStart} and #{cri.rowEnd}
+	</select>
+	
+	<!-- 상품 총 건수 -->
+	<select id="productCount" parameterType="SortCriteria" resultType="int">
+		<![CDATA[
+			SELECT COUNT(PRO_NUM)
+			FROM PRODUCT_TBL P
+			WHERE CAT_CODE IN (SELECT CAT_CODE FROM CATEGORY_TBL WHERE CAT_CODE = #{cat_code} OR CAT_PRTCODE = #{cat_code})
+			AND PRO_BUY_YN = 'Y'
+		]]>
+		<include refid="sort" />
+	</select>
+	
+	<!-- 검색 조건 : 공통으로 사용하는  구문 -->
+	<sql id="sort">
+		<!-- 기본 -->
+		<if test="sort == null"> 
+			ORDER BY P.PRO_NUM DESC
+		</if>
+		<if test="sort != null">
+			<!-- 신상품 -->
+			<if test="sort == 'new'.toString()"> 
+				ORDER BY P.STA_DATE DESC
+			</if>
+			<!-- 상품명 -->
+			<if test="sort == 'name'.toString()"> 
+				ORDER BY P.PRO_NM ASC
+			</if>
+			<!-- 낮은가격 -->
+			<if test="sort == 'low_price'.toString()"> 
+				ORDER BY P.PRO_PRICE ASC
+			</if>
+			<!-- 높은가격 -->
+			<if test="sort == 'high_price'.toString()"> 
+				ORDER BY P.PRO_PRICE DESC
+			</if>
+		</if>
+	</sql>
 
 </mapper>

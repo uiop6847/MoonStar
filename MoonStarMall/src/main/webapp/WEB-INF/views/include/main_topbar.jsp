@@ -16,7 +16,7 @@
 						<ul class="treeview-menu" id="mainCategory_${list.cat_code}"></ul>
 					</li> --%>
 					<li class="nav-item dropdown mainCategory" value="${list.cat_code}">
-						<a href="/product/list?cat_code=${list.cat_code}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+						<a href="/product/category?cat_code=${list.cat_code}" class="nav-link" style="margin: 0 5px;">
 						${list.cat_name}</a>
 						<ul class="dropdown-menu border-0 shadow" id="mainCategory_${list.cat_code}">
 						</ul>
@@ -35,17 +35,17 @@
 <!-- /.navbar -->
 <script id="subCategoryTemplate" type="text/x-handlebars-template">
 	{{#each .}}
-		<li><a href="/product/list?cat_code={{cat_code}}" class="dropdown-item">{{cat_name}}</a></li>
+		<li><a href="/product/category?cat_code={{cat_code}}" class="dropdown-item">{{cat_name}}</a></li>
 	{{/each}}
 </script>
 <%-- 2차 카테고리 템플릿 적용함수 --%>
 <script>
 $(function(){
 	/* 1차 카테고리에 따른 2차 카테고리 작업.   on()메서드: 매번진행 one()메서드: 단1회만 진행 */
-	$(".mainCategory").one("click", function(){
+	$(".mainCategory").one("mouseover", function(){
 		var mainCatCode= $(this).val();
 		var url = "/product/subCategoryList/" + mainCatCode;
-					
+		
 		// REST 방식으로 전송
 		$.getJSON(url, function(data){
 			// 받은 데이터로 subCategory에 템플릿 적용
@@ -64,5 +64,6 @@ $(function(){
 		//$("#subCategory option").remove();
 		target.append(options);
 	}
+	
 });
 </script>

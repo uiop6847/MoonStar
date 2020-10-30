@@ -36,6 +36,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			
 			reader.readAsDataURL(value.files[0]);
 		}
+		
+		accImg.css("width","345px");
 	}
 	
 	/* 테이블 행클릭 이벤트 */
@@ -250,12 +252,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script id="productRowAddInfoTemplate" type="text/x-handlebars-template">
 <div class="form-group" name="proDtl">
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-12">
 			<label for="file1">상품 대표 이미지</label>
-			<img id="LoadImg" style="width: 270px;" height="270px;">
-		</div>
-		<div class="col-md-9">
 			<input type="file" id="file1" name="file1" class="form-control" onchange="imgPreview(this);" />
+			<img id="LoadImg">
 		</div>
 	</div>
 	<label>상품상세설명</label>
@@ -330,12 +330,6 @@ $(function(){
 		
 		target.children().addClass("selected");
 		target.append(template);
-		
-		//var fileTag = target.find("input[id=file1]").attr("id");
-		//var edtorTag = target.find("textarea[id=pro_dtl_info]").attr("id");
-
-		//target.find("input[name=file1]").attr("name", "list[" + i + "]." + fileTag);
-		//target.find("textarea[name=pro_dtl_info]").attr("name", "list[" + i + "]." + edtorTag);
 		
 		// 태그 id 중복방지
 		var ckId = target.children(":last").children(":last").attr("id", "pro_dtl_info_" + cnt);

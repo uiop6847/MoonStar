@@ -109,6 +109,7 @@ public class FileUtils {
 		}
 	}
 */
+	/* 폴더 생성 */
 	private static void makeDir(String uploadPath, String datePath) {
 		/*
 		if(new File(paths[paths.length - 1]).exists() == false) {
@@ -137,7 +138,7 @@ public class FileUtils {
 	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 		
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
-		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 80);
+		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 345);
 		
 		// 썸네일 생성 준비작업
 		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;

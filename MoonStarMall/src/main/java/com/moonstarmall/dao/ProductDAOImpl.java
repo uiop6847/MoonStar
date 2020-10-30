@@ -1,5 +1,6 @@
 package com.moonstarmall.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonstarmall.domain.CategoryVO;
+import com.moonstarmall.util.SortCriteria;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO {
@@ -33,6 +35,30 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<Map<String, Object>> newProductList() throws Exception {
 		return session.selectList(NS + ".newProductList");
+	}
+
+	/* 카테고리별 상품 리스트 */
+	@Override
+	public List<Map<String, Object>> categoryProductList(String cat_code, SortCriteria cri) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("cat_code", cat_code);
+		map.put("cri", cri);
+		
+		return session.selectList(NS + ".productList", map);
+	}
+
+	/* 카테고리별 상품 총건수 */
+	@Override
+	public int categoryProductCount(String cat_code, SortCriteria cri) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("cat_code", cat_code);
+		map.put("cri", cri);
+		
+		return session.selectOne(NS + ".productCount", map);
 	}
 
 }

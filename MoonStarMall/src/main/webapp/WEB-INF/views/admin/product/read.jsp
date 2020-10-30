@@ -111,7 +111,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<th>상품수정일</th><td><fmt:formatDate value="${vo.udt_date}" pattern="yyyy-MM-dd"/></td>
 										</tr>
 										<tr>
-											<th>대표 이미지</th><td><img src="/admin/product/displayFile?fileName=${vo.pro_main_img }" style="width: 80px;"></td>
+											<th>대표 이미지</th><td><img src="/admin/product/displayFile?fileName=${vo.pro_main_img }" style="width: 345px;"></td>
 										</tr>
 										<tr>
 											<th>상세설명</th><td><div contenteditable="false" style="border: 1px solid #d2d2d2; padding: 20px;">

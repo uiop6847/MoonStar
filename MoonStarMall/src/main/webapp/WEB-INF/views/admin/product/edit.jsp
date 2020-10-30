@@ -43,6 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			
 			reader.readAsDataURL(value.files[0]);
 		}
+		accImg.css("width","345px");
 	}
 	
 	/* 테이블 행클릭 이벤트 */
@@ -252,14 +253,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<div id="productRowAddInfo">
 										<div class="form-group selected" name="proDtl">
 											<div class="row">
-												<div class="col-md-2">
+												<div class="col-md-12">
 													<label for="file1">상품 대표 이미지</label>
-													<img id="LoadImg" style="width: 100px;" height="100px;" src="/admin/product/displayFile?fileName=${vo.pro_main_img }">
-												</div>
-												<div class="col-md-10">
 													<input type="hidden" name="pro_main_img" value="${vo.pro_main_img}" />
-													<span id="fileName" style="margin-left:5px; font-size:14px;">현재 등록된 파일: <c:out value="${originFile[i.index]}"/></span>
 													<input type="file" id="list[${i.index }].file1" name="file1" class="form-control" onchange="imgPreview(this);" />
+													<span id="fileName" style="margin-left:5px; font-size:14px;">현재 등록된 파일: <c:out value="${originFile[i.index]}"/>
+														<br><img id="LoadImg" src="/admin/product/displayFile?fileName=${vo.pro_main_img }">
+													</span>
 												</div>
 											</div>
 											<label>상품상세설명</label>
