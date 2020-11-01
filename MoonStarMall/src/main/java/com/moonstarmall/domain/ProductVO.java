@@ -20,8 +20,9 @@ public class ProductVO {
 	private	String	pro_buy_yn;
 	private Date	sta_date;
 	private Date	udt_date;
-	// 업로드 파일
-	private MultipartFile file1;
+
+	private MultipartFile file1; // 업로드 파일
+	private int		discount_price; // 할인가격
 	
 	private List<ProductVO> list;
 	
@@ -136,6 +137,14 @@ public class ProductVO {
 	public void setFile1(MultipartFile file1) {
 		this.file1 = file1;
 	}
+	
+	public int getDiscount_price() {
+		return discount_price;
+	}
+
+	public void setDiscount_price(int discount_price) {
+		this.discount_price = discount_price;
+	}
 
 	public List<ProductVO> getList() {
 		return list;
@@ -151,7 +160,6 @@ public class ProductVO {
 				+ pro_nm + ", pro_price=" + pro_price + ", pro_discount=" + pro_discount + ", pro_publisher="
 				+ pro_publisher + ", pro_dtl_info=" + pro_dtl_info + ", pro_main_img=" + pro_main_img + ", pro_count="
 				+ pro_count + ", pro_buy_yn=" + pro_buy_yn + ", sta_date=" + sta_date + ", udt_date=" + udt_date
-				+ ", file1=" + file1 + ", list=" + list + "]";
+				+ ", file1=" + file1 + ", discount_price=" + discount_price + ", list=" + list + "]";
 	}
-
 }

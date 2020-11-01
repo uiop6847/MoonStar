@@ -20,7 +20,7 @@ public class GlobalControllerAdvice {
 	/* 1차 카테고리 메뉴 표시 */
 	@ModelAttribute
 	public void categoryList(Model model) throws Exception{
-		model.addAttribute("categoryList", service.mainCategory());
+		model.addAttribute("mainCategoryList", service.mainCategory());
 	}
 	
 	/* 메인 상품 리스트 */

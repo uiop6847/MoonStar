@@ -18,9 +18,17 @@
 		WHERE CAT_PRTCODE = #{cat_code}
 	</select>
 	
+	<!-- 카테고리코드에 따른 카테고리 목록 -->
+	<select id="categoryList" resultType="CategoryVO">
+		SELECT CAT_CODE, CAT_PRTCODE, CAT_NAME
+		FROM CATEGORY_TBL
+		WHERE CAT_CODE LIKE #{cat_code}||'%'
+	</select>
+	
 	<!-- new상품 리스트(main진열) -->
 	<select id="newProductList" resultType="HashMap">
-		SELECT 	P.PRO_NUM, P.PRO_NM, P.PRO_PRICE, P.PRO_DISCOUNT, P.PRO_MAIN_IMG, P.PRO_COUNT, 
+		SELECT 	P.PRO_NUM, P.PRO_NM, P.PRO_PRICE, P.PRO_DISCOUNT, P.PRO_MAIN_IMG, P.PRO_COUNT,
+				P.PRO_PRICE-(P.PRO_PRICE*(P.PRO_DISCOUNT/100)) AS DISCOUNT_PRICE,
 				NVL(R.REW_CNT, '0') AS REW_CNT, NVL(R.AVG_SCORE,'0') AS AVG_SCORE
 		FROM PRODUCT_TBL P LEFT JOIN (	SELECT PRO_NUM, COUNT(REW_NUM) AS REW_CNT, AVG(REW_SCORE) AS AVG_SCORE
 									  	FROM REVIEW_TBL GROUP BY PRO_NUM
@@ -35,7 +43,8 @@
 	
 	<!-- 카테고리별 상품 리스트 -->
 	<select id="productList" resultType="HashMap">
-		SELECT  PRO_NUM, CAT_CODE, CAT_PRTCODE, CAT_NAME, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_MAIN_IMG, PRO_COUNT, 
+		SELECT  PRO_NUM, CAT_CODE, CAT_PRTCODE, CAT_NAME, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_MAIN_IMG, PRO_COUNT,
+				PRO_PRICE-(PRO_PRICE*(PRO_DISCOUNT/100)) AS DISCOUNT_PRICE,
 		        NVL(REW_CNT, '0') AS REW_CNT, NVL(AVG_SCORE,'0') AS AVG_SCORE
 		FROM (  SELECT P.PRO_NUM, P.CAT_CODE, C.CAT_PRTCODE, C.CAT_NAME, P.PRO_NM, P.PRO_PRICE, P.PRO_DISCOUNT, P.PRO_MAIN_IMG, P.PRO_COUNT,
 		               R.REW_CNT, R.AVG_SCORE, row_number() over (<include refid="sort" />) P_SEQ
@@ -64,27 +73,36 @@
 	<!-- 검색 조건 : 공통으로 사용하는  구문 -->
 	<sql id="sort">
 		<!-- 기본 -->
-		<if test="sort == null"> 
+		<if test="cri.sort == null"> 
 			ORDER BY P.PRO_NUM DESC
 		</if>
-		<if test="sort != null">
+		<if test="cri.sort != null">
 			<!-- 신상품 -->
-			<if test="sort == 'new'.toString()"> 
+			<if test="cri.sort == 'new'.toString()"> 
 				ORDER BY P.STA_DATE DESC
 			</if>
 			<!-- 상품명 -->
-			<if test="sort == 'name'.toString()"> 
+			<if test="cri.sort == 'pro_nm'.toString()"> 
 				ORDER BY P.PRO_NM ASC
 			</if>
 			<!-- 낮은가격 -->
-			<if test="sort == 'low_price'.toString()"> 
+			<if test="cri.sort == 'low_price'.toString()"> 
 				ORDER BY P.PRO_PRICE ASC
 			</if>
 			<!-- 높은가격 -->
-			<if test="sort == 'high_price'.toString()"> 
+			<if test="cri.sort == 'high_price'.toString()"> 
 				ORDER BY P.PRO_PRICE DESC
 			</if>
 		</if>
 	</sql>
+	
+	<!-- 상품 상세정보 조회 -->
+	<select id="detail" parameterType="int" resultType="ProductVO">
+		SELECT  PRO_NUM, CAT_CODE, PRO_NM, PRO_PRICE, PRO_DISCOUNT, PRO_PUBLISHER,
+				PRO_PRICE-(PRO_PRICE*(PRO_DISCOUNT/100)) AS DISCOUNT_PRICE,
+				PRO_DTL_INFO, PRO_MAIN_IMG, PRO_COUNT, PRO_BUY_YN, STA_DATE, UDT_DATE
+		FROM PRODUCT_TBL
+		WHERE PRO_NUM = #{pro_num}
+	</select>
 
 </mapper>

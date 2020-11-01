@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.moonstarmall.dao.ProductDAO;
 import com.moonstarmall.domain.CategoryVO;
+import com.moonstarmall.domain.ProductVO;
 import com.moonstarmall.util.SortCriteria;
 
 @Service
@@ -28,6 +29,12 @@ public class ProductServiceImpl implements ProductService {
 		return dao.subCategoryList(cat_code);
 	}
 
+	/* 카테고리코드에 따른 카테고리 목록 */
+	@Override
+	public List<CategoryVO> categoryList(String cat_code) throws Exception {
+		return dao.categoryList(cat_code);
+	}
+	
 	/* new상품 리스트(main진열) */
 	@Override
 	public List<Map<String, Object>> newProductList() throws Exception {
@@ -44,6 +51,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int categoryProductCount(String cat_code, SortCriteria cri) throws Exception {
 		return dao.categoryProductCount(cat_code, cri);
+	}
+
+	/* 상품 상세정보 조회 */
+	@Override
+	public ProductVO productDetail(int pro_num) throws Exception {
+		return dao.productDetail(pro_num);
 	}
 
 }

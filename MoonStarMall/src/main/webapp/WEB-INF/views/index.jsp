@@ -77,7 +77,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										
 										<br>
 										<span style="color: #ECA4A6;">할인판매가 : 
-											<fmt:formatNumber value="${newList.pro_price - newList.pro_price div newList.pro_discount}" />
+											<fmt:formatNumber value="${newList.discount_price}" />
 										</span>
 									</c:if>
 								</div>

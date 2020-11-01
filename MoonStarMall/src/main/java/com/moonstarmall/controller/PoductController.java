@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonstarmall.domain.CategoryVO;
+import com.moonstarmall.domain.ProductVO;
 import com.moonstarmall.service.ProductService;
+import com.moonstarmall.util.Criteria;
 import com.moonstarmall.util.FileUtils;
 import com.moonstarmall.util.PageMaker;
 import com.moonstarmall.util.SortCriteria;
@@ -40,7 +42,7 @@ public class PoductController {
 	/* 1차 카테고리에 따른 2차 카테고리 출력*/
 	@ResponseBody
 	@RequestMapping(value = "subCategoryList/{cat_code}", method = RequestMethod.GET)
-	public ResponseEntity<List<CategoryVO>> subCategoryList(@PathVariable("cat_code") String cat_code) {
+	public ResponseEntity<List<CategoryVO>> subCategoryList(@PathVariable("cat_code") String cat_code, Model model) {
 		logger.info("subCategoryList() called");
 		
 		ResponseEntity<List<CategoryVO>> entity = null;
@@ -61,8 +63,8 @@ public class PoductController {
 	/* 카테고리별 상품 리스트(상품정렬 포함) */
 	@RequestMapping(value = "category", method = RequestMethod.GET)
 	public void categoryProductList(@ModelAttribute("cri") SortCriteria cri, 
-							@ModelAttribute("cat_code") String cat_code,
-							Model model) throws Exception {
+									@ModelAttribute("cat_code") String cat_code,
+									Model model) throws Exception {
 		logger.info("categoryProductList() called");
 		logger.info("=====cri : " + cri.toString());
 		
@@ -76,12 +78,13 @@ public class PoductController {
 			for(String key : list.get(i).keySet()) {
 				vo.put(key.toLowerCase(), list.get(i).get(key));
 			}
-			
 			// 변경된 map을 다시 list에 세팅
 			list.set(i, vo);
 		}
-		//logger.info("=====list : " + list.toString());
 		model.addAttribute("categoryProductList", list);
+		
+		// 클릭한 카테고리의 1차,2차 카테고리 조회
+		model.addAttribute("categoryList", service.categoryList(cat_code.substring(0, 1)));
 		
 		PageMaker pm = new PageMaker();
 		pm.setCri(cri);
@@ -95,5 +98,24 @@ public class PoductController {
 	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
 		return FileUtils.getFile(uploadPath, fileName);
 	}
+	
+	/* 상품 상세정보 조회 */
+	@RequestMapping(value = "detail", method = RequestMethod.GET)
+	public void productDetail(@ModelAttribute("cri") Criteria cri,
+							  @ModelAttribute("pro_num") int pro_num, Model model) throws Exception {
+		logger.info("productDetail() called");
+		logger.info("cri : " + cri);
+		
+		ProductVO vo = service.productDetail(pro_num);
+		logger.info("=====productDetail: " + vo);
+		
+		model.addAttribute("vo", vo);
+		
+		PageMaker pm = new PageMaker();
+		pm.setCri(cri);
+		
+		model.addAttribute("pm", pm);
+	}
+	
 	
 }

@@ -7,14 +7,9 @@
 	<div class="container">
 		<div style="margin: 0 auto;">
 			<!-- top navbar links -->
-			<ul class="navbar-nav">
+			<ul class="navbar-nav" >
 				<!-- 카테고리 -->
-				<c:forEach items="${categoryList}" var="list">
-					<%--<li class="nav-item mainCategory">
-						<a href="/product/list?cat_code=${list.cat_code}" class="nav-link">${list.cat_name}</a>
-						<!--  2차카테고리 자식수준으로 추가작업 -->
-						<ul class="treeview-menu" id="mainCategory_${list.cat_code}"></ul>
-					</li> --%>
+				<c:forEach items="${mainCategoryList}" var="list">
 					<li class="nav-item dropdown mainCategory" value="${list.cat_code}">
 						<a href="/product/category?cat_code=${list.cat_code}" class="nav-link" style="margin: 0 5px;">
 						${list.cat_name}</a>
@@ -35,7 +30,7 @@
 <!-- /.navbar -->
 <script id="subCategoryTemplate" type="text/x-handlebars-template">
 	{{#each .}}
-		<li><a href="/product/category?cat_code={{cat_code}}" class="dropdown-item">{{cat_name}}</a></li>
+		<li id="subCategory_{{cat_code}}"><a href="/product/category?cat_code={{cat_code}}" class="dropdown-item">{{cat_name}}</a></li>
 	{{/each}}
 </script>
 <%-- 2차 카테고리 템플릿 적용함수 --%>
@@ -64,6 +59,5 @@ $(function(){
 		//$("#subCategory option").remove();
 		target.append(options);
 	}
-	
 });
 </script>
