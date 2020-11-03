@@ -112,7 +112,25 @@ public class PageMaker {
 	            .build();	            
 		
 		return uriComponents.toUriString();
-	}	
+	}
+	
+	/*
+	 * 페이지 정보와 검색조건을 이용한 쿼리스트링을 생성 후 반환
+	 * 
+	 * @return
+	 * String : ex)?page=1&perPageNum=5&SortType=new
+	 */
+	public String makeSort(int page){
+		
+		UriComponents uriComponents =
+	            UriComponentsBuilder.newInstance()
+	            .queryParam("page", page)
+	            .queryParam("perPageNum", cri.getPerPageNum())
+	            .queryParam("searchType", ((SortCriteria)cri).getSort())
+	            .build();	            
+		
+		return uriComponents.toUriString();
+	}
 	
 	@Override
 	public String toString() {

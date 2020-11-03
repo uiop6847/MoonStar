@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
 import com.moonstarmall.service.ProductService;
+import com.moonstarmall.service.ReviewService;
 import com.moonstarmall.util.Criteria;
 import com.moonstarmall.util.FileUtils;
 import com.moonstarmall.util.PageMaker;
@@ -32,6 +33,8 @@ public class PoductController {
 
 	@Autowired
 	ProductService service;
+	@Autowired
+	ReviewService reviewServie;
 	
 	// 웹 프로젝트 영역 외부에 파일을 저장할 때 사용할 경로
 	@Resource(name="uploadPath")
@@ -89,7 +92,7 @@ public class PoductController {
 		PageMaker pm = new PageMaker();
 		pm.setCri(cri);
 		pm.setTotalCount(service.categoryProductCount(cat_code, cri));
-		
+		logger.info("=====pm : " + pm);
 		model.addAttribute("pm", pm);
 	}
 	
@@ -115,6 +118,8 @@ public class PoductController {
 		pm.setCri(cri);
 		
 		model.addAttribute("pm", pm);
+		
+		model.addAttribute("totalReview", reviewServie.reviewCount(pro_num));
 	}
 	
 	

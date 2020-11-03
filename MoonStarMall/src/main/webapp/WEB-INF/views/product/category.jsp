@@ -153,6 +153,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</c:forEach>
 				</div>
 				<!-- /.row -->
+				<%-- 페이지 표시 --%>
+				<div class="card-footer">
+					<ul class="pagination pagination-sm m-0 text-center">
+						<!-- 이전표시 여부  [이전] -->
+						<c:if test="${pm.prev}">
+							<li class="page-item"><a class="page-link" href="category?cat_code=${cat_code}&${pm.makeSort(pm.startPage-1)}">&laquo;</a></li>
+						</c:if>
+						<!-- 페이지목록번호 :  1  2  3  4  5  -->
+						<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="idx">
+							<li class="page-item" <c:out value="${pm.cri.page == idx?'class =active':''}"/>>
+								<a class="page-link" href="category?cat_code=${cat_code}&${pm.makeSort(idx)}">${idx}</a>
+							</li>
+						</c:forEach>
+						<!-- 다음표시 여부  [다음]-->
+						<c:if test="${pm.next && pm.endPage > 0}">
+							<li class="page-item"><a class="page-link" href="category?cat_code=${cat_code}&${pm.makeSort(pm.endPage +1)}">&raquo;</a></li>
+						</c:if>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<!-- /.content -->

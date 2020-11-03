@@ -15,62 +15,128 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 <script type="text/javascript" src="/js/product/detail.js"></script>
-<%-- 상품 후기 템플릿 --%>
-<script id="reviewTemplate" type="text/x-handlebars-template">
+<%-- 템플릿: 상품목록 --%>
+<script id="template" type="text/x-handlebars-template">
 	{{#each .}}
-		<div class="replyLi" data-rew_num={{rew_num}}>
-			<span class="fas bg-maroon" style="border-radius: 15px; min-width: 30px;">{{rew_num}}</span>
-			<!-- Default box -->
-			<div class="timeline-item card collapsed-card">
-				<div class="card-header">
-					<h3 class="card-title">{{rew_score}}</h3>
-					
-					<div class="card-tools">
-						<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-user"></i>
-					{{user_id}}
-				</span>
-				<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-clock"></i>
-				<%-- <fmt:formatDate value="2020-11-03" pattern="yyyy-MM-dd"/>--%>
-							{{prettifyDate sta_date}}
-						</span>
-						<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-				      		</button>
-					</div>
+		<li class="replyLi" data-rew_num={{rew_num}}>
+        	<i class="fa fa-comments bg-blue"></i>
+            <div class="timeline-item" >
+                <span class="time">
+                	<i class="fa fa-clock-o"></i>{{prettifyDate rew_date_reg}}
+                </span>
+                <h3 class="timeline-header">
+					<strong>{{checkRating rew_score}} <p class='rew_score' style="display:inline-block;">{{rew_score}}</p></strong> 
+					</h3>
+                <div class="timeline-body">
+					NUM: {{rew_num}} <p style="float:right;">작성자: {{user_id}}</p> <br>
+					<p id='rew_content'>{{rew_content}}</p> </div>
+				<div class="timeline-footer" style="float:right;">
+					{{eqReplyer user_id rew_num}}
 				</div>
-				<div class="card-body">
-					{{rew_content}}
-				</div>
-				<!-- /.card-body -->
-				<div class="card-footer" style="color: white;">
-					<a class="btn btn-primary btn-sm">수정</a>
-					<a class="btn btn-danger btn-sm">삭제</a>
-				</div>
-				<!-- /.card-footer-->
-			</div>
-			<!-- /.card -->
-		</div>
-	{{#each .}}
+	         </div>			
+         </li>
+	{{/each}}
 </script>
-<%-- handlebar 사용자정의 헬퍼 --%>
+<%-- 버튼 클릭 이벤트 메소드/ 핸들바 사용자 정의 헬퍼 --%>
 <script>
-$(function(){
-	
-	
-	/* 
-	 * 사용자 정의 헬퍼(prettifyDate)
-	 * : 매개변수로 받은 timeValue를 원하는 날짜 형태로 바꿔준다.
-	 */ 
-	Handlebars.registerHelper("prettifyDate", function(timeValue) {
-		var dateObj = new Date(timeValue);
-		var year = dateObj.getFullYear();
-		var month = dateObj.getMonth() + 1;
-		var date = dateObj.getDate();
-		return year + "/" + month + "/" + date;
+	$(document).ready(function(){
+
+		/* 상품 목록 버튼 클릭 시 */
+		$("#btn_list").on("click", function(){
+			location.href="/product/category${pm.makeQuery(pm.cri.page)}&cat_code=${vo.cat_code}";
+		});
+
+		/* 
+		 * 사용자 정의 헬퍼(prettifyDate)
+		 * : 매개변수로 받은 timeValue를 원하는 날짜 형태로 바꿔준다.
+		 */ 
+		Handlebars.registerHelper("prettifyDate", function(timeValue) {
+			var dateObj = new Date(timeValue);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "/" + month + "/" + date;
+		});
+
+		/* 
+		 * 사용자 정의 헬퍼(checkRating)
+		 * : 매개변수로 받은 후기 평점을 별표로 출력
+		 */ 
+		Handlebars.registerHelper("checkRating", function(rating) {
+			var stars = "";
+			switch(rating){
+				case 1:
+					 stars="★☆☆☆☆";
+					 break;
+				case 2:
+					 stars="★★☆☆☆";
+					 break;
+				case 3:
+					 stars="★★★☆☆";
+					 break;
+				case 4:
+					 stars="★★★★☆";
+					 break;
+				case 5:
+					 stars="★★★★★";
+					 break;
+				default:
+					stars="☆☆☆☆☆";
+			}
+			return stars;
+		});
+
+		/* 
+		 * 사용자 정의 헬퍼(eqReplyer)
+		 * : 로그인 한 아이디와 리뷰의 아이디 확인 후, 수정/삭제 버튼 활성화 
+		 */ 
+		Handlebars.registerHelper("eqReplyer", function(replyer, rew_num) {
+			var btnHtml = '';
+			var user_id = "${sessionScope.user.user_id}";
+			if (replyer == "${user.user_id}") {
+				btnHtml = "<a class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modifyModal'>"
+					  + "MODIFY</a>"
+					  + "<button class='btn btn-danger btn-xs' style='margin-left:5px;'" 
+					  + "onclick='deleteReview("+rew_num+");'"
+					  + "type='button' >DELETE</button>"; 
+			}
+			return new Handlebars.SafeString(btnHtml);
+			
+
+		});
+				
 	});
-	
-});
 </script>
 <style>
+     #star_grade a{
+     	font-size:22px;
+        text-decoration: none;
+        color: lightgray;
+    }
+    #star_grade a.on{
+        color: black;
+    }
+    
+    #star_grade_modal a{
+     	font-size:22px;
+        text-decoration: none;
+        color: lightgray;
+    }
+    #star_grade_modal a.on{
+        color: black;
+    }
+    
+    .popup {position: absolute;}
+    .back { background-color: gray; opacity:0.5; width: 100%; height: 300%; overflow:hidden;  z-index:1101;}
+    .front { 
+       z-index:1110; opacity:1; boarder:1px; margin: auto; 
+      }
+     .show{
+       position:relative;
+       max-width: 1200px; 
+       max-height: 800px; 
+       overflow: auto;       
+     } 
 	td {
 		 padding: 8px 16px;
 	}
@@ -125,6 +191,7 @@ $(function(){
 	    <!-- Main content -->
 		<div class="content">
 			<div class="container">
+			
 				<!-- Default box -->
 				<div class="row">
 					<div class="col-12 col-sm-6">
@@ -132,8 +199,7 @@ $(function(){
 						<h3 class="d-inline-block d-sm-none">${vo.pro_nm }</h3>
 						<!-- 상품 메인 이미지 -->
 						<div class="col-12">
-							<img src="/product/displayFile?fileName=${vo.pro_main_img}"
-								class="product-image" alt="Product Image">
+							<img src="/product/displayFile?fileName=${vo.pro_main_img}" class="product-image" alt="Product Image">
 						</div>
 						<!-- 상품 메인 이미지
 						<div class="col-12 product-image-thumbs">
@@ -247,21 +313,18 @@ $(function(){
 							<a class="nav-item nav-link active" id="product-info-tab" data-toggle="tab" href="#product-info" role="tab" aria-controls="product-info" aria-selected="true">
 							상세정보</a>
 							<a class="nav-item nav-link" id="product-review-tab" data-toggle="tab" href="#product-review" role="tab" aria-controls="product-review" aria-selected="false">
-							 후기[${totalReview}]</a>
+							 후기</a>
 							<a class="nav-item nav-link" id="product-board-tab" data-toggle="tab" href="#product-board" role="tab" aria-controls="product-board" aria-selected="false">
 							Q &amp; A </a>
 						</div>
 					</nav>
 					<div class="w-100 tab-content p-3" id="nav-tabContent">
-						<%-- 상세정보 --%>
 						<div class="tab-pane fade show active" id="product-info" role="tabpanel" aria-labelledby="product-info-tab" style="text-align: center;">
 							${vo.pro_dtl_info }
 						</div>
-						<%-- 후기 --%>
-						<div class="tab-pane fade" id="product-review" role="tabpanel" aria-labelledby="product-review-tab">
-							<!-- 상품후기쓰기 시작 -->
+						<div class="tab-pane fade" id="product-review" role="tabpanel" aria-labelledby="product-review-tab"> 
+							<!-- 상품후기쓰기 부분 -->
 							<div>
-								<!-- 별점선택 -->
 								<label for="review">Review</label><br>
 								<div class="rating">
 									<p id="star_grade">
@@ -272,80 +335,68 @@ $(function(){
 								        <a href="#">★</a>
 									</p>
 								</div>
-								<textarea id="reviewContent" rows="3" class="form-control"></textarea><br>
-								<!-- 상품후기 리스트 시작  -->
-						        <div class="row">
-									<div class="col-md-12">
-										<!-- timeline start -->
-										<div class="timeline">
-											<div class="time-label">
-												<button class="btn bg-red" id="btn_write_review" type="button">상품후기쓰기</button>
-											</div>
-											<!-- timeline item -->
-											<div class="time-label" id="repliesDiv">
-												<span class="fas bg-maroon" style="border-radius: 15px; min-width: 30px;">1</span>
-												<!-- Default box -->
-									            <div class="timeline-item card collapsed-card">
-													<div class="card-header">
-														<h3 class="card-title">별점☆☆☆☆☆</h3>
-														
-														<div class="card-tools">
-															<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-user"></i>
-																<%-- <fmt:formatDate value="2020-11-03" pattern="yyyy-MM-dd"/>--%>
-																홍길동
-															</span>
-															<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-clock"></i>
-																<%-- <fmt:formatDate value="2020-11-03" pattern="yyyy-MM-dd"/>--%>
-																2020-11-03
-															</span>
-															<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-	                  										</button>
-														</div>
-													</div>
-													<div class="card-body">
-														내용
-													</div>
-													<!-- /.card-body -->
-													<div class="card-footer" style="color: white;">
-														<a class="btn btn-primary btn-sm">수정</a>
-														<a class="btn btn-danger btn-sm">삭제</a>
-													</div>
-													<!-- /.card-footer-->
-									            </div>
-									            <!-- /.card -->
-											</div>
-											<!-- END timeline item -->
-											<!-- timeline item -->
-											<div class="noReview" style="display: none;">
-												<!-- Default box -->
-									            <div class="timeline-item card">
-													<div class="card-body">
-														상품후기가 존재하지 않습니다.
-													</div>
-													<!-- /.card-body -->
-									            </div>
-									            <!-- /.card -->
-											</div>
-											<!-- END timeline item -->
+								<textarea id="reviewContent" rows="3" style="width:100%;"></textarea><br>
+								
+								<!-- 상품 후기 리스트 -->
+								<ul class="timeline">
+									 <!-- timeline time label -->
+									<li class="time-label" id="repliesDiv">
+										<span class="btn btn-default">
+									    	상품후기 보기 <small id='replycntSmall'> [ ${totalReview} ] </small>
+									    </span>
+									    <button class="btn btn-primary" id="btn_write_review" type="button">상품후기쓰기</button>
+									</li>
+									<li class="noReview" style="display:none;">
+										<i class="fa fa-comments bg-blue"></i>
+										<div class="timeline-item" >
+											 <h3 class="timeline-header">
+												상품후기가 존재하지 않습니다.<br>
+												상품후기를 입력해주세요.</h3>
 										</div>
-										<!-- END timeline -->
-									</div>
-									<!-- /.col -->
-						        </div><!-- 상품후기 리스트 끝  -->
-						        
+									</li>
+									 
+								</ul>
 								<!-- 상품 후기 리스트 페이지부분 -->  
 								<div class='text-center'>
+								
 									<ul id="pagination" class="pagination pagination-sm no-margin "></ul>
 								</div>
-							</div><!-- 상품후기쓰기 끝 -->
-						
+							</div>
+									 
+									 
+							<%-- Modal : 상품후기 수정/삭제 팝업 --%>
+							<div id="modifyModal" class="modal modal-primary fade" role="dialog">
+								<div class="modal-dialog">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header" >
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<div class="modal-title">
+												<p id="star_grade_modal">
+													<a href="#">★</a>
+													<a href="#">★</a>
+													<a href="#">★</a>
+													<a href="#">★</a>
+													<a href="#">★</a>
+												</p>
+											</div>
+										</div>
+										<div class="modal-body" data-rew_num>
+											<p><input type="text" id="replytext" class="form-control"></p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-info" id="btn_modal_modify">MODIFY</button>
+											<button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-						
-						<%-- Q&A --%>
+							
 						<div class="tab-pane fade" id="product-board" role="tabpanel" aria-labelledby="product-board-tab"> </div>
 					</div>
 				</div>
-	    	</div>
+		    </div>
 		    <!-- /.container -->
 		</div>
 		<!-- /.content -->
