@@ -22,7 +22,6 @@ import com.moonstarmall.domain.CategoryVO;
 import com.moonstarmall.domain.ProductVO;
 import com.moonstarmall.service.ProductService;
 import com.moonstarmall.service.ReviewService;
-import com.moonstarmall.util.Criteria;
 import com.moonstarmall.util.FileUtils;
 import com.moonstarmall.util.PageMaker;
 import com.moonstarmall.util.SortCriteria;
@@ -104,7 +103,7 @@ public class PoductController {
 	
 	/* 상품 상세정보 조회 */
 	@RequestMapping(value = "detail", method = RequestMethod.GET)
-	public void productDetail(@ModelAttribute("cri") Criteria cri,
+	public void productDetail(@ModelAttribute("cri") SortCriteria cri,
 							  @ModelAttribute("pro_num") int pro_num, Model model) throws Exception {
 		logger.info("productDetail() called");
 		logger.info("cri : " + cri);

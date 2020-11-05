@@ -33,14 +33,32 @@ public class ReviewController {
 	
 	/* 상품 후기 쓰기 */
 	@RequestMapping(value = "write", method = RequestMethod.POST)
-	public void reviewWrite(ReviewVO vo, HttpSession session) throws Exception {
+	public ResponseEntity<String> reviewWrite(ReviewVO vo, HttpSession session) {
 		logger.info("reviewWrite() called");
 		
-		LoginDTO dto = (LoginDTO) session.getAttribute("user");
-		vo.setUser_id(dto.getUser_id());
+		ResponseEntity<String> entity = null;
 		
-		logger.info("=====ReviewVO : " + vo);
-		service.reviewWrite(vo);
+		try {
+			
+			if(session.getAttribute("user") == null) {
+				entity = new ResponseEntity<String>("N_SESSION", HttpStatus.OK);
+				
+			}else {
+				LoginDTO dto = (LoginDTO) session.getAttribute("user");
+				vo.setUser_id(dto.getUser_id());
+				
+				logger.info("=====ReviewVO : " + vo);
+				service.reviewWrite(vo);
+				
+				entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			
+		}
+		return entity;
 	}
 	
 	/* 상품 후기 수정 */
@@ -54,7 +72,7 @@ public class ReviewController {
 		try {
 			
 			service.reviewModify(vo);
-			entity = new ResponseEntity<String>("SUCCEESS", HttpStatus.OK);
+			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -72,9 +90,8 @@ public class ReviewController {
 		ResponseEntity<String> entity = null;
 		
 		try {
-			
 			service.reviewDelete(rew_num);
-			entity = new ResponseEntity<String>("SUCCEESS", HttpStatus.OK);
+			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -89,8 +106,6 @@ public class ReviewController {
 	public ResponseEntity<Map<String, Object>> reviewList(@PathVariable("pro_num") int pro_num,
 														  @PathVariable("page") int page){
 		logger.info("reviewList() called");
-		logger.info("=====pro_num : " + pro_num);
-		logger.info("=====page : " + page);
 		
 		ResponseEntity<Map<String, Object>> entity = null;
 		
@@ -98,21 +113,27 @@ public class ReviewController {
 			
 			Criteria cri = new Criteria();
 			cri.setPage(page);
+			logger.info("cri : " + cri);
+			
+			List<ReviewVO> list = service.reviewList(pro_num, cri);
+			int replyCount = service.reviewCount(pro_num);
 			
 			PageMaker pageMaker = new PageMaker();
 			pageMaker.setCri(cri);
-			
-			Map<String, Object> map = new HashMap<String, Object>();
-			List<ReviewVO> list = service.reviewList(pro_num, cri);
-			
-			map.put("list", list);
-			
-			int replyCount = service.reviewCount(pro_num);
-			
 			pageMaker.setTotalCount(replyCount);
 			
-			// 하단 페이지 작업 추가
-			map.put("pageMaker", pageMaker);
+			// jsp페이지에 상품후기 번호를 내림차순으로 재세팅
+			int no = replyCount - (page * cri.getPerPageNum()) + cri.getPerPageNum();
+			
+			for(int i = 0; i < list.size(); i++) {
+				list.get(i).setNo(no--);
+				//logger.info("list("+i+") : " + list.get(i));
+			}
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			
+			map.put("list", list);
+			map.put("pageMaker", pageMaker); // 하단 페이지 작업 추가
 			
 			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 			

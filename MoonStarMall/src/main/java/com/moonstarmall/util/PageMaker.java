@@ -126,7 +126,7 @@ public class PageMaker {
 	            UriComponentsBuilder.newInstance()
 	            .queryParam("page", page)
 	            .queryParam("perPageNum", cri.getPerPageNum())
-	            .queryParam("searchType", ((SortCriteria)cri).getSort())
+	            .queryParam("sortType", ((SortCriteria)cri).getSort())
 	            .build();	            
 		
 		return uriComponents.toUriString();

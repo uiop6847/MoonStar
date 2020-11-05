@@ -13,6 +13,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
+
+<style>
+	/* sub category */
+	li.nav-item.active .nav-link {
+    	color: #a0a0a0;
+    	border: 1px solid #c0c0c0;
+	}
+	a.sub.nav-link {
+		margin: 0 5px;
+		color: #b1b0b0;
+    	border: 1px solid #ebebeb;
+	}
+	
+	/* pagination style START */
+	.page-item.active .page-link {
+		background-color:#ECA4A6;
+		border:1px solid #ECA4A6;
+	}
+	a.page-link:hover, a.page-link:focus {
+		color:#fff;
+		border:1px solid #ECA4A6;
+		background-color:#ECA4A6;
+	}
+	.page-link {
+		color: rgba(0,0,0,.5);
+	}
+	/* pagination style END */
+</style>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -69,10 +97,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<ul class="navbar-nav" >
 									<!-- 2차카테고리 -->
 									<c:forEach items="${categoryList}" var="cat">
-										<li class="nav-item" value="${cat.cat_code}" style="margin: 20px 10px;">
-											<a href="/product/category?cat_code=${cat.cat_code}" class="nav-link" style="margin: 0 5px; color:#c0c0c0; border: 1px solid #c0c0c0;">
-											${cat.cat_name}</a>
-										</li>
+										<c:if test="${!empty cat.cat_prtcode}">
+											<li class="nav-item <c:out value="${cat.cat_code == cat_code?'active':''}"/>" value="${cat.cat_code}" style="margin: 20px 10px;">
+												<a href="/product/category?cat_code=${cat.cat_code}" class="sub nav-link">
+												${cat.cat_name}</a>
+											</li>
+										</c:if>
 									</c:forEach>
 								</ul>
 							</div>
@@ -129,6 +159,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 										</div>
 									</c:if>
+									<c:set var="score"><fmt:formatNumber value="${productList.avg_score}" pattern=".0"/></c:set>
 									<c:if test="${productList.avg_score != 0}">
 										<div style="position:absolute; width:130px; overflow:hidden; color:#cdcdcd;">
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
@@ -136,9 +167,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<small style="color: #807F89;">(${productList.avg_score})</small>
+											<small style="color: #807F89;">(${score})</small>
 										</div>
-										<c:set var="width" value="${(productList.avg_score/5)*95}"></c:set>
+										<c:set var="width" value="${score * 18.7}"></c:set>
 										<div style="position:absolute; width:${width}px; overflow:hidden; white-space:nowrap; color:#312E41;">
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
@@ -155,22 +186,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<!-- /.row -->
 				<%-- 페이지 표시 --%>
 				<div class="card-footer">
-					<ul class="pagination pagination-sm m-0 text-center">
-						<!-- 이전표시 여부  [이전] -->
-						<c:if test="${pm.prev}">
-							<li class="page-item"><a class="page-link" href="category?cat_code=${cat_code}&${pm.makeSort(pm.startPage-1)}">&laquo;</a></li>
-						</c:if>
-						<!-- 페이지목록번호 :  1  2  3  4  5  -->
-						<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="idx">
-							<li class="page-item" <c:out value="${pm.cri.page == idx?'class =active':''}"/>>
-								<a class="page-link" href="category?cat_code=${cat_code}&${pm.makeSort(idx)}">${idx}</a>
-							</li>
-						</c:forEach>
-						<!-- 다음표시 여부  [다음]-->
-						<c:if test="${pm.next && pm.endPage > 0}">
-							<li class="page-item"><a class="page-link" href="category?cat_code=${cat_code}&${pm.makeSort(pm.endPage +1)}">&raquo;</a></li>
-						</c:if>
-					</ul>
+					<nav aria-label="Contacts Page Navigation">
+						<ul class="pagination justify-content-center m-0">
+							<!-- 이전표시 여부  [이전] -->
+							<c:if test="${pm.prev}">
+								<li class="page-item"><a class="page-link" href="category${pm.makeSort(pm.startPage-1)}&cat_code=${cat_code}">&laquo;</a></li>
+							</c:if>
+							<!-- 페이지목록번호 :  1  2  3  4  5  -->
+							<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="idx">
+								<li class="page-item <c:out value="${pm.cri.page == idx?'active':''}"/>">
+									<a class="page-link" href="category${pm.makeSort(idx)}&cat_code=${cat_code}">${idx}</a>
+								</li>
+							</c:forEach>
+							<!-- 다음표시 여부  [다음]-->
+							<c:if test="${pm.next && pm.endPage > 0}">
+								<li class="page-item"><a class="page-link" href="category${pm.makeSort(pm.endPage +1)}&cat_code=${cat_code}">&raquo;</a></li>
+							</c:if>
+						</ul>
+					</nav>
 				</div>
 			</div>
 		</div>

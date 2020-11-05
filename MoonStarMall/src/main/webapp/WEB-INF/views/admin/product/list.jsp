@@ -37,6 +37,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	.col-right	{
 		text-align: right;
 	}
+	/* pagination style START */
+	.page-item.active .page-link {
+		background-color:#ECA4A6;
+		border:1px solid #ECA4A6;
+	}
+	a.page-link:hover, a.page-link:focus {
+		color:#fff;
+		border:1px solid #ECA4A6;
+		background-color:#ECA4A6;
+	}
+	.page-link {
+		color: rgba(0,0,0,.5);
+	}
+	/* pagination style END */
 </style>
 </head>
 <body class="hold-transition layout-top-nav">
@@ -169,22 +183,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								</div><!-- /.card-body -->
 							</form>
 							<div class="card-footer">
-								<ul class="pagination pagination-sm m-0 text-center">
-									<!-- 이전표시 여부  [이전] -->
-									<c:if test="${pm.prev}">
-										<li class="page-item"><a class="page-link" href="list${pm.makeSearch(pm.startPage-1)}">&laquo;</a></li>
-									</c:if>
-									<!-- 페이지목록번호 :  1  2  3  4  5  -->
-									<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="idx">
-										<li class="page-item" <c:out value="${pm.cri.page == idx?'class =active':''}"/>>
-											<a class="page-link" href="list${pm.makeSearch(idx)}">${idx}</a>
-										</li>
-									</c:forEach>
-									<!-- 다음표시 여부  [다음]-->
-									<c:if test="${pm.next && pm.endPage > 0}">
-										<li class="page-item"><a class="page-link" href="list${pm.makeSearch(pm.endPage +1)}">&raquo;</a></li>
-									</c:if>
-								</ul>
+								<nav aria-label="Contacts Page Navigation">
+									<ul class="pagination justify-content-center m-0">
+										<!-- 이전표시 여부  [이전] -->
+										<c:if test="${pm.prev}">
+											<li class="page-item"><a class="page-link" href="list${pm.makeSearch(pm.startPage-1)}">&laquo;</a></li>
+										</c:if>
+										<!-- 페이지목록번호 :  1  2  3  4  5  -->
+										<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="idx">
+											<li class="page-item <c:out value="${pm.cri.page == idx?'active':''}"/>">
+												<a class="page-link" href="list${pm.makeSearch(idx)}">${idx}</a>
+											</li>
+										</c:forEach>
+										<!-- 다음표시 여부  [다음]-->
+										<c:if test="${pm.next && pm.endPage > 0}">
+											<li class="page-item"><a class="page-link" href="list${pm.makeSearch(pm.endPage +1)}">&raquo;</a></li>
+										</c:if>
+									</ul>
+								</nav>
 							</div>
 						</div><!-- /.card -->
 					</div><!-- /.col -->

@@ -1,3 +1,5 @@
+<%@page import="org.springframework.web.bind.annotation.ModelAttribute"%>
+<%@page import="javax.print.attribute.AttributeSet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -19,53 +21,96 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script id="reviewTemplate" type="text/x-handlebars-template">
 	{{#each .}}
 		<div class="replyLi" data-rew_num={{rew_num}}>
-			<span class="fas bg-maroon" style="border-radius: 15px; min-width: 30px;">{{rew_num}}</span>
+			<span class="fas bg-maroon" style="border-radius: 15px; min-width: 30px; font-size: 12px;">{{no}}</span>
 			<!-- Default box -->
-			<div class="timeline-item card collapsed-card">
+			<div class="timeline-item card">
 				<div class="card-header">
-					<h3 class="card-title">{{rew_score}}</h3>
-					
+					<h4 class="card-title">{{checkRating rew_score}} (<span class="control-label rew_score">{{rew_score}}</span>)</h4>
 					<div class="card-tools">
 						<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-user"></i>
-					{{user_id}}
-				</span>
-				<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-clock"></i>
-				<%-- <fmt:formatDate value="2020-11-03" pattern="yyyy-MM-dd"/>--%>
+							{{user_id}}
+						</span>
+						<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-clock"></i>
 							{{prettifyDate sta_date}}
 						</span>
-						<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-				      		</button>
+						<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+			      		</button>
 					</div>
 				</div>
 				<div class="card-body">
-					{{rew_content}}
+					<p class="rew_content">{{rew_content}}</p>
 				</div>
 				<!-- /.card-body -->
 				<div class="card-footer" style="color: white;">
-					<a class="btn btn-primary btn-sm">수정</a>
-					<a class="btn btn-danger btn-sm">삭제</a>
+					{{eqReplyer user_id rew_num}}
 				</div>
 				<!-- /.card-footer-->
 			</div>
 			<!-- /.card -->
 		</div>
-	{{#each .}}
+	{{/each}}
 </script>
 <%-- handlebar 사용자정의 헬퍼 --%>
 <script>
 $(function(){
 	
-	
 	/* 
 	 * 사용자 정의 헬퍼(prettifyDate)
 	 * : 매개변수로 받은 timeValue를 원하는 날짜 형태로 바꿔준다.
-	 */ 
+	 */
 	Handlebars.registerHelper("prettifyDate", function(timeValue) {
 		var dateObj = new Date(timeValue);
 		var year = dateObj.getFullYear();
 		var month = dateObj.getMonth() + 1;
 		var date = dateObj.getDate();
 		return year + "/" + month + "/" + date;
+	});
+
+	 
+	/* 
+	 * 사용자 정의 헬퍼(checkRating)
+	 * : 매개변수로 받은 후기 평점을 별표로 출력
+	 */ 
+	Handlebars.registerHelper("checkRating", function(rating) {
+		var stars = "";
+		switch(rating){
+			case 1:
+				 stars="★☆☆☆☆";
+				 break;
+			case 2:
+				 stars="★★☆☆☆";
+				 break;
+			case 3:
+				 stars="★★★☆☆";
+				 break;
+			case 4:
+				 stars="★★★★☆";
+				 break;
+			case 5:
+				 stars="★★★★★";
+				 break;
+			default:
+				stars="☆☆☆☆☆";
+		}
+		return stars;
+	});
+	
+	/* 
+	 * 사용자 정의 헬퍼(eqReplyer)
+	 * : 로그인 한 아이디와 리뷰의 아이디 확인 후, 수정/삭제 버튼 활성화 
+	 */ 
+	Handlebars.registerHelper("eqReplyer", function(replyer, rew_num) {
+		var btnHtml = '';
+		var user_id = "${sessionScope.user.user_id}";
+		
+		if (replyer == user_id) {
+			
+			btnHtml = '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modifyModal">수정</button>'
+				  + '<button class="btn btn-danger btn-sm" onclick="deleteReview('+rew_num+');">삭제</button>';
+		}
+		
+		return new Handlebars.SafeString(btnHtml);
+		
 	});
 	
 });
@@ -74,10 +119,41 @@ $(function(){
 	td {
 		 padding: 8px 16px;
 	}
-	
 	td:last-child {
 		text-align: right;
 	}
+	/* 후기 별점선택 스타일 START */
+	#star_grade a {
+     	font-size:22px;
+        text-decoration: none;
+        color: lightgray;
+    }
+    #star_grade a.on {
+        color: black;
+    }
+    #star_grade_modal a {
+     	font-size:22px;
+        text-decoration: none;
+        color: lightgray;
+    }
+    #star_grade_modal a.on {
+        color: black;
+    }
+    /* 후기 별점선택 스타일 END */
+	/* pagination style START */
+	.page-item.active .page-link {
+		background-color:#ECA4A6;
+		border:1px solid #ECA4A6;
+	}
+	a.page-link:hover, a.page-link:focus {
+		color:#fff;
+		border:1px solid #ECA4A6;
+		background-color:#ECA4A6;
+	}
+	.page-link {
+		color: rgba(0,0,0,.5);
+	}
+	/* pagination style END */
 </style>
 </head>
 <body class="hold-transition layout-top-nav">
@@ -247,7 +323,7 @@ $(function(){
 							<a class="nav-item nav-link active" id="product-info-tab" data-toggle="tab" href="#product-info" role="tab" aria-controls="product-info" aria-selected="true">
 							상세정보</a>
 							<a class="nav-item nav-link" id="product-review-tab" data-toggle="tab" href="#product-review" role="tab" aria-controls="product-review" aria-selected="false">
-							 후기[${totalReview}]</a>
+							 후기<small id='replycntSmall'>[${totalReview}]</small></a>
 							<a class="nav-item nav-link" id="product-board-tab" data-toggle="tab" href="#product-board" role="tab" aria-controls="product-board" aria-selected="false">
 							Q &amp; A </a>
 						</div>
@@ -265,11 +341,11 @@ $(function(){
 								<label for="review">Review</label><br>
 								<div class="rating">
 									<p id="star_grade">
-								        <a href="#">★</a>
-								        <a href="#">★</a>
-								        <a href="#">★</a>
-								        <a href="#">★</a>
-								        <a href="#">★</a>
+								        <a href="#"><ion-icon src="/ionicons/star.svg"></ion-icon></a>
+								        <a href="#"><ion-icon src="/ionicons/star.svg"></ion-icon></a>
+								        <a href="#"><ion-icon src="/ionicons/star.svg"></ion-icon></a>
+								        <a href="#"><ion-icon src="/ionicons/star.svg"></ion-icon></a>
+								        <a href="#"><ion-icon src="/ionicons/star.svg"></ion-icon></a>
 									</p>
 								</div>
 								<textarea id="reviewContent" rows="3" class="form-control"></textarea><br>
@@ -278,43 +354,9 @@ $(function(){
 									<div class="col-md-12">
 										<!-- timeline start -->
 										<div class="timeline">
-											<div class="time-label">
+											<div class="time-label" id="repliesDiv">
 												<button class="btn bg-red" id="btn_write_review" type="button">상품후기쓰기</button>
 											</div>
-											<!-- timeline item -->
-											<div class="time-label" id="repliesDiv">
-												<span class="fas bg-maroon" style="border-radius: 15px; min-width: 30px;">1</span>
-												<!-- Default box -->
-									            <div class="timeline-item card collapsed-card">
-													<div class="card-header">
-														<h3 class="card-title">별점☆☆☆☆☆</h3>
-														
-														<div class="card-tools">
-															<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-user"></i>
-																<%-- <fmt:formatDate value="2020-11-03" pattern="yyyy-MM-dd"/>--%>
-																홍길동
-															</span>
-															<span style="color: #999; font-size: 12px; padding: 10px;"><i class="fas fa-clock"></i>
-																<%-- <fmt:formatDate value="2020-11-03" pattern="yyyy-MM-dd"/>--%>
-																2020-11-03
-															</span>
-															<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-	                  										</button>
-														</div>
-													</div>
-													<div class="card-body">
-														내용
-													</div>
-													<!-- /.card-body -->
-													<div class="card-footer" style="color: white;">
-														<a class="btn btn-primary btn-sm">수정</a>
-														<a class="btn btn-danger btn-sm">삭제</a>
-													</div>
-													<!-- /.card-footer-->
-									            </div>
-									            <!-- /.card -->
-											</div>
-											<!-- END timeline item -->
 											<!-- timeline item -->
 											<div class="noReview" style="display: none;">
 												<!-- Default box -->
@@ -333,15 +375,59 @@ $(function(){
 									<!-- /.col -->
 						        </div><!-- 상품후기 리스트 끝  -->
 						        
-								<!-- 상품 후기 리스트 페이지부분 -->  
-								<div class='text-center'>
-									<ul id="pagination" class="pagination pagination-sm no-margin "></ul>
+								<!-- 상품 후기 리스트 페이지부분 -->
+								<div class="card-footer">
+									<nav aria-label="Contacts Page Navigation">
+										<ul class="pagination justify-content-center m-0">
+											<!-- 이전표시 여부  [이전] -->
+											<c:if test="${pm.prev}">
+												<li class="page-item"><a class="page-link" href="category${pm.makeSort(pm.startPage-1)}&cat_code=${cat_code}">&laquo;</a></li>
+											</c:if>
+											<!-- 페이지목록번호 :  1  2  3  4  5  -->
+											<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="idx">
+												<li class="page-item <c:out value="${pm.cri.page == idx?'active':''}"/>">
+													<a class="page-link" href="category${pm.makeSort(idx)}&cat_code=${cat_code}">${idx}</a>
+												</li>
+											</c:forEach>
+											<!-- 다음표시 여부  [다음]-->
+											<c:if test="${pm.next && pm.endPage > 0}">
+												<li class="page-item"><a class="page-link" href="category${pm.makeSort(pm.endPage +1)}&cat_code=${cat_code}">&raquo;</a></li>
+											</c:if>
+										</ul>
+									</nav>
 								</div>
+								<%-- Modal : 상품후기 수정 --%>
+								<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="modifyModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<div class="modal-title" id="modifyModalLabel">
+													<p id="star_grade_modal">
+														<a href="#">★</a>
+														<a href="#">★</a>
+														<a href="#">★</a>
+														<a href="#">★</a>
+														<a href="#">★</a>
+													</p>
+												</div>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											</div>
+											<div class="modal-body">
+												<textarea class="form-control" id="replytext" data-rv_num></textarea>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-primary" id="btn_modal_modify">수정</button>
+												<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								
 							</div><!-- 상품후기쓰기 끝 -->
 						
 						</div>
 						
-						<%-- Q&A --%>
+						<%-- Q & A --%>
 						<div class="tab-pane fade" id="product-board" role="tabpanel" aria-labelledby="product-board-tab"> </div>
 					</div>
 				</div>

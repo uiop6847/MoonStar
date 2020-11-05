@@ -27,10 +27,10 @@
 	<!-- 상품 후기 리스트(페이지 포함) -->
 	<select id="list" parameterType="Map" resultType="ReviewVO">
 		SELECT REW_NUM, USER_ID, PRO_NUM, REW_CONTENT, REW_SCORE, STA_DATE
-		FROM(SELECT REW_NUM, USER_ID, PRO_NUM, REW_CONTENT, REW_SCORE, STA_DATE,
-				ROW_NUMBER() OVER(ORDER BY REW_NUM DESC) P_SEQ
-			FROM REVIEW_TBL
-			WHERE PRO_NUM = #{pro_num})
+		FROM (  SELECT  REW_NUM, USER_ID, PRO_NUM, REW_CONTENT, REW_SCORE, STA_DATE,
+		                ROW_NUMBER() OVER(ORDER BY REW_NUM DESC) P_SEQ
+		        FROM REVIEW_TBL
+		        WHERE PRO_NUM = #{pro_num})
 		WHERE P_SEQ BETWEEN #{cri.rowStart} AND #{cri.rowEnd}
 	</select>
 	
