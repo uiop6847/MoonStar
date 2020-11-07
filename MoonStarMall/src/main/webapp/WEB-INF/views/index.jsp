@@ -92,6 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 										</div>
 									</c:if>
+									<c:set var="score"><fmt:formatNumber value="${newList.avg_score}" pattern=".0"/></c:set>
 									<c:if test="${newList.avg_score != 0}">
 										<div style="position:absolute; width:130px; overflow:hidden; color:#cdcdcd;">
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
@@ -99,9 +100,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<small style="color: #807F89;">(${newList.avg_score})</small>
+											<small style="color: #807F89;">(${score})</small>
 										</div>
-										<c:set var="width" value="${(newList.avg_score/5)*95}"></c:set>
+										<c:set var="width" value="${score * 18.7}"></c:set>
 										<div style="position:absolute; width:${width}px; overflow:hidden; white-space:nowrap; color:#312E41;">
 											<ion-icon src="/ionicons/star.svg"></ion-icon>
 											<ion-icon src="/ionicons/star.svg"></ion-icon>

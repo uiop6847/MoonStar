@@ -56,7 +56,7 @@ public class AdminController {
 			rttr.addFlashAttribute("msg", "LOGIN_FAIL");
 		}
 		
-		return "redirect:/admin/main";
+		return "redirect:" + (String) session.getAttribute("dest");
 	}
 	
 	/* 관리자 로그아웃 */

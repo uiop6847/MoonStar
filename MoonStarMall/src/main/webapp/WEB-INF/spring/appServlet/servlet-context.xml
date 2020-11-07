@@ -35,7 +35,29 @@
 	<beans:bean id="uploadPath" class="java.lang.String">
 		<beans:constructor-arg value="C:\\dev\\upload" />
 	</beans:bean>
-
+	
+	<beans:bean id="authInterceptor" class="com.moonstarmall.interceptor.AuthInterceptor"></beans:bean>
+	<beans:bean id="loginInterceptor" class="com.moonstarmall.interceptor.LoginInterceptor"></beans:bean>
+	
+	<interceptors>
+	<!-- "/**"를 path로 설정할 경우 무한루프 방지를 위해 <exclude-mapping path="/"/> 필수 -->
+		
+		<!-- 관리자페이지의 경우 -->
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<exclude-mapping path="/admin/login"/>
+			<exclude-mapping path="/admin/loginOK"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		
+		<!-- 일반사용자의 경우
+		<interceptor>
+			<mapping path="/cart/**"/>
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor>
+		 -->
+	</interceptors>
+	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />

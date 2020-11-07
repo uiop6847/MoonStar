@@ -2,6 +2,29 @@ var replyPage = 1;
 
 $(function(){
 	var pro_num = $("#pro_num").val();
+
+	$("#buy_count").on("change", function(){
+
+		var total = $("#pro_price").val() * $(this).val();
+
+		total = makeComma(total);
+
+		$("#total_price").empty();
+		$("#total_price").append(total);
+
+		$("#total").empty();
+		$("#total").append(total + " (" + $(this).val() + "개)");
+
+	});
+
+	// 금액 ,(콤마) 정규식
+	function makeComma(str) {
+
+		str = String(str);
+	   
+		return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+	   
+	}
 	
 	/* 별점 클릭 시, 색상 변경 */
 	$("#star_grade a").click(function(e){
@@ -158,6 +181,67 @@ $(function(){
 
 	});
 
+	/* 장바구니 담기 */
+	$("#btn_cart").on("click", function(){
+		
+		var result = "";
+		var formData = { 	
+							pro_num : pro_num, 
+							buy_count : $("#buy_count").val() 
+						};
+		
+		// 동일한 상품이 장바구니에 존재하는지 확인
+		$.ajax({
+			url: "/cart/itemCheck",
+			type : "post", 
+			data : formData,
+			success : function(data) {
+
+				if(data == "UPDATE"){
+					result = confirm("장바구니에 동일한 상품이 있습니다. \n장바구니에 추가하시겠습니까?");
+					if(result){
+						cartUpdate(formData);
+					}
+
+				}else if(data == "INSERT"){
+					cartUpdate(formData);
+				
+				}else 
+				if(data == "N_SESSION"){
+					result = confirm("장바구니에 담으려면 로그인을 해주세요. \n로그인 하시겠습니까?");
+					if(result){
+						location.href = "/member/login";
+					}
+
+				}
+			}
+		});
+
+	});
+
+	/* 장바구니 등록 및 수량 변경 처리 */
+	function cartUpdate(formData){
+		$.ajax({
+			url : "/cart/cartUpdate",
+			type : "post", 
+			data : formData,
+			success : function(data) {
+
+				if(data == "SUCCESS"){
+					result = confirm("장바구니에 담았습니다. \n장바구니로 이동 하시겠습니까?");
+					if(result){
+						location.href = "/cart/list";
+
+					}
+				}else if(data == "N_SESSION"){
+					result = confirm("장바구니에 담으려면 로그인을 해주세요. \n로그인 하시겠습니까?");
+					if(result){
+						location.href = "/member/login";
+					}
+				}
+			}
+		});
+	}
 	
 });
 

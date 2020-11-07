@@ -117,7 +117,6 @@ public class PoductController {
 		pm.setCri(cri);
 		
 		model.addAttribute("pm", pm);
-		
 		model.addAttribute("totalReview", reviewServie.reviewCount(pro_num));
 	}
 	

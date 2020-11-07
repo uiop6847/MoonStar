@@ -204,7 +204,6 @@ $(function(){
 				<!-- Default box -->
 				<div class="row">
 					<div class="col-12 col-sm-6">
-						<input type="hidden" id="pro_num" name="pro_num" value="${vo.pro_num}" />
 						<h3 class="d-inline-block d-sm-none">${vo.pro_nm }</h3>
 						<!-- 상품 메인 이미지 -->
 						<div class="col-12">
@@ -226,74 +225,14 @@ $(function(){
 						<!-- 상품 상세설명 -->
 						<p></p>
 						<hr>
-						<!-- 
-						<h4>Available Colors</h4>
-						<div class="btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-default text-center active">
-								<input type="radio" name="color_option" id="color_option1" autocomplete="off" checked="">
-								Green
-								<br>
-								<i class="fas fa-circle fa-2x text-green"></i>
-							</label>
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option2" autocomplete="off">
-								Blue
-								<br>
-								<i class="fas fa-circle fa-2x text-blue"></i>
-							</label>
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option3" autocomplete="off">
-								Purple
-								<br>
-								<i class="fas fa-circle fa-2x text-purple"></i>
-							</label>
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option4" autocomplete="off">
-								Red
-								<br>
-								<i class="fas fa-circle fa-2x text-red"></i>
-							</label>
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option5" autocomplete="off">
-								Orange
-								<br>
-								<i class="fas fa-circle fa-2x text-orange"></i>
-							</label>
-						</div>
-						-->
-						<!-- 
-						<h4 class="mt-3">Size <small>Please select one</small></h4>
-						<div class="btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option1" autocomplete="off">
-								<span class="text-xl">S</span>
-								<br>
-								Small
-							</label>
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option1" autocomplete="off">
-								<span class="text-xl">M</span>
-								<br>
-								Medium
-							</label>
-							<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option1" autocomplete="off">
-								<span class="text-xl">L</span>
-								<br>
-								Large
-							</label>
-								<label class="btn btn-default text-center">
-								<input type="radio" name="color_option" id="color_option1" autocomplete="off">
-								<span class="text-xl">XL</span>
-								<br>
-								Xtra-Large
-							</label>
-						</div>
-						-->
+						<input type="hidden" id="pro_num" name="pro_num" value="${vo.pro_num}" />
 						<table style="width: 100%;">
 							<tr>
 								<td>판매가</td>
-								<td colspan="2"><span id="pro_price"><fmt:formatNumber value="${vo.discount_price }" /></span></td>
+								<td colspan="2">
+									<span><fmt:formatNumber value="${vo.discount_price }" /></span>
+									<input type="hidden" id="pro_price" value="${vo.discount_price }">
+								</td>
 							</tr>
 							<tr>
 								<td>적립금</td>
@@ -302,17 +241,20 @@ $(function(){
 							</tr>
 							<tr>
 								<td>수량</td>
-								<td style="width: 100px;"><input id="count" type="number" class="form-control" value="1"></td>
-								<td><span id="total_price"><fmt:formatNumber var="total_price" value="${vo.discount_price }" /></span></td>
+								<td style="width: 100px;"><input id="buy_count" name="buy_count" type="number" class="form-control" value="1" min="1"></td>
+								<td style="width: 170px;"><span id="total_price"><fmt:formatNumber value="${vo.discount_price }" /></span></td>
 							</tr>
 						</table>
-						
+						<hr>
+						<div>
+							<h4>TOTAL : <span id="total"><fmt:formatNumber value="${vo.discount_price }" /> (1개)</span></h4>
+						</div>
 						<div class="mt-4">
-							<div class="btn btn-secondary btn-lg btn-flat">
-								BUY IT NOW
-							</div>
-							<div class="btn btn-outline-secondary btn-lg btn-flat">
-								<i class="fas fa-cart-plus fa-lg mr-2"></i>
+							<div>
+								<button class="btn btn-secondary btn-lg btn-flat" id="btn_buy">
+								BUY IT NOW</button>
+								<button class="btn btn-outline-secondary btn-lg btn-flat" id="btn_cart">
+								<i class="fas fa-cart-plus fa-lg mr-2"></i></button>
 							</div>
 						</div>
 					</div>
@@ -396,6 +338,7 @@ $(function(){
 										</ul>
 									</nav>
 								</div>
+								
 								<%-- Modal : 상품후기 수정 --%>
 								<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="modifyModalLabel" aria-hidden="true">
 									<div class="modal-dialog">

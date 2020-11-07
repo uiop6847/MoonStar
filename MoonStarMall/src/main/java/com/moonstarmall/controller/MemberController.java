@@ -149,7 +149,6 @@ public class MemberController {
 		logger.info("loginOK() called");
 		
 		LoginDTO loginDTO = service.loginOK(dto);
-		
 		if(loginDTO != null) {
 			logger.info("Login SUCCESS");
 			
@@ -167,13 +166,14 @@ public class MemberController {
 			rttr.addFlashAttribute("msg", "LOGIN_SUCCESS");
 			
 			return "redirect:/";
+			//return "redirect:" + (String) session.getAttribute("dest");
+			
 		}else {
 			logger.info("Login FAIL");
-			
 			rttr.addFlashAttribute("msg", "LOGIN_FAIL");
-			
-			return "redirect:/member/login";
 		}
+		
+		return "redirect:/member/login";
 	}
 	
 	/* 로그아웃     /member/logout */

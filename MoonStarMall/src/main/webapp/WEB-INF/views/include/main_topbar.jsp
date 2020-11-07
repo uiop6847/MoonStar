@@ -21,7 +21,7 @@
 		</div>
 		<ul class="navbar-nav">
 			<li class="nav-item" >
-				<a class="nav-link">
+				<a class="nav-link" href="/cart/list">
 					<ion-icon src="/ionicons/bag-outline.svg" style="font-size:20px;"></ion-icon></a>
 			</li>
 		</ul>
