@@ -202,6 +202,7 @@ $(function(){
 		<div class="content">
 			<div class="container">
 				<!-- Default box -->
+				<form id="orderInfo" action="/order/orderForm?cartType=D" method="post">
 				<div class="row">
 					<div class="col-12 col-sm-6">
 						<h3 class="d-inline-block d-sm-none">${vo.pro_nm }</h3>
@@ -251,14 +252,15 @@ $(function(){
 						</div>
 						<div class="mt-4">
 							<div>
-								<button class="btn btn-secondary btn-lg btn-flat" id="btn_buy">
+								<button type="button" class="btn btn-secondary btn-lg btn-flat" id="btn_buy">
 								BUY IT NOW</button>
-								<button class="btn btn-outline-secondary btn-lg btn-flat" id="btn_cart">
+								<button type="button" class="btn btn-outline-secondary btn-lg btn-flat" id="btn_cart">
 								<i class="fas fa-cart-plus fa-lg mr-2"></i></button>
 							</div>
 						</div>
 					</div>
 				</div>
+				</form>
 				<div class="row mt-4">
 					<nav class="w-100">
 						<div class="nav nav-tabs" id="product-tab" role="tablist">

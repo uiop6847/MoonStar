@@ -3,14 +3,6 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.moonstarmall.mappers.CartMapper">
 
-	<!-- 장바구니 조회 -->
-	<select id="list" resultType="CartVO">
-		SELECT CART_CD, PRO_NUM, USER_ID, BUY_COUNT
-		FROM CART_TBL
-		WHERE PRO_NUM = ${pro_num}
-		AND USER_ID = ${user_id}
-	</select>
-	
 	<!-- 동일한 상품이 장바구니에 존재하는지 확인 -->
 	<select id="itemCheck" parameterType="CartVO" resultType="int">
 		SELECT COUNT(*)
@@ -23,7 +15,7 @@
 	<update id="cartUpdate" parameterType="CartVO">
 		MERGE INTO CART_TBL
 	    USING DUAL
-	    ON ( PRO_NUM = #{pro_num} AND USER_ID = #{user_id})
+	    ON ( PRO_NUM = #{pro_num} AND USER_ID = #{user_id} )
 	    WHEN MATCHED THEN
 	        UPDATE SET BUY_COUNT = BUY_COUNT + #{buy_count}
 	    WHEN NOT MATCHED THEN
@@ -31,11 +23,35 @@
 	        VALUES (SEQ_CART_CD.NEXTVAL, #{pro_num}, #{user_id}, #{buy_count})
 	</update>
 	
+	<!-- 장바구니 list -->
+	<select id="list" parameterType="String" resultType="HashMap">
+		SELECT  C.CART_CD, C.USER_ID, P.PRO_NUM, P.PRO_NM, P.PRO_MAIN_IMG, C.BUY_COUNT,
+        		P.PRO_PRICE-(P.PRO_PRICE*(P.PRO_DISCOUNT/100)) AS DISCOUNT_PRICE
+		FROM PRODUCT_TBL P INNER JOIN CART_TBL C
+		ON P.PRO_NUM = C.PRO_NUM
+		AND C.USER_ID = #{user_id}
+		ORDER BY C.CART_CD
+	</select>
+	
+	<!-- 장바구니에 등록된 상품 수량 변경 -->
+	<update id="buyUpdate" parameterType="CartVO">
+		UPDATE CART_TBL
+		SET BUY_COUNT = #{buy_count}
+		WHERE CART_CD = #{cart_cd}
+	</update>
+	
 	<!-- 장바구니 삭제 -->
-	<delete id="delete">
+	<delete id="cartDelete" parameterType="Map">
 		DELETE
 		FROM CART_TBL
-		WHERE CART_CD = ${cart_cd}
+		WHERE CART_CD IN (${cart_cd})
 	</delete>
+	
+	<!-- 장바구니 조회 -->
+	<select id="cartCount" parameterType="CartVO" resultType="CartVO">
+		SELECT COUNT(*)
+		FROM CART_TBL
+		WHERE USER_ID = #{user_id}
+	</select>
 
 </mapper>

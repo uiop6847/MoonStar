@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moonstarmall.mappers.DeliveryMapper">
+
+	<!-- 기본배송지 조회  -->
+	<select id="defaultAddr" parameterType="String" resultType="DeliveryVO">
+		SELECT DE_NUM, USER_ID, DE_NM, DE_RECENT_NM, DE_ZIP_NUM, DE_ADDR, DE_ADDR_DTL, DE_TEL_PHONE, DE_CELL_PHONE, DE_DEFAULT_YN
+        FROM DELIVERY_TBL
+        WHERE USER_ID = #{user_id}
+        AND DE_DEFAULT_YN = 'Y'
+	</select>
+
+</mapper>

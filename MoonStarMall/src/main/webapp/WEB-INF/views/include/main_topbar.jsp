@@ -22,7 +22,9 @@
 		<ul class="navbar-nav">
 			<li class="nav-item" >
 				<a class="nav-link" href="/cart/list">
-					<ion-icon src="/ionicons/bag-outline.svg" style="font-size:20px;"></ion-icon></a>
+					<ion-icon src="/ionicons/bag-outline.svg" style="font-size:20px;"></ion-icon>
+					<span class="badge badge-secondary" style="position: absolute;">${cartCount }</span>
+				</a>
 			</li>
 		</ul>
 	</div>
@@ -59,5 +61,6 @@ $(function(){
 		//$("#subCategory option").remove();
 		target.append(options);
 	}
+	
 });
 </script>

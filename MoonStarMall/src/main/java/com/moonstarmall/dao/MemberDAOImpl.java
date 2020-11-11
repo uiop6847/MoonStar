@@ -1,5 +1,6 @@
 package com.moonstarmall.dao;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -76,5 +77,18 @@ public class MemberDAOImpl implements MemberDAO {
 	public void deleteUser(String user_id) throws Exception {
 		session.delete(NS + ".deleteUser", user_id);
 	}
+
+	/* 사용한 적립금 차감 */
+	@Override
+	public void usePoint(String user_id, int user_point) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("user_id", user_id);
+		map.put("user_point", user_point);
+		
+		session.update(NS + ".usePoint", map);
+	}
+	
 
 }

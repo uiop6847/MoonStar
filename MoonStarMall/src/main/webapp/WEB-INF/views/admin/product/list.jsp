@@ -274,7 +274,7 @@ $(function(){
             }
         });
         
-        // 상품수정 화면 이동
+        // 상품삭제
         location.href= '/admin/product/delete?proNumArr=' + proNumArr;
     });
 	
