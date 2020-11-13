@@ -10,5 +10,13 @@
         WHERE USER_ID = #{user_id}
         AND DE_DEFAULT_YN = 'Y'
 	</select>
+	
+	<!-- 사용자배송지 조회 -->
+	<select id="userAddr" parameterType="String" resultType="DeliveryVO">
+		SELECT  USER_ID, ZIP_NUM AS DE_ZIP_NUM, ADDR AS DE_ADDR, ADDR_DTL AS DE_ADDR_DTL, 
+		        TEL_PHONE AS DE_TEL_PHONE, CELL_PHONE AS DE_CELL_PHONE
+        FROM USER_INFO
+        WHERE USER_ID = #{user_id}
+	</select>
 
 </mapper>

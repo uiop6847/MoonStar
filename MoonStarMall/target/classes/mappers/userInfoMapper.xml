@@ -81,6 +81,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE USER_ID = #{user_id}
 	</delete>
 	
+	<!-- 사용자 적립금 조회 -->
+	<select id="userPoint" parameterType="String" resultType="int">
+		SELECT USER_POINT
+		FROM USER_INFO
+		WHERE USER_ID = #{user_id}
+	</select>
+	
 	<!-- 사용한 적립금 차감 -->
 	<update id="usePoint" parameterType="Map">
 		UPDATE USER_INFO

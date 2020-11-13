@@ -19,5 +19,11 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 	public DeliveryVO defaultAddr(String user_id) throws Exception {
 		return session.selectOne(NS + ".defaultAddr", user_id);
 	}
+	
+	/* 사용자배송지 조회 */
+	@Override
+	public DeliveryVO userAddr(String user_id) throws Exception {
+		return session.selectOne(NS + ".userAddr", user_id);
+	}
 
 }

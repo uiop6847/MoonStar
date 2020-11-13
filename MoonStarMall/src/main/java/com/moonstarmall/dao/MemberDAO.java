@@ -37,6 +37,9 @@ public interface MemberDAO {
 	/* 회원 탈퇴 */
 	public void deleteUser(String user_id) throws Exception;
 	
+	/* 사용자 적립금 조회 */
+	public int userPoint(String user_id) throws Exception;
+	
 	/* 사용한 적립금 차감 */
 	public void usePoint(String user_id, int user_point) throws Exception;
 

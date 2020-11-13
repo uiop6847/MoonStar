@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.moonstarmall.dao.CartDAO;
+import com.moonstarmall.dao.DeliveryDAO;
 import com.moonstarmall.dao.MemberDAO;
 import com.moonstarmall.dao.OrderDAO;
 import com.moonstarmall.domain.CartVO;
@@ -22,6 +23,8 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO dao;
 	@Autowired
 	private CartDAO cart;
+	@Autowired
+	private DeliveryDAO delivery;
 	@Autowired
 	private MemberDAO member;
 	
@@ -68,11 +71,11 @@ public class OrderServiceImpl implements OrderService {
 		DeliveryVO vo = null;
 		
 		// 기본배송지 우선적용
-		vo = dao.defaultAddr(user_id);
+		vo = delivery.defaultAddr(user_id);
 		
 		// 기본배송지가 없으면 사용자정보에 등록된 주소 적용
 		if(vo == null) {
-			vo = dao.userAddr(user_id);
+			vo = delivery.userAddr(user_id);
 		}
 		
 		return vo;
@@ -81,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
 	/* 사용자 적립금 조회 */
 	@Override
 	public int userPoint(String user_id) throws Exception {
-		return dao.userPoint(user_id);
+		return member.userPoint(user_id);
 	}
 
 	/* 주문정보 저장처리 */
@@ -92,11 +95,10 @@ public class OrderServiceImpl implements OrderService {
 		int ordSeq = dao.orderSeq();
 		
 		if(ordSeq != 0) {
-			// 주문정보 저장
+			
 			order.setOrd_cd(ordSeq);
 			order.setUser_id(user_id);
-			System.out.println("=====orderInsert() called");
-			System.out.println("=====order : " + order);
+			// 주문정보 저장
 			dao.orderInsert(order);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -123,6 +125,12 @@ public class OrderServiceImpl implements OrderService {
 				member.usePoint(user_id, use_point);
 			}
 		}
+	}
+
+	/* 주문내역 조회 */
+	@Override
+	public List<OrderVO> orderList(String user_id) throws Exception {
+		return dao.orderList(user_id);
 	}
 	
 }

@@ -20,4 +20,7 @@ public interface OrderService {
 	
 	/* 주문정보 저장처리 */
 	public void orderInfoAdd(CartVO cartList, OrderVO order, String user_id, int use_point) throws Exception;
+	
+	/* 주문내역 조회 */
+	public List<OrderVO> orderList(String user_id) throws Exception;
 }

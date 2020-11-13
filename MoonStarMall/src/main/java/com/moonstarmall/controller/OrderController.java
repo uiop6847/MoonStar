@@ -32,15 +32,13 @@ public class OrderController {
 	/* 주문요청내역 조회  
 	 * 
 	 * @cartType
-	 * 	D : 상품상세정보 -> 주문
+	 * 	D : 상품상세정보 -> 주문하기
 	 * 	A : 장바구니 -> 주문하기
 	 * 	All : 장바구니 -> 전체주문, 선택주문
 	 * */
 	@RequestMapping(value = "orderForm", method = RequestMethod.POST)
 	public void orderInfoSelect(@RequestParam("cartType") String type, CartVO list, Model model, HttpSession session) throws Exception {
 		logger.info("orderInfoSelect() called");
-		logger.info("=====type : " + type);
-		logger.info("=====list : " + list);
 		
 		LoginDTO dto = (LoginDTO) session.getAttribute("user");
 		String user_id = dto.getUser_id();
@@ -70,19 +68,35 @@ public class OrderController {
 	
 	/* 주문정보 저장처리 */
 	@RequestMapping(value = "orderInfoAdd", method = RequestMethod.POST)
-	public void orderInfoAdd(CartVO cartList, OrderVO order, int use_point, HttpSession session) throws Exception {
+	public String orderInfoAdd(CartVO cartList, OrderVO order, int use_point, HttpSession session) throws Exception {
 		logger.info("orderInfoAdd() called");
-		
-		logger.info("=====cartList : " + cartList.getList());
-		logger.info("=====order : " + order);
-		logger.info("=====use_point : " + use_point);
 		
 		LoginDTO dto = (LoginDTO) session.getAttribute("user");
 		String user_id = dto.getUser_id();
 		
 		service.orderInfoAdd(cartList, order, user_id, use_point);
 		
-		logger.info("=====SUCCESS");
+		return "redirect:/order/orderComplete";
+	}
+	
+	/* 주문완료 화면으로 이동 */
+	@RequestMapping(value = "orderComplete", method = RequestMethod.GET)
+	public String orderComplete() {
+		logger.info("orderComplete() called");
+		
+		return "/order/orderComplete";
+	}
+	
+	/* 주문내역 조회 */
+	@RequestMapping(value = "list", method = RequestMethod.GET)
+	public void orderList(Model model, HttpSession session) throws Exception {
+		
+		LoginDTO dto = (LoginDTO) session.getAttribute("user");
+		String user_id = dto.getUser_id();
+
+		List<OrderVO> list = service.orderList(user_id);
+		
+		model.addAttribute("orderList", list);
 	}
 
 }

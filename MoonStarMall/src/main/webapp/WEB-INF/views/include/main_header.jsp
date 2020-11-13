@@ -43,7 +43,7 @@
 					  <a href="/cart/list" class="nav-link">CART</a>
 					</li>
 					<li class="nav-item">
-						<a href="/member/order" class="nav-link">ORDER</a>
+						<a href="/order/list" class="nav-link">ORDER</a>
 					</li>
 					<li class="nav-item">
 						<a href="/member/mypage" class="nav-link">MY PAGE</a>

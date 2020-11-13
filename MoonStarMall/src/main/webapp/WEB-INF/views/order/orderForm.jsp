@@ -54,6 +54,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	input[readonly="readonly"]{
 		background-color: #fff !important;
 	}
+	
+	.row-title {
+		margin: 40px 0 0;
+	}
+	
+	.selected {
+		display: none;
+	}
 </style>
 </head>
 <body class="hold-transition layout-top-nav">
@@ -155,68 +163,71 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										</tr>
 									</tbody>
 								</table>
-								<div class="row" style="margin: 30px 0;">
+								<div class="row row-title">
 									<div class="col-6"><label>배송정보</label></div>
 									<div class="col-md-6 col-right">
 										<span style="color: #FA8072">*</span><small>&nbsp;필수입력사항</small>
 									</div>
-									<table class="table">
-										<tr>
-											<th style="width: 150px;">배송지선택</th>
-											<td>
-												<label><input type="radio" name = "buy_addr" checked="checked">기본배송지</label>
-												<label><input type="radio" name = "buy_addr">새로입력</label>
-												<button type="button" class="btn btn-flat btn-default">배송지관리</button>
-												<!-- 기본배송지 저장목적 -->
-												<input type="hidden" id="def_nm" value="${orderAddr.de_nm }">
-												<input type="hidden" id="def_zip_num" value="${orderAddr.de_zip_num }">
-												<input type="hidden" id="def_addr" value="${orderAddr.de_addr }">
-												<input type="hidden" id="def_addr_dtl" value="${orderAddr.de_addr_dtl }">
-												<input type="hidden" id="def_tel_phone" value="${orderAddr.de_tel_phone }">
-												<input type="hidden" id="def_cell_phone" value="${orderAddr.de_cell_phone }">
-											</td>
-										</tr>
-										<tr>
-											<th>받으시는분&nbsp;<span style="color: #FA8072">*</span></th>
-											<td><input type="text" class="form-control" id="ord_nm" name="ord_nm" style="width: 100px;" value="${orderAddr.de_nm }"></td>
-										</tr>
-										<tr>
-											<th>주소&nbsp;<span style="color: #FA8072">*</span></th>
-											<td>
-												<div class="row">
-													<div style="width: 100px;">
-														<input type="text" class="form-control" id="sample2_postcode" name="zip_num" readonly="readonly" value="${orderAddr.de_zip_num }">
-													</div>
-													<div style="width: 200px;">
-														<button type="button" onclick="sample2_execDaumPostcode()" id="btn_postCode" class="btn btn-default">
-														우편번호찾기&nbsp;<i class="fa fa-search"></i>
-														</button>
-													</div>
+								</div>
+								<table class="table" style="border-bottom: 1px solid #dee2e6;">
+									<tr>
+										<th style="width: 150px;">배송지선택</th>
+										<td>
+											<label><input type="radio" name = "buy_addr" checked="checked">기본배송지</label>
+											<label><input type="radio" name = "buy_addr">새로입력</label>
+											<button type="button" class="btn btn-flat btn-default">배송지관리</button>
+											<!-- 기본배송지 저장목적 -->
+											<input type="hidden" id="def_nm" value="${orderAddr.de_nm }">
+											<input type="hidden" id="def_zip_num" value="${orderAddr.de_zip_num }">
+											<input type="hidden" id="def_addr" value="${orderAddr.de_addr }">
+											<input type="hidden" id="def_addr_dtl" value="${orderAddr.de_addr_dtl }">
+											<input type="hidden" id="def_tel_phone" value="${orderAddr.de_tel_phone }">
+											<input type="hidden" id="def_cell_phone" value="${orderAddr.de_cell_phone }">
+										</td>
+									</tr>
+									<tr>
+										<th>받으시는분&nbsp;<span style="color: #FA8072">*</span></th>
+										<td><input type="text" class="form-control" id="ord_nm" name="ord_nm" style="width: 100px;" value="${orderAddr.de_nm }"></td>
+									</tr>
+									<tr>
+										<th>주소&nbsp;<span style="color: #FA8072">*</span></th>
+										<td>
+											<div class="row">
+												<div style="width: 100px;">
+													<input type="text" class="form-control" id="sample2_postcode" name="zip_num" readonly="readonly" value="${orderAddr.de_zip_num }">
 												</div>
-												<div class="row">
-													<input type="text" class="form-control" id="sample2_address" name="addr" readonly="readonly" style="width: 60%;" value="${orderAddr.de_addr }">
-													<label>&nbsp;기본주소</label>
+												<div style="width: 200px;">
+													<button type="button" onclick="sample2_execDaumPostcode()" id="btn_postCode" class="btn btn-default">
+													우편번호찾기&nbsp;<i class="fa fa-search"></i>
+													</button>
 												</div>
-												<div class="row">
-													<input type="text" class="form-control" id="sample2_detailAddress" name="addr_dtl" style="width: 60%;" value="${orderAddr.de_addr_dtl }">
-													<label>&nbsp;상세주소(선택입력가능)</label>
-													<input type="hidden" id="sample2_extraAddress" class="form-control" placeholder="참고항목">
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<th>일반전화</th>
-											<td>
-												<input type="text" class="form-control" id="tel_phone" name="tel_phone" style="width: 200px;" value="${orderAddr.de_tel_phone }">
-											</td>
-										</tr>
-										<tr>
-											<th>휴대전화&nbsp;<span style="color: #FA8072">*</span></th>
-											<td>
-												<input type="text" class="form-control" id="cell_phone" name="cell_phone" style="width: 200px;" value="${orderAddr.de_cell_phone }">
-											</td>
-										</tr>
-									</table>
+											</div>
+											<div class="row">
+												<input type="text" class="form-control" id="sample2_address" name="addr" readonly="readonly" style="width: 60%;" value="${orderAddr.de_addr }">
+												<label>&nbsp;기본주소</label>
+											</div>
+											<div class="row">
+												<input type="text" class="form-control" id="sample2_detailAddress" name="addr_dtl" style="width: 60%;" value="${orderAddr.de_addr_dtl }">
+												<label>&nbsp;상세주소(선택입력가능)</label>
+												<input type="hidden" id="sample2_extraAddress" class="form-control" placeholder="참고항목">
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>일반전화</th>
+										<td>
+											<input type="text" class="form-control" id="tel_phone" name="tel_phone" style="width: 200px;" value="${orderAddr.de_tel_phone }">
+										</td>
+									</tr>
+									<tr>
+										<th>휴대전화&nbsp;<span style="color: #FA8072">*</span></th>
+										<td>
+											<input type="text" class="form-control" id="cell_phone" name="cell_phone" style="width: 200px;" value="${orderAddr.de_cell_phone }">
+										</td>
+									</tr>
+								</table>
+								<div class="row row-title">
+									<div class="col-12"><label>결제 예정 금액</label></div>
 								</div>
 								<table class="table table-bordered col-center">
 									<tr>
@@ -229,34 +240,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<span id="buy_price_2"><fmt:formatNumber value="${total_price}" /></span>
 											<input type="hidden" id="total_price" value="${total_price }">
 										</td>
-										<td id="total_discount_2">+ 0</td>
+										<td id="total_discount_2">- 0</td>
 										<td>
 											= <span id="buy_total_price_2"><fmt:formatNumber value="${total_price}" /></span>
 										</td>
 									</tr>
 									<tr>
-										<th>총 할인금액</th><td colspan="3" id="total_discount_1" class="col-left"></td>
+										<th>총 할인금액</th><td colspan="3" id="total_discount_1" class="col-left">- 0</td>
 									</tr>
 									<tr>
 										<td class="col-left">구매적립금</td>
 										<td colspan="3" class="col-left">
-											<input type="number" class="form-control" id="use_point" name="use_point" style="width: 200px; display: inline-block; text-align: right;" min="0" max="${userPoint }">
+											<input type="number" class="form-control" id="use_point" name="use_point" value="0" style="width: 200px; display: inline-block; text-align: right;" min="0" max="${userPoint }">
 											원(총 사용가능 구매적립금 <span><fmt:formatNumber value="${userPoint }"/></span>원)
 											<input type="hidden" id="user_point" value="${userPoint }">
 										</td>
 									</tr>
 								</table>
-								<div class="row" style="margin: 30px 0;">
-									<div class="col-6"><label>결제수단</label></div>
-									<table class="table">
+								<div class="row row-title">
+									<div class="col-12"><label>결제 수단</label></div>
+								</div>
+								<div style="margin: 10px;">
+									<label><input type="radio" id="payment_0" name="payment" value="cash" checked="checked">
+									무통장입금</label>
+									<label><input type="radio" id="payment_1" name="payment" value="card">
+									카드결제</label>
+								</div>
+								<div style="margin:10px; padding: 20px; border: 1px solid #ced4da; height: 200px;">
+									<table class="table" id="cash_section" style="border-bottom: 1px solid #dee2e6;">
 										<tr>
-											<td colspan="2">
-												<label><input type="radio" id="payment_0" name="payment" value="cash" checked="checked">무통장입금</label>
-												<label><input type="radio" id="payment_1" name="payment" value="card">카드결제</label>
-											</td>
-										</tr>
-										<tr>
-											<td style="width: 150px;">입금자명</td>
+											<td>입금자명</td>
 											<td><input type="text" class="form-control" id="pay_nm" name="pay_nm" style="width: 100px;"></td>
 										</tr>
 										<tr>
@@ -269,7 +282,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<div class="card-footer">
 								<div class="row" id="payArea">
 									<div class="col-4">
-										<table class="table">
+										<table class="table table-bordered">
 											<tr>
 												<td>총 적립예정금액</td>
 												<td>
@@ -290,9 +303,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<strong id="pay_name">무통장입금</strong>
 											 <span>최종결제금액&nbsp;<b id="pay_price"><fmt:formatNumber value="${total_price}" /></b></span>
 										</p>
-										<p>
-											<span><input type="checkbox" id="chk_agreement"> 결제정보를 확인하였으며, 구매진행에 동의합니다.</span>
-										</p>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" id="chk_agreement">
+											<label class="form-check-label" for="chk_agreement">결제정보를 확인하였으며, 구매진행에 동의합니다.</label>
+				                        </div>
 									</div>
 									<div class="col-3">
 										<div class="col-right" style="margin: 20% 0;">

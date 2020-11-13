@@ -77,6 +77,12 @@ public class MemberDAOImpl implements MemberDAO {
 	public void deleteUser(String user_id) throws Exception {
 		session.delete(NS + ".deleteUser", user_id);
 	}
+	
+	/* 사용자 적립금 조회 */
+	@Override
+	public int userPoint(String user_id) throws Exception {
+		return session.selectOne(NS + ".userPoint", user_id);
+	}
 
 	/* 사용한 적립금 차감 */
 	@Override

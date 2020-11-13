@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonstarmall.domain.CartVO;
-import com.moonstarmall.domain.DeliveryVO;
 import com.moonstarmall.domain.OrderVO;
 
 @Repository
@@ -36,24 +35,6 @@ public class OrderDAOImpl implements OrderDAO {
 		return session.selectList(NS + ".orderInfoAll", map);
 	}
 	
-	/* 기본배송지 조회 */
-	@Override
-	public DeliveryVO defaultAddr(String user_id) throws Exception {
-		return session.selectOne(NS + ".defaultAddr", user_id);
-	}
-	
-	/* 사용자배송지 조회 */
-	@Override
-	public DeliveryVO userAddr(String user_id) throws Exception {
-		return session.selectOne(NS + ".userAddr", user_id);
-	}
-	
-	/* 사용자 적립금 조회 */
-	@Override
-	public int userPoint(String user_id) throws Exception {
-		return session.selectOne(NS + ".userPoint", user_id);
-	}
-	
 	/* 주문번호 시퀀스 조회 */
 	@Override
 	public int orderSeq() throws Exception {
@@ -70,6 +51,12 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public void orderDtlInsert(Map<String, Object> map) throws Exception {
 		session.insert(NS + ".orderDtlInsert", map);
+	}
+
+	/* 주문내역 조회 */
+	@Override
+	public List<OrderVO> orderList(String user_id) throws Exception {
+		return session.selectList(NS + ".list", user_id);
 	}
 
 }

@@ -3,6 +3,7 @@ var replyPage = 1;
 $(function(){
 	var pro_num = $("#pro_num").val();
 
+	/* 구매수량 변경 */
 	$("#buy_count").on("change", function(){
 
 		var total = $("#pro_price").val() * $(this).val();

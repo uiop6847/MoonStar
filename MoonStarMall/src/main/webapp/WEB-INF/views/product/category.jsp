@@ -150,34 +150,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								</div>
 								<div class="card-footer" style="height: 72px;">
 									<small>후기 [${productList.rew_cnt}]</small>
-									<c:if test="${productList.avg_score == 0}">
-										<div style="width:95px; overflow:hidden; color:#cdcdcd;">
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-										</div>
-									</c:if>
-									<c:set var="score"><fmt:formatNumber value="${productList.avg_score}" pattern=".0"/></c:set>
-									<c:if test="${productList.avg_score != 0}">
-										<div style="position:absolute; width:130px; overflow:hidden; color:#cdcdcd;">
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<small style="color: #807F89;">(${score})</small>
-										</div>
-										<c:set var="width" value="${score * 18.7}"></c:set>
-										<div style="position:absolute; width:${width}px; overflow:hidden; white-space:nowrap; color:#312E41;">
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-											<ion-icon src="/ionicons/star.svg"></ion-icon>
-										</div>
-									</c:if>
+									<c:set var="score"><fmt:formatNumber value="${productList.avg_score}" pattern="0.0"/></c:set>
+									<div style="position:absolute; width:130px; overflow:hidden; color:#cdcdcd;">
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<small style="color: #807F89;">(${score})</small>
+									</div>
+									<c:set var="width" value="${score * 18.7}"></c:set>
+									<div style="position:absolute; width:${width}px; overflow:hidden; white-space:nowrap; color:#ffc107;">
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+										<ion-icon src="/ionicons/star.svg"></ion-icon>
+									</div>
 								</div>
 							</div>
 						</div>
