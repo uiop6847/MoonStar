@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moonstarmall.mappers.AdUserInfoMapper">
+
+	<!-- 회원 리스트 -->
+	<select id="userList" parameterType="SearchCriteria" resultType="hashMap">
+		SELECT USER_ID, USER_NM, USER_EMAIL, EMAIL_REV_YN, USER_POINT, ORD_CNT, PAY_AMOUNT, STA_DATE, LAST_DATE
+		FROM (
+		        SELECT U.USER_ID, U.USER_NM, U.USER_EMAIL, U.EMAIL_REV_YN, U.USER_POINT, NVL(O.ORD_CNT,0) AS ORD_CNT, NVL(O.PAY_AMOUNT,0) AS PAY_AMOUNT, U.STA_DATE, U.LAST_DATE,
+		               row_number() over(ORDER BY STA_DATE DESC) AS P_SEQ
+		        FROM USER_INFO U LEFT JOIN (SELECT USER_ID, COUNT(ORD_CD) AS ORD_CNT, SUM(PAY_AMOUNT) AS PAY_AMOUNT
+		                                    FROM ORDER_INFO
+		                                    GROUP BY USER_ID) O
+		        ON U.USER_ID = O.USER_ID
+				<include refid="search" />
+		    ) A
+		WHERE P_SEQ BETWEEN #{rowStart} and #{rowEnd}
+	</select>
+	
+	<!-- 회원 총 건수 -->
+	<select id="userCount" parameterType="SearchCriteria" resultType="int">
+		<![CDATA[
+			SELECT COUNT(USER_ID)
+			FROM USER_INFO U
+		]]>
+		<include refid="search" />
+	</select>
+	
+	<!-- 검색 조건 : 공통으로 사용하는  구문 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<!-- 아이디 -->
+			<if test="searchType == 'id'.toString()"> 
+				where u.user_id like '%' || #{keyword} || '%'
+			</if>
+			<!-- 회원명 -->
+			<if test="searchType == 'name'.toString()"> 
+				where u.user_nm like '%' || #{keyword} || '%'
+			</if>
+		</if>
+	</sql>
+
+</mapper>
