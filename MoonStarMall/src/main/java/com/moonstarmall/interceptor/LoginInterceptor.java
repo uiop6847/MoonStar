@@ -36,17 +36,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		
 		HttpSession session = request.getSession();
-		System.out.println("session : " + session.getAttribute("user"));
+		logger.info("session: " + session.getAttribute("user"));
+		
 		if(session.getAttribute("user") == null) {
-			System.out.println("getMethod : " + request.getMethod());
-			if(request.getMethod().equals("AJAX")) {
-				
-				response.sendError(400);
-				
-			}else {
+			logger.info("getMethod: " + request.getMethod());
+			
 				saveDest(request);
 				response.sendRedirect("/member/login");
-			}
 			
 			return false;
 		}

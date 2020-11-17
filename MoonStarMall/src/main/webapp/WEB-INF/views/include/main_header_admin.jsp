@@ -28,26 +28,33 @@
 						<a href="/admin/logout" class="nav-link">LOGOUT</a>
 					</li>
 					<li class="nav-item dropdown">
-						<a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+						<a href="#" class="nav-link dropdown-toggle">
 						상품 관리</a>
-						<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+						<ul class="dropdown-menu border-0 shadow">
 						  <li><a href="/admin/product/insert" class="dropdown-item">상품 등록</a></li>
 						  <li><a href="/admin/product/list" class="dropdown-item">상품 목록</a></li>
 						  <li><a href="/admin/product/category" class="dropdown-item">상품 카테고리 관리</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<a id="dropdownSubMenu2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+						<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
 						주문 관리</a>
-						<ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+						<ul class="dropdown-menu border-0 shadow">
 						  <li><a href="#" class="dropdown-item">주문 목록</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<a id="dropdownSubMenu3" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+						<a href="#" class="nav-link dropdown-toggle">
 						회원 관리</a>
-						<ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
-						  <li><a href="#" class="dropdown-item">회원 목록</a></li>
+						<ul class="dropdown-menu border-0 shadow">
+						  <li><a href="/admin/member/list" class="dropdown-item">회원 목록</a></li>
+						</ul>
+					</li>
+					<li class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle">
+						통계</a>
+						<ul class="dropdown-menu border-0 shadow">
+						  <li><a href="#" class="dropdown-item">일별 누적 접속자 통계</a></li>
 						</ul>
 					</li>
 				</c:if>

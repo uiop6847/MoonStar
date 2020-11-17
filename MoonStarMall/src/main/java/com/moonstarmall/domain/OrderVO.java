@@ -15,7 +15,7 @@ public class OrderVO {
 	private int		pay_amount;
 	private String	payment;
 	private String	pay_nm;
-	private String	ord_state;
+	private String	ord_status;
 	private int		re_point;
 	private Date	ord_date;
 
@@ -107,12 +107,12 @@ public class OrderVO {
 		this.pay_nm = pay_nm;
 	}
 
-	public String getOrd_state() {
-		return ord_state;
+	public String getOrd_status() {
+		return ord_status;
 	}
 
-	public void setOrd_state(String ord_state) {
-		this.ord_state = ord_state;
+	public void setOrd_status(String ord_status) {
+		this.ord_status = ord_status;
 	}
 	
 	public int getRe_point() {
@@ -136,6 +136,6 @@ public class OrderVO {
 		return "OrderVO [ord_cd=" + ord_cd + ", user_id=" + user_id + ", ord_nm=" + ord_nm + ", zip_num=" + zip_num
 				+ ", addr=" + addr + ", addr_dtl=" + addr_dtl + ", tel_phone=" + tel_phone + ", cell_phone="
 				+ cell_phone + ", pay_amount=" + pay_amount + ", payment=" + payment + ", pay_nm=" + pay_nm
-				+ ", ord_state=" + ord_state + ", re_point=" + re_point + ", ord_date=" + ord_date + "]";
+				+ ", ord_status=" + ord_status + ", re_point=" + re_point + ", ord_date=" + ord_date + "]";
 	}
 }

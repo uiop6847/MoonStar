@@ -149,6 +149,7 @@ public class MemberController {
 		logger.info("loginOK() called");
 		
 		LoginDTO loginDTO = service.loginOK(dto);
+				
 		if(loginDTO != null) {
 			logger.info("Login SUCCESS");
 			

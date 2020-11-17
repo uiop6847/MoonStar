@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.moonstarmall.domain.CartVO;
 import com.moonstarmall.domain.OrderVO;
+import com.moonstarmall.util.DateCriteria;
 
 public interface OrderDAO {
 	
@@ -27,5 +28,8 @@ public interface OrderDAO {
 	public void orderDtlInsert(Map<String, Object> map) throws Exception;
 	
 	/* 주문내역 조회 */
-	public List<OrderVO> orderList(String user_id) throws Exception;
+	public List<Map<String, Object>> orderList(DateCriteria cri, String user_id) throws Exception;
+	
+	/* 주문정보 총 건수 */
+	public int orderCount(DateCriteria cri, String user_id) throws Exception;
 }

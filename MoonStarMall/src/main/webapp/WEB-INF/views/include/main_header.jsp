@@ -22,16 +22,7 @@
 						<a href="/member/login" class="nav-link">LOGIN</a>
 					</li>
 					<li class="nav-item">
-					  <a href="/member/join" class="nav-link">JOIN US</a>
-					</li>
-					<li class="nav-item">
-					  <a href="#" class="nav-link">CART</a>
-					</li>
-					<li class="nav-item">
-						<a href="/member/login" class="nav-link">ORDER</a>
-					</li>
-					<li class="nav-item">
-						<a href="/member/login" class="nav-link">MY PAGE</a>
+						<a href="/member/join" class="nav-link">JOIN US</a>
 					</li>
 				</c:if>
 				<%-- 로그인 한 상태 --%>
@@ -39,16 +30,16 @@
 					<li class="nav-item">
 						<a href="/member/logout" class="nav-link">LOGOUT</a>
 					</li>
-					<li class="nav-item">
-					  <a href="/cart/list" class="nav-link">CART</a>
-					</li>
-					<li class="nav-item">
-						<a href="/order/list" class="nav-link">ORDER</a>
-					</li>
-					<li class="nav-item">
-						<a href="/member/mypage" class="nav-link">MY PAGE</a>
-					</li>
 				</c:if>
+				<li class="nav-item">
+				  <a href="/cart/list" class="nav-link">CART</a>
+				</li>
+				<li class="nav-item">
+					<a href="/order/list" class="nav-link">ORDER</a>
+				</li>
+				<li class="nav-item">
+					<a href="/member/mypage" class="nav-link">MY PAGE</a>
+				</li>
 			</ul>
 		</div>
 

@@ -38,7 +38,7 @@
 		WHERE ROWNUM <= 20
 		]]>
 		AND PRO_BUY_YN = 'Y'
-		ORDER BY P.STA_DATE DESC
+		ORDER BY P.PRO_NUM DESC
 	</select>
 	
 	<!-- 카테고리별 상품 리스트 -->

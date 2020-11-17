@@ -53,9 +53,11 @@
 		<!-- 일반사용자의 경우
 		<interceptor>
 			<mapping path="/cart/**"/>
+			<mapping path="/order/**"/>
+			<mapping path="/member/mypage"/>
 			<beans:ref bean="loginInterceptor"/>
-		</interceptor>
-		 -->
+		</interceptor> 
+		-->
 	</interceptors>
 	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->

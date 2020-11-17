@@ -261,10 +261,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<div class="col-12"><label>결제 수단</label></div>
 								</div>
 								<div style="margin: 10px;">
-									<label><input type="radio" id="payment_0" name="payment" value="cash" checked="checked">
-									무통장입금</label>
-									<label><input type="radio" id="payment_1" name="payment" value="card">
-									카드결제</label>
+									<input type="radio" id="payment_0" name="payment" value="cash" checked="checked">
+									<label for="payment_0">무통장입금</label>
+									<input type="radio" id="payment_1" name="payment" value="card">
+									<label for="payment_1">카드결제</label>
 								</div>
 								<div style="margin:10px; padding: 20px; border: 1px solid #ced4da; height: 200px;">
 									<table class="table" id="cash_section" style="border-bottom: 1px solid #dee2e6;">
@@ -301,7 +301,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<div class="col-5" style="border-left: 1px solid rgba(0,0,0,.1); font-size: large;">
 										<p>
 											<strong id="pay_name">무통장입금</strong>
-											 <span>최종결제금액&nbsp;<b id="pay_price"><fmt:formatNumber value="${total_price}" /></b></span>
+											<span>최종결제금액&nbsp;<b id="pay_price"><fmt:formatNumber value="${total_price}" /></b></span>
 										</p>
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" id="chk_agreement">
@@ -311,6 +311,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<div class="col-3">
 										<div class="col-right" style="margin: 20% 0;">
 											<input type="hidden" id="pay_amount" name="pay_amount" value="${total_price }">
+											<input type="hidden" id="ord_status" name="ord_status" value="">
 											<input type="hidden" id="re_point" name="re_point" value="<fmt:parseNumber value="${pro_total_point}" integerOnly="true" />">
 											<button type="button" id="btn_buy" class="btn btn-flat btn-secondary" style="width:200px; padding: 20px; background-color: #3d4145;">
 											결제하기</button>

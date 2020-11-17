@@ -15,6 +15,7 @@ import com.moonstarmall.dao.OrderDAO;
 import com.moonstarmall.domain.CartVO;
 import com.moonstarmall.domain.DeliveryVO;
 import com.moonstarmall.domain.OrderVO;
+import com.moonstarmall.util.DateCriteria;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -129,8 +130,14 @@ public class OrderServiceImpl implements OrderService {
 
 	/* 주문내역 조회 */
 	@Override
-	public List<OrderVO> orderList(String user_id) throws Exception {
-		return dao.orderList(user_id);
+	public List<Map<String, Object>> orderList(DateCriteria cri, String user_id) throws Exception {
+		return dao.orderList(cri, user_id);
+	}
+
+	/* 주문정보 총 건수 */
+	@Override
+	public int orderCount(DateCriteria cri, String user_id) throws Exception {
+		return dao.orderCount(cri, user_id);
 	}
 	
 }

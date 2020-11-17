@@ -1,5 +1,6 @@
 package com.moonstarmall.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.moonstarmall.domain.CartVO;
 import com.moonstarmall.domain.OrderVO;
+import com.moonstarmall.util.DateCriteria;
 
 @Repository
 public class OrderDAOImpl implements OrderDAO {
@@ -55,8 +57,26 @@ public class OrderDAOImpl implements OrderDAO {
 
 	/* 주문내역 조회 */
 	@Override
-	public List<OrderVO> orderList(String user_id) throws Exception {
-		return session.selectList(NS + ".list", user_id);
+	public List<Map<String, Object>> orderList(DateCriteria cri, String user_id) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("cri", cri);
+		map.put("user_id", user_id);
+		
+		return session.selectList(NS + ".list", map);
+	}
+
+	/* 주문정보 총 건수 */
+	@Override
+	public int orderCount(DateCriteria cri, String user_id) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("cri", cri);
+		map.put("user_id", user_id);
+		
+		return session.selectOne(NS + ".orderCount", map);
 	}
 
 }

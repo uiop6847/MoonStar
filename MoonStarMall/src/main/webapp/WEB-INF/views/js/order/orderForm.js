@@ -64,6 +64,10 @@ $(function(){
         // 선택한 radio는 display 되도록 처리
         if($(this).is(":checked")){
             $("#"+$(this).val()+"_section").removeClass("selected");
+
+            var payName = $(this).next().text();
+            $("#pay_name").empty();
+            $("#pay_name").text(payName);
         }
     });
 
@@ -133,6 +137,14 @@ $(function(){
         
         // 유효성검사 정상이면 submit처리
         if(isOK == true){
+
+            // 주문상세코드 세팅
+            if($("input[name=payment]:checked").val() == "cash"){
+                $("#ord_status").val("01");
+            }else if($("input[name=payment]:checked").val() == "card"){
+                $("#ord_status").val("02");
+            }
+
             form.submit();
         }
         

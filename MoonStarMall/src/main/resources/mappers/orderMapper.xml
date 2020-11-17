@@ -43,9 +43,9 @@
 	<!-- 주문정보 저장 -->
 	<insert id="orderInsert" parameterType="OrderVO">
 		INSERT INTO ORDER_INFO (ORD_CD, USER_ID, ORD_NM, ZIP_NUM, ADDR, ADDR_DTL, TEL_PHONE, CELL_PHONE, 
-					PAY_AMOUNT, PAYMENT, PAY_NM, ORD_STATE)
+					PAY_AMOUNT, PAYMENT, PAY_NM, ORD_STATUS, RE_POINT)
 		VALUES(#{ord_cd}, #{user_id}, #{ord_nm}, #{zip_num}, #{addr}, #{addr_dtl}, #{tel_phone}, #{cell_phone}, 
-					#{pay_amount}, #{payment}, #{pay_nm}, '입금대기중')
+			   #{pay_amount}, #{payment}, #{pay_nm}, '01', #{re_point})
 	</insert>
 	
 	<!-- 주문정보상세 저장 -->
@@ -58,17 +58,56 @@
 	</insert>
 	
 	<!-- 주문정보 조회 -->
-	<select id="list" parameterType="String" resultType="OrderVO">
-		SELECT ORD_CD, USER_ID, ORD_NM, ZIP_NUM, ADDR, ADDR_DTL, TEL_PHONE, CELL_PHONE, PAY_AMOUNT, PAYMENT, PAY_NM, ORD_STATE, ORD_DATE
-		FROM ORDER_INFO
-		WHERE USER_ID = #{user_id}
+	<select id="list" parameterType="String" resultType="HashMap">
+		SELECT ORD_DATE, ORD_CD, PRO_NUM, PRO_MAIN_IMG, PRO_NM, BUY_COUNT, BUY_PRICE, ORD_STATUS, ORD_STATUS_NM, RE_POINT
+		FROM (
+		        SELECT  ORD.ORD_DATE, ORD.ORD_CD, P.PRO_NUM, P.PRO_MAIN_IMG, P.PRO_NM, DTL.BUY_COUNT, DTL.BUY_PRICE, ORD.ORD_STATUS, 
+		        		(SELECT STATUS_NM FROM STATUS_TBL WHERE DIV_NM = 'ord_status' AND STATUS_CD = ORD_STATUS) AS ORD_STATUS_NM,
+		        		ORD.RE_POINT, row_number() OVER (ORDER BY ORD.ORD_DATE DESC, ORD.ORD_CD DESC) P_SEQ
+		        FROM ORDER_INFO ORD LEFT OUTER JOIN ORDER_DTL DTL ON ORD.ORD_CD = DTL.ORD_CD
+		        	 LEFT OUTER JOIN PRODUCT_TBL P ON P.PRO_NUM = DTL.PRO_NUM
+		        WHERE ORD.USER_ID = #{user_id}
+		        <include refid="search" />
+		     ) A
+		WHERE P_SEQ BETWEEN #{cri.rowStart} and #{cri.rowEnd}
+		AND TO_CHAR(ORD_DATE, 'YYYY-MM-DD') BETWEEN #{cri.fromDate} AND #{cri.toDate}
 	</select>
 	
-	<!-- 주문정보상세 조회 -->
-	<select id="orderDtl" parameterType="int" resultType="OrderDetailVO">
-		SELECT ORD_CD, PRO_NUM, BUY_COUNT, BUY_PRICE
-		FROM ORDER_DTL
-		WHERE ORD_CD = #{ord_cd}
+	<!-- 주문정보 총 건수 -->
+	<select id="orderCount" parameterType="Map" resultType="int">
+		<![CDATA[
+			SELECT COUNT(ORD.ORD_CD)
+			FROM ORDER_INFO ORD LEFT OUTER JOIN ORDER_DTL DTL ON ORD.ORD_CD = DTL.ORD_CD
+	        	 LEFT OUTER JOIN PRODUCT_TBL P ON P.PRO_NUM = DTL.PRO_NUM
+	        WHERE ORD.USER_ID = #{user_id}
+		]]>
+		<include refid="search" />
 	</select>
+	
+	<!-- 검색 조건 : 공통으로 사용하는  구문 -->
+	<sql id="search">
+		<if test="cri.searchType != null">
+			<!-- 입금대기중 -->
+			<if test="cri.searchType == '01'.toString()"> 
+				and ord_status = #{cri.searchType}
+			</if>
+			<!-- 결제완료 -->
+			<if test="cri.searchType == '02'.toString()"> 
+				and ord_status = #{cri.searchType}
+			</if>
+			<!-- 상품준비중 -->
+			<if test="cri.searchType == '03'.toString()"> 
+				and ord_status = #{cri.searchType}
+			</if>
+			<!-- 배송중 -->
+			<if test="cri.searchType == '04'.toString()"> 
+				and ord_status = #{cri.searchType}
+			</if>
+			<!-- 배송완료 -->
+			<if test="cri.searchType == '05'.toString()"> 
+				and ord_status = #{cri.searchType}
+			</if>
+		</if>
+	</sql>
 
 </mapper>

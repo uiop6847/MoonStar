@@ -49,26 +49,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content-header -->
-	
-		<%-- 로그인 안 한 상태 --%>
-		<c:if test="${sessionScope.admin == null}">
-			
-		</c:if>
 		<!-- Main content -->
 		<div class="content">
 			<div class="container">
-				<%-- 로그인 한 상태 --%>
-				<c:if test="${sessionScope.admin != null}">
-					<div class="col-lg-12">
-						<div class="card">
-							<div class="card-body">
-								<h4>welcome!<br/></h4>
-								<h6>This is Admin Main page. <br/> 
-									Please click on the menu you want to work on :)</h6>
+				<div class="row">
+					<div class="col-lg-3 col-6">
+						<!-- small box -->
+						<div class="small-box bg-info">
+							<div class="inner">
+								<h3>150</h3>
+								
+								<p>New Orders</p>
 							</div>
+							<div class="icon">
+								<i class="ion ion-bag"></i>
+							</div>
+							<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
-				</c:if>
+					<!-- ./col -->
+				</div>
+				
+				<!-- <div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4>welcome!<br/></h4>
+							<h6>This is Admin Main page. <br/> 
+								Please click on the menu you want to work on :)</h6>
+						</div>
+					</div>
+				</div> -->
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content -->
