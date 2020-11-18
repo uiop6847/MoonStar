@@ -13,7 +13,7 @@ import com.moonstarmall.domain.CartVO;
 public class CartDAOImpl implements CartDAO {
 	
 	@Autowired
-	SqlSession session;
+	private SqlSession session;
 	
 	public final static String NS = "com.moonstarmall.mappers.CartMapper";
 	

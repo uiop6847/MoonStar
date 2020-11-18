@@ -15,7 +15,7 @@ import com.moonstarmall.util.SearchCriteria;
 public class AdProductDAOImpl implements AdProductDAO {
 	
 	@Autowired
-	SqlSession session;
+	private SqlSession session;
 	
 	public final static String NS = "com.moonstarmall.mappers.AdProductMapper";
 

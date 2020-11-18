@@ -40,7 +40,7 @@
 						<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
 						주문 관리</a>
 						<ul class="dropdown-menu border-0 shadow">
-						  <li><a href="#" class="dropdown-item">주문 목록</a></li>
+						  <li><a href="/admin/order/list" class="dropdown-item">주문 목록</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">

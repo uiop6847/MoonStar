@@ -15,6 +15,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
 <%--table all ckeckbox기능 --%>
 <script type="text/javascript" src="/js/check.js"></script>
+<%-- 메시지 처리 --%>
+<script>
+	if ("${msg}" == "INSERT_SUCCESS") {
+		alert("상품등록이 완료되었습니다.");
+		
+	} else if ("${msg}" == "EDIT_SUCCESS") {
+		alert("상품 수정이 완료되었습니다.");
+		
+	} else if ("${msg}" == "DELETE_SUCCESS") {
+		alert("상품 삭제가 완료되었습니다.");
+	}
+</script>
 <style>
 	.col-center	{
 		text-align: center;
@@ -54,13 +66,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark">Admin Page <small>Member List</small></h1>
+						<h1 class="m-0 text-dark">Admin Page <small>Order List</small></h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><a href="/admin/main">HOME</a></li>
-							<li class="breadcrumb-item active">회원 관리</li>
-							<li class="breadcrumb-item active">회원 목록</li>
+							<li class="breadcrumb-item active">주문 관리</li>
+							<li class="breadcrumb-item active">주문 목록</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
@@ -75,16 +87,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-12">
 						<div class="card">
 							<div class="card-header" style="background-color: #F9D5D3;">
-								<h3 class="card-title">회원 목록</h3>
+								<h3 class="card-title">주문 목록</h3>
 							</div>
 							<div class="card-body">
 								<select class="form-control" name="searchType" style="width:180px; display: inline-block;">
 									<option value="null"
 										<c:out value="${cri.searchType == null?'selected':''}"/>>검색조건 선택</option>
-									<option value="id"
-										<c:out value="${cri.searchType eq 'id'?'selected':''}"/>>ID</option>
-									<option value="name"
-										<c:out value="${cri.searchType eq 'name'?'selected':''}"/>>회원명</option>
+									<option value="ord_cd"
+										<c:out value="${cri.searchType eq 'ord_cd'?'selected':''}"/>>주문번호</option>
 								</select>
 								<!-- SEARCH -->
 								<input class="form-control" type="text" name='keyword' id="keyword" style="width:250px; display: inline-block;" value='${cri.keyword}' />
@@ -93,42 +103,69 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<i class="fas fa-search"></i>
 								</button>
 							</div>
+							<div class="row">
+								<div class="col-12" style="text-align: right; padding: 10px;">
+									<button class="btn btn-info" type="button" id="btn_edit">
+										수정</button>
+									<button class="btn btn-danger" type="button" id="btn_delete">
+										삭제</button>
+								</div>
+							</div>
 							<form id="productListForm" method="post">
 								<div class="card-body table-responsive p-0">
 									<table id="tbl_productList" class="table table-hover table-bordered text-nowrap">
 										<thead>
 										<tr class="col-center">
+											<th><input type="checkbox" id="checkAll"></th>
+											<th>주문일자<br>[주문번호]</th>
 											<th>아이디</th>
-											<th>회원명</th>
-											<th>이메일</th>
-											<th>수신여부</th>
-											<th>포인트</th>
-											<th>상품구매개수</th>
-											<th>상품결제합계</th>
-											<th>회원가입일</th>
-											<th>마지막접속일</th>
+											<th>받는사람</th>
+											<th>주소</th>
+											<th>일반전화</th>
+											<th>휴대전화</th>
+											<th>결제금액</th>
+											<th>결제수단</th>
+											<th>입금자명</th>
+											<th>주문처리상태</th>
 										</tr>
 										</thead>
 										<tbody id="tbl_productListRow">
 											<%-- 상품리스트 출력 --%>
-											<c:if test="${empty userList}">
+											<c:if test="${empty productList}">
 											<tr>
-												<td colspan="9">
-													<p style="padding:50px 0px; text-align: center;">회원이 존재하지 않습니다. </p>
+												<td colspan="11">
+													<p style="padding:50px 0px; text-align: center;">등록된 상품이 존재하지 않습니다. </p>
 												</td>
 											</tr>
 											</c:if>
-											<c:forEach items="${userList }" var="list">
+											<c:forEach items="${productList }" var="productVO">
 											<tr>
-												<td class="col-center">${list.user_id}</td>
-												<td class="col-center">${list.user_nm}</td>
-												<td class="col-center">${list.user_email}</td>
-												<td class="col-center">${list.email_rev_yn}</td>
-												<td class="col-center"><fmt:formatNumber value="${list.user_point}" pattern="#,###"/></td>
-												<td class="col-center"><fmt:formatNumber value="${list.ord_cnt}" pattern="#,###"/></td>
-												<td class="col-center"><fmt:formatNumber value="${list.pay_amount}" pattern="#,###"/></td>
-												<td class="col-center"><fmt:formatDate value="${list.sta_date }" pattern="yyyy-MM-dd"/></td>
-												<td class="col-center"><fmt:formatDate value="${list.last_date }" pattern="yyyy-MM-dd"/></td>
+												<td>
+													<input type="checkbox" name="check" class="check">
+												</td>
+												<td class="col-center">${productVO.pro_num}</td>
+												<td class="col-center">
+													<img src="/admin/product/displayFile?fileName=${productVO.pro_main_img }" style="width: 80px;">
+													<input type="hidden" name="img_${productVO.pro_num }" value="${productVO.pro_main_img }">
+												</td>
+												<td class="col-md-2">
+													<a href="/admin/product/read${pm.makeSearch(pm.cri.page)}&pro_num=${productVO.pro_num}" style="color: #807F89;">
+														${productVO.pro_nm}&nbsp;<ion-icon name="search-outline"></ion-icon>
+													</a>
+												</td>
+												<td class="col-md-1 col-center">${productVO.pro_price}</td>
+												<td class="col-md-1 col-center">${productVO.pro_discount}</td>
+												<td class="col-md-2 col-center">${productVO.pro_publisher}</td>
+												<td class="col-md-1 col-center">${productVO.pro_count }</td>
+												<td class="col-center">${productVO.pro_buy_yn}</td>
+												<td class="col-md-1 col-center">
+													<fmt:formatDate value="${productVO.sta_date }" pattern="yyyy-MM-dd"/>
+												</td>
+												<!-- 
+												<td class="col-md-1 col-center">
+													<fmt:formatDate value="${productVO.udt_date}" pattern="yyyy-MM-dd"/>
+												</td>
+												 -->
 											</tr>
 											</c:forEach>
 										</tbody>
@@ -186,6 +223,51 @@ $(function(){
 			+ $("select option:selected").val()
 			+ "&keyword=" + $('#keyword').val();
     });
+	
+    /* 수정버튼 클릭 시 */
+    $("#btn_edit").on("click", function(){
+        
+        var proNumArr = [];
+        
+        if($(":checkbox:checked").length == 0){
+            alert("선택된 상품이 없습니다.\n수정할 상품을 선택해주세요.");
+			return false;
+        }
+        
+        $("#tbl_productListRow tr").each(function(i){
+
+            if($(this).find(":checkbox").is(":checked")){
+                
+            	proNumArr.push($(this).children().eq(1).text());
+            }
+        });
+        
+        // 상품수정 화면 이동
+        location.href= '/admin/product/edit?proNumArr=' + proNumArr;
+    });
+    
+    /* 삭제버튼 클릭 시 */
+    $("#btn_delete").on("click", function(){
+		
+    	var proNumArr = [];
+        
+        if($(":checkbox:checked").length == 0){
+        	alert("선택된 상품이 없습니다.\n삭제할 상품을 선택해주세요.");
+			return false;
+        }
+        
+        $("#tbl_productListRow tr").each(function(i){
+
+            if($(this).find(":checkbox").is(":checked")){
+                
+            	proNumArr.push($(this).children().eq(1).text());
+            }
+        });
+        
+        // 상품삭제
+        location.href= '/admin/product/delete?proNumArr=' + proNumArr;
+    });
+	
 });
 </script>
 </body>

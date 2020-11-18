@@ -11,7 +11,7 @@ import com.moonstarmall.dto.AdminDTO;
 public class AdminDAOImpl implements AdminDAO {
 	
 	@Autowired
-	SqlSession session;
+	private SqlSession session;
 	
 	public final static String NS = "com.moonstarmall.mappers.AdminMapper";
 	

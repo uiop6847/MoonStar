@@ -13,7 +13,7 @@ import com.moonstarmall.util.SearchCriteria;
 public class AdMemberDAOImpl implements AdMemberDAO {
 	
 	@Autowired
-	SqlSession session;
+	private SqlSession session;
 	
 	private final static String NS = "com.moonstarmall.mappers.AdUserInfoMapper";
 
