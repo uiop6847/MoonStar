@@ -1,14 +1,7 @@
 package com.moonstarmall.domain;
 
 public class StatusVO {
-/*
-    STATUS_NUM       NUMBER          PRIMARY KEY,
-    DIV_NM           VARCHAR2(50)    NOT NULL,
-    STATUS_CD        VARCHAR2(50)    NOT NULL,
-    STATUS_NM        VARCHAR2(50)    NOT NULL,
-    STATUS_COMMENT   VARCHAR2(1000)
-*/
-
+	
 	private int		status_num;
 	private String	div_nm;
 	private String	status_cd;

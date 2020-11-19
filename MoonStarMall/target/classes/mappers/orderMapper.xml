@@ -80,6 +80,7 @@
 			FROM ORDER_INFO ORD LEFT OUTER JOIN ORDER_DTL DTL ON ORD.ORD_CD = DTL.ORD_CD
 	        	 LEFT OUTER JOIN PRODUCT_TBL P ON P.PRO_NUM = DTL.PRO_NUM
 	        WHERE ORD.USER_ID = #{user_id}
+	        AND TO_CHAR(ORD_DATE, 'YYYY-MM-DD') BETWEEN #{cri.fromDate} AND #{cri.toDate}
 		]]>
 		<include refid="search" />
 	</select>

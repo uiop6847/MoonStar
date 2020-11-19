@@ -146,7 +146,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<p style="padding:50px 0px; text-align: center;">주문내역이 없습니다.</p>
 								</c:if>
 								<c:if test="${!empty orderList}">
-									<table id="tbl_cartList" class="table table-hover table-bordered text-nowrap">
+									<table id="tbl_orderList" class="table table-hover table-bordered text-nowrap">
 										<thead>
 										<tr class="col-center">
 											<th>주문일자<br>[주문번호]</th>
@@ -158,7 +158,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<!-- <th>선택</th> -->
 										</tr>
 										</thead>
-										<tbody id="tbl_cartListRow">
+										<tbody id="tbl_orderListRow">
 											<%-- 주문내역 출력 --%>
 											<c:forEach items="${orderList }" var="list" varStatus="i">
 											<tr>

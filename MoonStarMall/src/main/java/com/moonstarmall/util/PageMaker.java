@@ -152,6 +152,22 @@ public class PageMaker {
 		return uriComponents.toUriString();
 	}
 	
+	public String makeOrderSearch(int page){
+		
+		UriComponents uriComponents =
+	            UriComponentsBuilder.newInstance()
+	            .queryParam("page", page)
+	            .queryParam("perPageNum", cri.getPerPageNum())
+	            .queryParam("statusType", ((OrderSearchCriteria)cri).getStatusType())
+	            .queryParam("fromDate", ((OrderSearchCriteria)cri).getFromDate())
+	            .queryParam("toDate", ((OrderSearchCriteria)cri).getToDate())
+	            .queryParam("searchType", ((OrderSearchCriteria)cri).getSearchType())
+	            .queryParam("keyword", ((OrderSearchCriteria)cri).getKeyword())
+	            .build();
+		
+		return uriComponents.toUriString();
+	}
+	
 	@Override
 	public String toString() {
 		return "PageMaker [totalCount=" + totalCount + ", startPage="

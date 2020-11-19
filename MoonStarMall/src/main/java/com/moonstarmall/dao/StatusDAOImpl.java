@@ -13,11 +13,13 @@ public class StatusDAOImpl implements StatusDAO {
 	
 	@Autowired
 	private SqlSession session;
+	
+	private final static String NS = "com.moonstarmall.mappers.StatusMapper";
 
 	/* 상태테이블 리스트 조회 */
 	@Override
 	public List<StatusVO> statusList(String div_nm) throws Exception {
-		return null;
+		return session.selectList(NS + ".statusList", div_nm);
 	}
 
 }

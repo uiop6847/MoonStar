@@ -1,6 +1,7 @@
 package com.moonstarmall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class OrderVO {
 	
@@ -18,6 +19,8 @@ public class OrderVO {
 	private String	ord_status;
 	private int		re_point;
 	private Date	ord_date;
+	
+	private List<OrderVO> list;
 
 	public int getOrd_cd() {
 		return ord_cd;
@@ -131,11 +134,20 @@ public class OrderVO {
 		this.ord_date = ord_date;
 	}
 
+	public List<OrderVO> getList() {
+		return list;
+	}
+
+	public void setList(List<OrderVO> list) {
+		this.list = list;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderVO [ord_cd=" + ord_cd + ", user_id=" + user_id + ", ord_nm=" + ord_nm + ", zip_num=" + zip_num
 				+ ", addr=" + addr + ", addr_dtl=" + addr_dtl + ", tel_phone=" + tel_phone + ", cell_phone="
 				+ cell_phone + ", pay_amount=" + pay_amount + ", payment=" + payment + ", pay_nm=" + pay_nm
-				+ ", ord_status=" + ord_status + ", re_point=" + re_point + ", ord_date=" + ord_date + "]";
+				+ ", ord_status=" + ord_status + ", re_point=" + re_point + ", ord_date=" + ord_date + ", list=" + list
+				+ "]";
 	}
 }

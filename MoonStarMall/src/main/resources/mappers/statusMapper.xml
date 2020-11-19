@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moonstarmall.mappers.StatusMapper">
+
+	<!-- 상태테이블 리스트 조회 -->
+	<select id="statusList" parameterType="String" resultType="StatusVO">
+		SELECT STATUS_NUM, DIV_NM, STATUS_CD, STATUS_NM, STATUS_COMMENT
+		FROM STATUS_TBL
+		WHERE DIV_NM = #{div_nm}
+	</select>
+
+</mapper>

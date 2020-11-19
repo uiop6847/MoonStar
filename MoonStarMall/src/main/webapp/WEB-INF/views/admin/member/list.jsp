@@ -95,7 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</div>
 							<form id="productListForm" method="post">
 								<div class="card-body table-responsive p-0">
-									<table id="tbl_productList" class="table table-hover table-bordered text-nowrap">
+									<table id="tbl_userList" class="table table-hover table-bordered text-nowrap">
 										<thead>
 										<tr class="col-center">
 											<th>아이디</th>
@@ -109,8 +109,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<th>마지막접속일</th>
 										</tr>
 										</thead>
-										<tbody id="tbl_productListRow">
-											<%-- 상품리스트 출력 --%>
+										<tbody id="tbl_userListRow">
+											<%-- 회원리스트 출력 --%>
 											<c:if test="${empty userList}">
 											<tr>
 												<td colspan="9">
