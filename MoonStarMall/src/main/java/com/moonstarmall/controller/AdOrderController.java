@@ -59,6 +59,7 @@ public class AdOrderController {
 		model.addAttribute("statusList", status.statusList("ord_status"));
 		
 		PageMaker pm = new PageMaker();
+		
 		pm.setCri(cri);
 		pm.setTotalCount(service.orderCount(cri));
 		

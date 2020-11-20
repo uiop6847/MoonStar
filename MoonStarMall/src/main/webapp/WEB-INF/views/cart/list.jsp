@@ -131,10 +131,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 															<input type="hidden" id="list[${i.index }].discount_price" name="discount_price" value="${list.discount_price }">
 														</td>
 														<td>
-															<div style="margin: auto; margin-bottom:10px; width: 70px;">
-																<input class="form-control" type="number" id="list[${i.index }].buy_count" name="buy_count" value="${list.buy_count }">
-															</div>
+															<%--상품수량이 있으면 --%>
+															<c:if test="${list.pro_count > 0}">
+																<div style="margin: auto; margin-bottom:10px; width: 70px;">
+																	<input class="form-control" type="number" id="list[${i.index }].buy_count" name="buy_count" value="${list.buy_count }">
+																</div>
 																<button type="button" id="list[${i.index }].btn_count_update" class="btn btn-flat btn-default">변경</button>
+															</c:if>
+															<%--상품수량이 없으면 --%>
+															<c:if test="${list.pro_count <= 0}">
+																<div style="margin: auto; margin-bottom:10px; width: 70px;">
+																	<input class="form-control" value="${list.buy_count }" readonly="readonly" style="background-color: white;">
+																</div>
+																<p style="font-weight: bold; color: red;">품절</p>
+																<input type="hidden" name="pro_count" value="${list.pro_count }">
+															</c:if>
 														</td>
 														<td>-</td>
 														<td>무료</td>

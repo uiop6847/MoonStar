@@ -240,24 +240,39 @@ $(function(){
 								<c:set var="point" value="1"></c:set>
 								<td colspan="2"><fmt:parseNumber value="${vo.discount_price * (point/100)}" integerOnly="true"/>원(${point}%)</td>
 							</tr>
+							<c:if test="${vo.pro_count > 0}">
 							<tr>
 								<td>수량</td>
-								<td style="width: 100px;"><input id="buy_count" name="buy_count" type="number" class="form-control" value="1" min="1"></td>
+								<td style="width: 100px;">
+									<input id="buy_count" name="buy_count" type="number" class="form-control" value="1" min="1">
+									
+									<input type="hidden" id="pro_count" name="pro_count" value="${vo.pro_count }">
+								</td>
 								<td style="width: 170px;"><span id="total_price"><fmt:formatNumber value="${vo.discount_price }" /></span></td>
 							</tr>
+							</c:if>
 						</table>
 						<hr>
 						<div>
 							<h4>TOTAL : <span id="total"><fmt:formatNumber value="${vo.discount_price }" /> (1개)</span></h4>
 						</div>
-						<div class="mt-4">
-							<div>
-								<button type="button" class="btn btn-secondary btn-lg btn-flat" id="btn_buy">
+						<c:if test="${vo.pro_count > 0}">
+						<div class="row mt-4">
+							<div class="col-7" style="padding: 0;">
+								<button type="button" class="btn btn-block btn-secondary btn-lg btn-flat" id="btn_buy">
 								BUY IT NOW</button>
-								<button type="button" class="btn btn-outline-secondary btn-lg btn-flat" id="btn_cart">
+							</div>
+							<div class="col-5" style="padding: 0;">
+								<button type="button" class="btn btn-block btn-outline-secondary btn-lg btn-flat" id="btn_cart">
 								<i class="fas fa-cart-plus fa-lg mr-2"></i></button>
 							</div>
 						</div>
+						</c:if>
+						<c:if test="${vo.pro_count <= 0}">
+							<div class="mt-4" style="text-align: center;">
+								<h4 style="font-weight: bold; color: #6c757d;">품절</h4>
+							</div>
+						</c:if>
 					</div>
 				</div>
 				</form>
@@ -395,23 +410,5 @@ $(function(){
 <!-- REQUIRED SCRIPTS -->
 
 <%@include file="/WEB-INF/views/include/plugins.jsp" %>
-<script>
-$(function(){
-	
-	$("#count").on("change", function(){
-		
-		if($(this).val() < 1){
-			alert("최소 주문수량은 1개 입니다.");
-			$(this).val(1);
-		}else{
-			var total_price;
-			total_price = $("#pro_price").text() * $(this).val();
-			
-			console.log($(this).val());
-			$("#total_price").val(total_price);
-		}
-	});
-});
-</script>
 </body>
 </html>

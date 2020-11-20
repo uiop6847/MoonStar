@@ -126,6 +126,10 @@ $(function(){
         // 클릭한 행의 내용만 submit되도록 한다.
         var tr = $(this).parents("tr");
 
+        var proCount = $("input[name='pro_count']:eq("+tr.index()+")").val();
+        // 품절된 상품인지 check
+        if(!proCountCheck(proCount)){ return false; }
+
         form.find("input[id$=cart_cd]").each(function(index, item){
             // 클릭한 행의 name명만 list로 변경
             if(index == tr.index()){
@@ -142,6 +146,17 @@ $(function(){
     /* 전체상품주문 버튼 클릭 시 */
     $("#btn_all_buy").on("click", function(){
 
+        var isOK = true;
+        $(":checkbox:not(:first)").each(function(i){
+
+            var proCount = $("input[name='pro_count']:eq("+i+")").val();
+            // 품절된 상품인지 check
+            if(!proCountCheck(proCount)){ isOK = false; }
+
+        });
+        
+        if(isOK == false){ return false; }
+
         form.find("input[id$=cart_cd]").each(function(index, item){
             // 전체 행의 name명 변경
             $(item).attr("name", "list["+index+"].cart_cd");
@@ -157,9 +172,21 @@ $(function(){
         if($(":checkbox:not(:first):checked").length == 0){
 			alert("선택된 상품이 없습니다.");
 			return false;
-		}
+        }
+
+        var isOK = true;
+        $(":checkbox:not(:first):checked").each(function(i){
+        
+            var proCount = $("input[name='pro_count']:eq("+i+")").val();
+            // 품절된 상품인지 check
+            if(!proCountCheck(proCount)){ isOK = false; }
+
+        });
+        
+        if(isOK == false){  return false; }
 
         form.find("input[id$=cart_cd]").each(function(index, item){
+
             // check된 행의 name명 변경
             if($(":checkbox:not(:first)").eq(index).prop("checked")){
                 $(item).attr("name", "list["+index+"].cart_cd");
@@ -211,6 +238,13 @@ $(function(){
         $("#buy_total_price_2").text(result);
     }
 
+    // 품절된 상품인지 확인하는 함수
+    function proCountCheck(value){
 
+        if(value <= 0){
+            alert("품절된 상품은 주문이 불가합니다.");
+            return false;
+        }
+    }
 
 });

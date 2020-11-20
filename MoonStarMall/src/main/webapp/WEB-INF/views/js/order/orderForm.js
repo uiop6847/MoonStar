@@ -143,6 +143,8 @@ $(function(){
                 $("#ord_status").val("01");
             }else if($("input[name=payment]:checked").val() == "card"){
                 $("#ord_status").val("02");
+            }else{
+                $("#ord_status").val("-");
             }
 
             form.submit();

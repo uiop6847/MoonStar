@@ -5,6 +5,12 @@ $(function(){
 
 	/* 구매수량 변경 */
 	$("#buy_count").on("change", function(){
+	
+		if($("#pro_count").val() <= 0){
+			alert("현재 상품의 남은수량은  " + $("#pro_count").val() + "개 입니다.");
+			$("#buy_count").val(1);
+			return false;
+		}
 
 		var total = $("#pro_price").val() * $(this).val();
 
